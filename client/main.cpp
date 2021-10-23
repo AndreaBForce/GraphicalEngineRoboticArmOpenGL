@@ -1,7 +1,7 @@
 #include <iostream>
 #include "simpleClass.h"
 
-int main(){
+int main(int argc, char *argv[]){
 
     std::cout << "Sono il client" << std::endl;
     simpleClass obj;
