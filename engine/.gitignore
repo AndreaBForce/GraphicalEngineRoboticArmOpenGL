@@ -9,6 +9,5 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-engine.vcxproj
 engine.vcxproj.filters
 engine.vcxproj.user
