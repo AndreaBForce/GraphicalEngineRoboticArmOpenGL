@@ -6,3 +6,4 @@ client/bin
 cgProject.workspace.layout
 
 # ignore visual studio files
+Debug/

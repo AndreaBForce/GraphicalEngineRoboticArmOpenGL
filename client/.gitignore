@@ -1,0 +1,14 @@
+.vs/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+client.vcxproj
+client.vcxproj.filters
+client.vcxproj.user
