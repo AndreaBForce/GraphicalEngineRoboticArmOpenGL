@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1634923178 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/simpleClass.cpp
+	"simpleClass.h"
+	<iostream>
+
+1634923638 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/simpleClass.h
+

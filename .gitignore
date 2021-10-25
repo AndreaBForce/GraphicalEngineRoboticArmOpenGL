@@ -1,0 +1,8 @@
+# ignore codeblocks files
+engine/obj
+engine/bin
+client/obj
+client/bin
+cgProject.workspace.layout
+
+# ignore visual studio files
