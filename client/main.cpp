@@ -7,5 +7,6 @@ int main(int argc, char *argv[]){
     simpleClass obj;
     obj.engineMsg();
 
+    obj.init("Test iniziale fatto molto male", 640, 640, argc,argv);
     return 0;
 }

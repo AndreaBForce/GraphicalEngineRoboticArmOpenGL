@@ -33,6 +33,7 @@
 class LIB_API simpleClass{
     public:
         void engineMsg();
+		void init(const char* nomeFinestra, int width,int height, int argc, char* argv[]);
 };
 
 
