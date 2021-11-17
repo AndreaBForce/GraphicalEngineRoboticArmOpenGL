@@ -1,12 +1,12 @@
 #include <iostream>
-#include "simpleClass.h"
+#include "Engine.h"
 
 int main(int argc, char *argv[]){
 
     std::cout << "Sono il client" << std::endl;
-    simpleClass obj;
-    obj.engineMsg();
+    Engine* engine = Engine::GetInstance();
 
-    obj.init("Test iniziale fatto molto male", 640, 640, argc,argv);
+    engine->engineMsg();
+    engine->init("Test iniziale fatto molto male", 640, 640, argc,argv);
     return 0;
 }

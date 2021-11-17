@@ -39,7 +39,16 @@
 			<Add option="-std=c++11" />
 			<Add option="-fPIC" />
 			<Add option="-fexceptions" />
+			<Add directory="../dependencies/glm/include" />
 		</Compiler>
+		<Unit filename="Camera.cpp" />
+		<Unit filename="Camera.h" />
+		<Unit filename="Mesh.cpp" />
+		<Unit filename="Mesh.h" />
+		<Unit filename="Node.cpp" />
+		<Unit filename="Node.h" />
+		<Unit filename="Object.cpp" />
+		<Unit filename="Object.h" />
 		<Unit filename="simpleClass.cpp" />
 		<Unit filename="simpleClass.h" />
 		<Extensions />

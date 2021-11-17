@@ -9,7 +9,7 @@ class Node : public Object
     public:
         Node();
         virtual ~Node();
-        virtual void render();
+        void render() {};
 
         glm::mat4 get_pos_matrix(){return pos_matrix;}
         Node* get_parent(){return parent;}

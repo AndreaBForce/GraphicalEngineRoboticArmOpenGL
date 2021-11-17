@@ -6,7 +6,7 @@
 /////////////
 
 // Generic info:
-   #define LIB_NAME      "Simple Dynamic Library v0.1a"  ///< Library credits
+   #define LIB_NAME      "Engine library v0.1a"          ///< Library credits
    #define LIB_VERSION   10                              ///< Library version (divide by 10)
 
 #ifdef _WINDOWS
@@ -27,14 +27,23 @@
 // CLASSES //
 /////////////
 
-#ifndef SIMPLECLASS_H_INCLUDED
-#define SIMPLECLASS_H_INCLUDED
+#ifndef ENGINE_H_INCLUDED
+#define ENGINE_H_INCLUDED
 
-class LIB_API simpleClass{
+class LIB_API Engine{
     public:
+        static Engine* GetInstance();
         void engineMsg();
 		void init(const char* nomeFinestra, int width,int height, int argc, char* argv[]);
+
+		Engine(Engine &other) = delete;
+		void operator=(const Engine &) = delete;
+
+    private:
+        Engine(){};
+        static Engine* engine_instance;
 };
 
+Engine* Engine::engine_instance = nullptr;;
 
-#endif // SIMPLECLASS_H_INCLUDED
+#endif // ENGINE_H_INCLUDED

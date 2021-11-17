@@ -9,7 +9,7 @@ class Mesh : public Node
         Mesh();
         virtual ~Mesh();
 
-        void render();
+        void render() override;
 
         void load_mesh_from_file();
 

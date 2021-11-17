@@ -1,21 +1,20 @@
-#include "simpleClass.h"
-#include <iostream>
-
+#include "Engine.h"
+#include "Node.h"
 
 //////////////
 // #INCLUDE //
 //////////////
 
-   // GLM:   
+   // GLM:
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// FreeGLUT:   
+// FreeGLUT:
 #include <GL/freeglut.h>
 
 // C/C++:
-#include <iostream>      
+#include <iostream>
 
 
 //////////////
@@ -57,7 +56,16 @@ int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
 // BODY OF CLASS //
 //////////////////
 
-void LIB_API simpleClass::engineMsg(){
+
+Engine* LIB_API Engine::GetInstance(){
+    if(engine_instance == nullptr){
+        engine_instance = new Engine();
+    }
+
+    return engine_instance;
+}
+
+void LIB_API Engine::engineMsg(){
     std::cout << "Sono l'engine 1" << std::endl;
 }
 
@@ -69,11 +77,11 @@ int windowId;
 
 void displayCallback()
 {
-    // Clear the screen:         
+    // Clear the screen:
     glClearColor(1.0f, 0.6f, 0.1f, 1.0f); // RGBA components
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Set a matrix to move our triangle: 
+    // Set a matrix to move our triangle:
     glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, distance));
     glm::mat4 rotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -86,7 +94,7 @@ void displayCallback()
     // Set model matrix as current OpenGL matrix:
     glLoadMatrixf(glm::value_ptr(f));
 
-    // Pass a triangle (object coordinates: the triangle is centered around the origin):    
+    // Pass a triangle (object coordinates: the triangle is centered around the origin):
     glBegin(GL_TRIANGLES);
     glColor3f(0.0f, 0.0f, 1.0f);
     glVertex3f(-10.0f, -10.0f, 0.0f);
@@ -94,7 +102,7 @@ void displayCallback()
     glVertex3f(0.0f, 10.0f, 0.0f);
     glEnd();
 
-    // Swap this context's buffer:     
+    // Swap this context's buffer:
     glutSwapBuffers();
 }
 
@@ -153,17 +161,17 @@ void specialCallback(int key, int mouseX, int mouseY)
 }
 
 
-void LIB_API simpleClass::init(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
+void LIB_API Engine::init(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
 
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
     glutInitWindowPosition(100, 100);
 
     glutInit(&argc, argv);
-  
+
     // Set some optional flags:
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 
-    // Create the window with a specific title:   
+    // Create the window with a specific title:
     windowId = glutCreateWindow(nomeFinestra);
 
     glutDisplayFunc(displayCallback);
