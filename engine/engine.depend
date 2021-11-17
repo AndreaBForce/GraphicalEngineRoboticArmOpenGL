@@ -1,7 +1,42 @@
 # depslib dependency file v1.0
-1634923178 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/simpleClass.cpp
+1637086875 source:/home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Camera.cpp
+	"Camera.h"
+
+1637093784 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Camera.h
+	"Node.h"
+
+1637093316 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Node.h
+	"Object.h"
+	<vector>
+
+1637092357 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Object.h
+	<string>
+	<glm/glm.hpp>
+	<glm/gtc/matrix_transform.hpp>
+	<glm/gtc/type_ptr.hpp>
+	<GL/freeglut.h>
+
+1637093123 source:/home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Mesh.cpp
+	"Mesh.h"
+
+1637093752 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Mesh.h
+	"Node.h"
+
+1637087614 source:/home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Node.cpp
+	"Node.h"
+
+1637086830 source:/home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Object.cpp
+	"Object.h"
+
+1636185684 source:/home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/simpleClass.cpp
 	"simpleClass.h"
 	<iostream>
+	<glm/glm.hpp>
+	<glm/gtc/matrix_transform.hpp>
+	<glm/gtc/type_ptr.hpp>
+	<GL/freeglut.h>
+	<iostream>
+	<Windows.h>
 
-1634923638 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/simpleClass.h
+1636185684 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/simpleClass.h
 
