@@ -57,7 +57,7 @@ int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
 //////////////////
 
 
-Engine* LIB_API Engine::GetInstance(){
+LIB_API Engine*  Engine::GetInstance(){
     if(engine_instance == nullptr){
         engine_instance = new Engine();
     }
