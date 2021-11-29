@@ -33,6 +33,15 @@
     <ClInclude Include="Object.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -48,6 +57,15 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
