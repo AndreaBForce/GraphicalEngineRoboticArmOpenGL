@@ -7,3 +7,5 @@ cgProject.workspace.layout
 
 # ignore visual studio files
 Debug/
+CppProperties.json
+.vs/
