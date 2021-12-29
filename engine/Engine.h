@@ -39,6 +39,7 @@ class LIB_API Engine{
 		Engine(Engine &other) = delete;
 		void operator=(const Engine &) = delete;
 
+        void loadFromFile(const char* filePath);
     private:
         Engine(){};
         static Engine* engine_instance;

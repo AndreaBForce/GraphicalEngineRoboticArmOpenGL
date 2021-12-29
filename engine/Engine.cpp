@@ -1,6 +1,6 @@
 #include "Engine.h"
 #include "Node.h"
-
+#include "OvoRReader.h"
 //////////////
 // #INCLUDE //
 //////////////
@@ -184,3 +184,14 @@ void LIB_API Engine::init(const char* nomeFinestra, int width, int height, int a
 //C++->PREPROCESSOR->PREPROCESSOR DEFINITIONS-> METTI FREEGLUT_STATIC; davanti agli altri
 //Linker->general_> additional librarys-> metti ..\dependencies\freeglut\lib\$(Platform)\$(Configuration);
 //C++-> GENERAL -> ADDITIONAL SOCI -> metti ..\dependencies\freeglut\include;..\dependencies\glm\include
+
+void LIB_API Engine::loadFromFile(const char* filePath) {
+
+    //Declare the ovoreader
+    OvoRReader OvoReader;
+
+    Node* root = OvoReader.readDataFromFile(filePath);
+
+    //TODO ASSIGN ROOT
+
+}
