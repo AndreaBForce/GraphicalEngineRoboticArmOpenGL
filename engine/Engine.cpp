@@ -162,7 +162,7 @@ void specialCallback(int key, int mouseX, int mouseY)
 
 void LIB_API Engine::init(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
 
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
     glutInitWindowPosition(100, 100);
 
     glutInit(&argc, argv);
