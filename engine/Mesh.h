@@ -1,7 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 #include "Node.h"
-
+#include "Material.h"
 
 class Mesh : public Node
 {
@@ -18,7 +18,7 @@ class Mesh : public Node
     private:
         glm::vec4 texturingColoring;
 
-        //Material material;
+        Material material;
 
 };
 

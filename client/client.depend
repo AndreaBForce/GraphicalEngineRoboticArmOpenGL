@@ -5,7 +5,7 @@
 
 1636185684 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/simpleClass.h
 
-1641134650 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/client/main.cpp
+1641135144 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/client/main.cpp
 	<iostream>
 	"Engine.h"
 	"Node.h"
@@ -13,7 +13,7 @@
 
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/simpleClass.h
 
-1641134650 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
+1641134928 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
 	"Node.h"
 
 1637164292 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Node.h
@@ -913,6 +913,14 @@
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/type_ptr.inl
 	<cstring>
 
-1637164313 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
+1641134928 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
 	"Node.h"
+	"Material.h"
+
+1641134928 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
+	"Object.h"
+	"Texture.h"
+
+1641134928 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
+	"Object.h"
 
