@@ -21,6 +21,7 @@
    #define LIB_API  // Dummy declaration
 #endif
 
+#include "Node.h"
 
 
 /////////////
@@ -35,12 +36,14 @@ class LIB_API Engine{
         static Engine* GetInstance();
         void engineMsg();
 		void init(const char* nomeFinestra, int width,int height, int argc, char* argv[]);
+        void loadTree(Node* root);
 
 		Engine(Engine &other) = delete;
 		void operator=(const Engine &) = delete;
 
     private:
         Engine(){};
+        Node* rootE;
         static Engine* engine_instance;
 };
 

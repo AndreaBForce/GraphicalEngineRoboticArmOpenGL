@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Engine.h"
+#include "Node.h"
+#include "Mesh.h"
 
 int main(int argc, char *argv[]){
 
@@ -7,6 +9,10 @@ int main(int argc, char *argv[]){
     Engine* engine = Engine::GetInstance();
 
     engine->engineMsg();
-    engine->init("Test iniziale fatto molto male", 640, 640, argc,argv);
+    Node* root;
+    Mesh* mesh;
+    mesh->set_parent(root);
+    //engine->loadTree(root);
+    engine->init("Test iniziale fatto molto male", 100, 100, argc, argv);
     return 0;
 }

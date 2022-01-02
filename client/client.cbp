@@ -38,6 +38,7 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++11" />
 			<Add directory="../engine" />
+			<Add directory="../dependencies/glm/include" />
 		</Compiler>
 		<Linker>
 			<Add library="engine" />

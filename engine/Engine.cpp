@@ -61,7 +61,6 @@ Engine* LIB_API Engine::GetInstance(){
     if(engine_instance == nullptr){
         engine_instance = new Engine();
     }
-
     return engine_instance;
 }
 
@@ -181,6 +180,9 @@ void LIB_API Engine::init(const char* nomeFinestra, int width, int height, int a
     glutMainLoop();
 }
 
+void Engine::loadTree(Node* root){
+    Engine::engine_instance->rootE = root;
+}
 //C++->PREPROCESSOR->PREPROCESSOR DEFINITIONS-> METTI FREEGLUT_STATIC; davanti agli altri
 //Linker->general_> additional librarys-> metti ..\dependencies\freeglut\lib\$(Platform)\$(Configuration);
 //C++-> GENERAL -> ADDITIONAL SOCI -> metti ..\dependencies\freeglut\include;..\dependencies\glm\include
