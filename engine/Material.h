@@ -9,9 +9,27 @@ public:
     virtual ~Material();
     void render() {};
 
+
+
+    //Da mettere tutto private
+    char* name;
+
+    //Campi materiale
+    glm::vec3 emission;
+    glm::vec3 albedo;
+    float roughness;
+    float metalness;
+    float alpha;
+    char textureName[FILENAME_MAX];
+    char normalMapName[FILENAME_MAX];
+    char heightMapName[FILENAME_MAX];
+    char roughnessMapName[FILENAME_MAX];
+    char metalnessMapName[FILENAME_MAX];
     //todo add material properties
 private:
     Texture texture;
+
 };
+
 
 #endif // MATERIAL_H

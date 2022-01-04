@@ -19,11 +19,15 @@ class Node : public Object
 
         void tree_traversal();
         void set_parent(Node *new_parent){parent = new_parent;}
+        void addChild(Node* childNode);
+        int getNrOfChildren();
+
 
     private:
+
         glm::mat4 pos_matrix;
         Node* parent;
-        std::vector<Node> children;
+        std::vector<Node*> children;
 };
 
 #endif // NODE_H

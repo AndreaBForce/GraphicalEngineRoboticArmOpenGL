@@ -17,9 +17,9 @@
 #include "OvoRReader.h"
 #include <iostream>
 #include <fstream>
-#include <vector>   
-#include <iomanip>   
-#include <limits.h>   
+#include <vector>
+#include <iomanip>
+#include <limits.h>
 
 using namespace std;
 Node* OvoRReader::readDataFromFile(const char* filePath)
@@ -51,28 +51,29 @@ Node* OvoRReader::readDataFromFile(const char* filePath)
 
     unsigned int position = 0;
 
-    std::cout << lSize;
+    //std::cout << lSize;
     root = recursiveLoad(buffer, position);
-
-
+    root->addChild(recursiveLoad(buffer,position));
 
     //TODO QUESTO ERA UN TEST PER VERIFICARE CHE LEGGESSE IL TUTTO
     //VA RIMPIAZZATO CON LA RICORSIONE SOTTO
-    for (int i = 0; i < 50; i++) {
+    /*for (int i = 0; i < 50; i++) {
         std::cout << "entro qua ora";
 
         root = recursiveLoad(buffer, position);
-    }
+    }*/
 
     return root;
 }
 
 Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 {
-    // Parse the chunk starting at buffer + position:   
-
+    // Parse the chunk starting at buffer + position:
+    // Extract node information
+    Node* thisNode;
     unsigned int chunkId = 0, chunkSize = 0;
     unsigned int numberOfChildren = 0;
+
     /*
     * Leggi com memcpy e ogni volta poi sposti la position
     * Dopo ogni memcpy bisogna spostare la positon del socio
@@ -111,6 +112,9 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&versionId, data + chunkPosition, sizeof(unsigned int));
         cout << "   Version . . . :  " << versionId << endl;
         chunkPosition += sizeof(unsigned int);
+        thisNode = new Node();
+
+        //Credo che il primo Object che viene letto sia la root di tutto
 
     }
     break;
@@ -145,6 +149,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(targetName, data + chunkPosition);
         cout << "   Target node . :  " << targetName << endl;
         chunkPosition += (unsigned int)strlen(targetName) + 1;
+        thisNode = new Node();
     }
     break;
 
@@ -153,71 +158,63 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     case OvObject::Type::MATERIAL: //
     {
         cout << "material]" << endl;
+        Material* thisMaterial = new Material();
 
         // Material name:
-        char materialName[FILENAME_MAX];
-        strcpy(materialName, data + chunkPosition);
-        cout << "   Name  . . . . :  " << materialName << endl;
-        chunkPosition += (unsigned int)strlen(materialName) + 1;
+        strcpy(thisMaterial->name, data + chunkPosition);
+        cout << "   Name  . . . . :  " << (thisMaterial->name) << endl;
+        chunkPosition += (unsigned int)strlen(thisMaterial->name) + 1;
 
         // Material term colors, starting with emissive:
         glm::vec3 emission, albedo;
-        memcpy(&emission, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   Emission  . . :  " << emission.r << ", " << emission.g << ", " << emission.b << endl;
+        memcpy(&thisMaterial->emission, data + chunkPosition, sizeof(glm::vec3));
+        cout << "   Emission  . . :  " << thisMaterial->emission.r << ", " << thisMaterial->emission.g << ", " << thisMaterial->emission.b << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Albedo:
-        memcpy(&albedo, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   Albedo  . . . :  " << albedo.r << ", " << albedo.g << ", " << albedo.b << endl;
+        memcpy(&thisMaterial->albedo, data + chunkPosition, sizeof(glm::vec3));
+        cout << "   Albedo  . . . :  " << thisMaterial->albedo.r << ", " << thisMaterial->albedo.g << ", " << thisMaterial->albedo.b << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Roughness factor:
-        float roughness;
-        memcpy(&roughness, data + chunkPosition, sizeof(float));
-        cout << "   Roughness . . :  " << roughness << endl;
+        memcpy(&thisMaterial->roughness, data + chunkPosition, sizeof(float));
+        cout << "   Roughness . . :  " << thisMaterial->roughness << endl;
         chunkPosition += sizeof(float);
 
         // Metalness factor:
-        float metalness;
-        memcpy(&metalness, data + chunkPosition, sizeof(float));
-        cout << "   Metalness . . :  " << metalness << endl;
+        memcpy(&thisMaterial->metalness, data + chunkPosition, sizeof(float));
+        cout << "   Metalness . . :  " << thisMaterial->metalness << endl;
         chunkPosition += sizeof(float);
 
-        // Transparency factor:
-        float alpha;
-        memcpy(&alpha, data + chunkPosition, sizeof(float));
-        cout << "   Transparency  :  " << alpha << endl;
+        // Transparency factor
+        memcpy(&thisMaterial->alpha, data + chunkPosition, sizeof(float));
+        cout << "   Transparency  :  " << thisMaterial->alpha << endl;
         chunkPosition += sizeof(float);
 
         // Albedo texture filename, or [none] if not used:
-        char textureName[FILENAME_MAX];
-        strcpy(textureName, data + chunkPosition);
-        cout << "   Albedo tex. . :  " << textureName << endl;
-        chunkPosition += (unsigned int)strlen(textureName) + 1;
+        strcpy(thisMaterial->textureName, data + chunkPosition);
+        cout << "   Albedo tex. . :  " << thisMaterial->textureName << endl;
+        chunkPosition += (unsigned int)strlen(thisMaterial->textureName) + 1;
 
         // Normal map filename, or [none] if not used:
-        char normalMapName[FILENAME_MAX];
-        strcpy(normalMapName, data + chunkPosition);
-        cout << "   Normalmap tex.:  " << normalMapName << endl;
-        chunkPosition += (unsigned int)strlen(normalMapName) + 1;
+        strcpy(thisMaterial->normalMapName, data + chunkPosition);
+        cout << "   Normalmap tex.:  " << thisMaterial->normalMapName << endl;
+        chunkPosition += (unsigned int)strlen(thisMaterial->normalMapName) + 1;
 
         // Height map filename, or [none] if not used:
-        char heightMapName[FILENAME_MAX];
-        strcpy(heightMapName, data + chunkPosition);
-        cout << "   Heightmap tex.:  " << heightMapName << endl;
-        chunkPosition += (unsigned int)strlen(heightMapName) + 1;
+        strcpy(thisMaterial->heightMapName, data + chunkPosition);
+        cout << "   Heightmap tex.:  " << thisMaterial->heightMapName << endl;
+        chunkPosition += (unsigned int)strlen(thisMaterial->heightMapName) + 1;
 
         // Roughness map filename, or [none] if not used:
-        char roughnessMapName[FILENAME_MAX];
-        strcpy(roughnessMapName, data + chunkPosition);
-        cout << "   Roughness tex.:  " << roughnessMapName << endl;
-        chunkPosition += (unsigned int)strlen(roughnessMapName) + 1;
+        strcpy(thisMaterial->roughnessMapName, data + chunkPosition);
+        cout << "   Roughness tex.:  " << thisMaterial->roughnessMapName << endl;
+        chunkPosition += (unsigned int)strlen(thisMaterial->roughnessMapName) + 1;
 
         // Metalness map filename, or [none] if not used:
-        char metalnessMapName[FILENAME_MAX];
-        strcpy(metalnessMapName, data + chunkPosition);
-        cout << "   Metalness tex.:  " << metalnessMapName << endl;
-        chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
+        strcpy(thisMaterial->metalnessMapName, data + chunkPosition);
+        cout << "   Metalness tex.:  " << thisMaterial->metalnessMapName << endl;
+        chunkPosition += (unsigned int)strlen(thisMaterial->metalnessMapName) + 1;
     }
     break;
 
@@ -311,7 +308,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
              */
             struct PhysProps
             {
-                // Pay attention to 16 byte alignement (use padding):      
+                // Pay attention to 16 byte alignement (use padding):
                 unsigned char type;
                 unsigned char contCollisionDetection;
                 unsigned char collideWithRBodies;
@@ -377,7 +374,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                     // Iterate through hull vertices:
                     for (unsigned int c = 0; c < nrOfVertices; c++)
                     {
-                        // Vertex coords:    
+                        // Vertex coords:
                         glm::vec3 vertex;
                         memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
 
@@ -420,12 +417,12 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             cout << "   Nr. faces . . :  " << faces << endl;
             chunkPosition += sizeof(unsigned int);
 
-            // Interleaved and compressed vertex/normal/UV/tangent data:                    
+            // Interleaved and compressed vertex/normal/UV/tangent data:
             for (unsigned int c = 0; c < vertices; c++)
             {
 
 
-                // Vertex coords:    
+                // Vertex coords:
                 glm::vec3 vertex;
                 memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
                 chunkPosition += sizeof(glm::vec3);
@@ -463,7 +460,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Extra information for skinned meshes:
         if (isSkinned)
         {
-            // Initial mesh pose matrix:               
+            // Initial mesh pose matrix:
             glm::mat4 poseMatrix;
             memcpy(&poseMatrix, data + chunkPosition, sizeof(glm::mat4));
 
@@ -496,7 +493,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             {
                 cout << "      LOD . . :  " << l + 1 << "/" << LODs << endl;
 
-                // Per vertex bone weights and indexes:               
+                // Per vertex bone weights and indexes:
                 for (unsigned int c = 0; c < verticesPerLOD[l]; c++)
                 {
 
@@ -666,19 +663,15 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     buffer = buffer + position;
     delete[] data;
 
-
-    // Extract node information
-    //TODO DA AGGIUNGERE LA ROBA
-    Node* thisNode = NULL;
-
     // Go recursive when child nodes are avaialble:
-    /*if (numberOfChildren)
+    if (numberOfChildren){
         while (thisNode->getNrOfChildren() < numberOfChildren)
         {
             Node* childNode = recursiveLoad(buffer, position);
             thisNode->addChild(childNode);
         }
-    */
+    }
+
     // Done:
 
     return thisNode;

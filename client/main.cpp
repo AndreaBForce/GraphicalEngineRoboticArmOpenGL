@@ -13,9 +13,9 @@ int main(int argc, char *argv[]){
     Mesh* mesh = new Mesh();
     mesh->set_parent(root);
     //engine->loadTree(root);
-    engine->init("Test iniziale fatto molto male", 100, 100, argc, argv);
+    //engine->init("Test iniziale fatto molto male", 100, 100, argc, argv);
 
-    engine->loadFromFile("C:/Users/andre/Documents/3ds Max 2020/export/braccio.OVO");
+    engine->loadFromFile("/home/andrea/braccio.OVO");
     return 0;
 
     //VISUAL STUDIO PER APRIRLO,
