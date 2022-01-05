@@ -17,9 +17,9 @@
 #include "OvoRReader.h"
 #include <iostream>
 #include <fstream>
-#include <vector>   
-#include <iomanip>   
-#include <limits.h>   
+#include <vector>
+#include <iomanip>
+#include <limits.h>
 
 using namespace std;
 Node* OvoRReader::readDataFromFile(const char* filePath)
@@ -69,7 +69,7 @@ Node* OvoRReader::readDataFromFile(const char* filePath)
 
 Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 {
-    // Parse the chunk starting at buffer + position:   
+    // Parse the chunk starting at buffer + position:
 
     unsigned int chunkId = 0, chunkSize = 0;
     unsigned int numberOfChildren = 0;
@@ -236,82 +236,79 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         else
             cout << "mesh]" << endl;
 
+        Mesh* thisMesh = new Mesh();
+
         // Mesh name:
-        char meshName[FILENAME_MAX];
-        strcpy(meshName, data + chunkPosition);
-        chunkPosition += (unsigned int)strlen(meshName) + 1;
-        cout << "   Name  . . . . :  " << meshName << endl;
+        //char meshName[FILENAME_MAX];
+        strcpy(thisMesh->meshName, data + chunkPosition);
+
+        chunkPosition += (unsigned int)strlen(thisMesh->meshName) + 1;
+        cout << "   Name  . . . . :  " << thisMesh->meshName << endl;
 
         // Mesh matrix:
-        glm::mat4 matrix;
-        memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
+        memcpy(&thisMesh->matrix, data + chunkPosition, sizeof(glm::mat4));
 
         chunkPosition += sizeof(glm::mat4);
 
         // Mesh nr. of children nodes:
         unsigned int children;
-        memcpy(&children, data + chunkPosition, sizeof(unsigned int));
+        memcpy(&thisMesh->children, data + chunkPosition, sizeof(unsigned int));
         numberOfChildren = children;
         cout << "   Nr. children  :  " << children << endl;
         chunkPosition += sizeof(unsigned int);
 
         // Optional target node, or [none] if not used:
-        char targetName[FILENAME_MAX];
-        strcpy(targetName, data + chunkPosition);
-        cout << "   Target node . :  " << targetName << endl;
-        chunkPosition += (unsigned int)strlen(targetName) + 1;
+        strcpy(thisMesh->targetName, data + chunkPosition);
+        cout << "   Target node . :  " << thisMesh->targetName << endl;
+        chunkPosition += (unsigned int)strlen(thisMesh->targetName) + 1;
 
         // Mesh subtype (see OvMesh SUBTYPE enum):
         unsigned char subtype;
         memcpy(&subtype, data + chunkPosition, sizeof(unsigned char));
-        char subtypeName[FILENAME_MAX];
         switch ((OvMesh::Subtype)subtype)
         {
-        case OvMesh::Subtype::DEFAULT: strcpy(subtypeName, "standard"); break;
-        case OvMesh::Subtype::NORMALMAPPED: strcpy(subtypeName, "normal-mapped"); break;
-        case OvMesh::Subtype::TESSELLATED: strcpy(subtypeName, "tessellated"); break;
-        default: strcpy(subtypeName, "UNDEFINED");
+        case OvMesh::Subtype::DEFAULT: strcpy(thisMesh->subtypeName, "standard"); break;
+        case OvMesh::Subtype::NORMALMAPPED: strcpy(thisMesh->subtypeName, "normal-mapped"); break;
+        case OvMesh::Subtype::TESSELLATED: strcpy(thisMesh->subtypeName, "tessellated"); break;
+        default: strcpy(thisMesh->subtypeName, "UNDEFINED");
         }
-        cout << "   Subtype . . . :  " << (int)subtype << " (" << subtypeName << ")" << endl;
+        cout << "   Subtype . . . :  " << (int)subtype << " (" << thisMesh->subtypeName << ")" << endl;
         chunkPosition += sizeof(unsigned char);
 
         // Material name, or [none] if not used:
-        char materialName[FILENAME_MAX];
-        strcpy(materialName, data + chunkPosition);
-        cout << "   Material  . . :  " << materialName << endl;
-        chunkPosition += (unsigned int)strlen(materialName) + 1;
+        //char materialName[FILENAME_MAX];
+        thisMesh->get_material()->set_name(data + chunkPosition);
+        //strcpy(materialName, data + chunkPosition);
+        //cout << "   Material  . . :  " << materialName << endl;
+        chunkPosition += (unsigned int)strlen(thisMesh->get_material()->get_name()) + 1;
 
         // Mesh bounding sphere radius:
-        float radius;
-        memcpy(&radius, data + chunkPosition, sizeof(float));
-        cout << "   Radius  . . . :  " << radius << endl;
+        memcpy(&thisMesh->radius, data + chunkPosition, sizeof(float));
+        cout << "   Radius  . . . :  " << thisMesh->radius << endl;
         chunkPosition += sizeof(float);
 
         // Mesh bounding box minimum corner:
-        glm::vec3 bBoxMin;
-        memcpy(&bBoxMin, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   BBox minimum  :  " << bBoxMin.x << ", " << bBoxMin.y << ", " << bBoxMin.z << endl;
+        memcpy(&thisMesh->bBoxMin, data + chunkPosition, sizeof(glm::vec3));
+        cout << "   BBox minimum  :  " << thisMesh->bBoxMin.x << ", " << thisMesh->bBoxMin.y << ", " << thisMesh->bBoxMin.z << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Mesh bounding box maximum corner:
-        glm::vec3 bBoxMax;
-        memcpy(&bBoxMax, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   BBox maximum  :  " << bBoxMax.x << ", " << bBoxMax.y << ", " << bBoxMax.z << endl;
+        memcpy(&thisMesh->bBoxMax, data + chunkPosition, sizeof(glm::vec3));
+        cout << "   BBox maximum  :  " << thisMesh->bBoxMax.x << ", " << thisMesh->bBoxMax.y << ", " << thisMesh->bBoxMax.z << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Optional physics properties:
-        unsigned char hasPhysics;
-        memcpy(&hasPhysics, data + chunkPosition, sizeof(unsigned char));
-        cout << "   Physics . . . :  " << (int)hasPhysics << endl;
+        memcpy(&thisMesh->hasPhysics, data + chunkPosition, sizeof(unsigned char));
+        cout << "   Physics . . . :  " << (int)thisMesh->hasPhysics << endl;
         chunkPosition += sizeof(unsigned char);
-        if (hasPhysics)
+        if (thisMesh->hasPhysics)
         {
             /**
              * Mesh physics properties.
              */
             struct PhysProps
             {
-                // Pay attention to 16 byte alignement (use padding):      
+                // Pay attention to 16 byte alignement (use padding):
                 unsigned char type;
                 unsigned char contCollisionDetection;
                 unsigned char collideWithRBodies;
@@ -377,7 +374,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                     // Iterate through hull vertices:
                     for (unsigned int c = 0; c < nrOfVertices; c++)
                     {
-                        // Vertex coords:    
+                        // Vertex coords:
                         glm::vec3 vertex;
                         memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
 
@@ -420,12 +417,12 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             cout << "   Nr. faces . . :  " << faces << endl;
             chunkPosition += sizeof(unsigned int);
 
-            // Interleaved and compressed vertex/normal/UV/tangent data:                    
+            // Interleaved and compressed vertex/normal/UV/tangent data:
             for (unsigned int c = 0; c < vertices; c++)
             {
 
 
-                // Vertex coords:    
+                // Vertex coords:
                 glm::vec3 vertex;
                 memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
                 chunkPosition += sizeof(glm::vec3);
@@ -463,7 +460,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Extra information for skinned meshes:
         if (isSkinned)
         {
-            // Initial mesh pose matrix:               
+            // Initial mesh pose matrix:
             glm::mat4 poseMatrix;
             memcpy(&poseMatrix, data + chunkPosition, sizeof(glm::mat4));
 
@@ -496,7 +493,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             {
                 cout << "      LOD . . :  " << l + 1 << "/" << LODs << endl;
 
-                // Per vertex bone weights and indexes:               
+                // Per vertex bone weights and indexes:
                 for (unsigned int c = 0; c < verticesPerLOD[l]; c++)
                 {
 
