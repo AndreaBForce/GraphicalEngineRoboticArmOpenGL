@@ -17,9 +17,9 @@
 #include "OvoRReader.h"
 #include <iostream>
 #include <fstream>
-#include <vector>   
-#include <iomanip>   
-#include <limits.h>   
+#include <vector>
+#include <iomanip>
+#include <limits.h>
 
 using namespace std;
 Node* OvoRReader::readDataFromFile(const char* filePath)
@@ -69,7 +69,7 @@ Node* OvoRReader::readDataFromFile(const char* filePath)
 
 Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 {
-    // Parse the chunk starting at buffer + position:   
+    // Parse the chunk starting at buffer + position:
 
     unsigned int chunkId = 0, chunkSize = 0;
     unsigned int numberOfChildren = 0;
@@ -98,6 +98,9 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     position = position + (sizeof(char) * chunkSize);
 
     //TODO FARE UNA FUNZIONE DI STO MEGA PEZZO DI CODICE
+
+    //Creazione della light
+    Light* light1 = new Light();
 
     switch ((OvObject::Type)chunkId)
     {
@@ -311,7 +314,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
              */
             struct PhysProps
             {
-                // Pay attention to 16 byte alignement (use padding):      
+                // Pay attention to 16 byte alignement (use padding):
                 unsigned char type;
                 unsigned char contCollisionDetection;
                 unsigned char collideWithRBodies;
@@ -377,7 +380,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                     // Iterate through hull vertices:
                     for (unsigned int c = 0; c < nrOfVertices; c++)
                     {
-                        // Vertex coords:    
+                        // Vertex coords:
                         glm::vec3 vertex;
                         memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
 
@@ -420,12 +423,12 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             cout << "   Nr. faces . . :  " << faces << endl;
             chunkPosition += sizeof(unsigned int);
 
-            // Interleaved and compressed vertex/normal/UV/tangent data:                    
+            // Interleaved and compressed vertex/normal/UV/tangent data:
             for (unsigned int c = 0; c < vertices; c++)
             {
 
 
-                // Vertex coords:    
+                // Vertex coords:
                 glm::vec3 vertex;
                 memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
                 chunkPosition += sizeof(glm::vec3);
@@ -463,7 +466,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Extra information for skinned meshes:
         if (isSkinned)
         {
-            // Initial mesh pose matrix:               
+            // Initial mesh pose matrix:
             glm::mat4 poseMatrix;
             memcpy(&poseMatrix, data + chunkPosition, sizeof(glm::mat4));
 
@@ -496,7 +499,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             {
                 cout << "      LOD . . :  " << l + 1 << "/" << LODs << endl;
 
-                // Per vertex bone weights and indexes:               
+                // Per vertex bone weights and indexes:
                 for (unsigned int c = 0; c < verticesPerLOD[l]; c++)
                 {
 
@@ -528,10 +531,12 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(lightName, data + chunkPosition);
         cout << "   Name  . . . . :  " << lightName << endl;
         chunkPosition += (unsigned int)strlen(lightName) + 1;
+        light1->set_name(lightName);
 
         // Light matrix:
         glm::mat4 matrix;
         memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
+        light1->setViewMatrix(matrix);
 
         chunkPosition += sizeof(glm::mat4);
 
@@ -579,12 +584,14 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&direction, data + chunkPosition, sizeof(glm::vec3));
         cout << "   Direction . . :  " << direction.r << ", " << direction.g << ", " << direction.b << endl;
         chunkPosition += sizeof(glm::vec3);
+        light1->setDirection(direction);
 
         // Cutoff:
         float cutoff;
         memcpy(&cutoff, data + chunkPosition, sizeof(float));
         cout << "   Cutoff  . . . :  " << cutoff << endl;
         chunkPosition += sizeof(float);
+        light1->setCutoff(cutoff);
 
         // Exponent:
         float spotExponent;

@@ -68,17 +68,58 @@ void LIB_API Engine::engineMsg(){
     std::cout << "Sono l'engine 1" << std::endl;
 }
 
+void LIB_API Engine::clearDisplay(){
+    //glClearColor(0.0f, 0.6f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
+void LIB_API Engine::setDisplayCallback(void(* callback)(void)){
+    glutDisplayFunc(callback);
+}
+
+void LIB_API Engine::setSpecialCallback(void(* callback)(int key, int mouseX, int mouseY)){
+    glutSpecialFunc(callback);
+}
+
+void LIB_API Engine::setKeyboardCallback(void(* callback)(unsigned char key, int mouseX, int mouseY)){
+    glutKeyboardFunc(callback);
+}
+
+void LIB_API Engine::forceRendering(int windowId){
+    glutPostWindowRedisplay(windowId);
+}
+
+void LIB_API Engine::enableLightSystem(){
+    glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHT0);
+}
+
+void LIB_API Engine::startEventLoop(){
+    while(1){
+        glutMainLoopEvent();
+    }
+}
+
+void LIB_API Engine::endEventLoop(){
+    glutLeaveMainLoop();
+}
+
+void LIB_API Engine::swapBuffer(){
+    glutSwapBuffers();
+}
 
 float angle = 0.0f;
 float distance = -45.0f;
-int windowId;
+//int windowId;
 
 void displayCallback()
 {
+    std::cout << "callback lato engine" << std::endl;
     // Clear the screen:
-    glClearColor(1.0f, 0.6f, 0.1f, 1.0f); // RGBA components
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // RGBA components
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Set a matrix to move our triangle:
     glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, distance));
@@ -124,6 +165,10 @@ void reshapeCallback(int width, int height)
 }
 
 
+void LIB_API Engine::setReshapeCallback(){
+    glutReshapeFunc(reshapeCallback);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * This callback is invoked each time a special keyboard key is pressed.
@@ -156,28 +201,34 @@ void specialCallback(int key, int mouseX, int mouseY)
     }
 
     // Force rendering refresh:
-    glutPostWindowRedisplay(windowId);
+    //glutPostWindowRedisplay(windowId);
 }
 
 
-void LIB_API Engine::init(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
+int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
+    int windowId;
 
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowPosition(100, 100);
+    glutInitWindowSize(width, height);
 
     glutInit(&argc, argv);
 
     // Set some optional flags:
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_EXIT);
 
     // Create the window with a specific title:
     windowId = glutCreateWindow(nomeFinestra);
 
-    glutDisplayFunc(displayCallback);
-    glutReshapeFunc(reshapeCallback);
-    glutSpecialFunc(specialCallback);
+    //glutDisplayFunc(displayCallback);
+    //glutReshapeFunc(reshapeCallback);
+    //glutSpecialFunc(specialCallback);
 
-    glutMainLoop();
+    //glEnable(GL_DEPTH_TEST);
+
+
+    //glutMainLoop();
+    return windowId;
 }
 
 void Engine::loadTree(Node* root){

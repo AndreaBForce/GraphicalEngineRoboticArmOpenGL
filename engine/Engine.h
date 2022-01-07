@@ -23,6 +23,14 @@
 
 #include "Node.h"
 
+/////////////
+// DEFINE //
+///////////
+
+#define KEY_UP GLUT_KEY_UP
+#define KEY_DOWN GLUT_KEY_DOWN
+#define KEY_LEFT GLUT_KEY_LEFT
+#define KEY_RIGHT GLUT_KEY_RIGHT
 
 /////////////
 // CLASSES //
@@ -35,7 +43,17 @@ class LIB_API Engine{
     public:
         static Engine* GetInstance();
         void engineMsg();
-		void init(const char* nomeFinestra, int width,int height, int argc, char* argv[]);
+		int init3Dcontext(const char* nomeFinestra, int width,int height, int argc, char* argv[]);
+		void setDisplayCallback(void(* callback)(void));
+		void setReshapeCallback();
+		void setSpecialCallback(void(* callback)(int key, int mouseX, int mouseY));
+		void setKeyboardCallback(void(* callback)(unsigned char key, int mouseX, int mouseY));
+		void forceRendering(int windowId);
+		void enableLightSystem();
+		void startEventLoop();
+		void endEventLoop();
+		void clearDisplay();
+		void swapBuffer();
         void loadTree(Node* root);
 
 		Engine(Engine &other) = delete;
