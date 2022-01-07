@@ -24,6 +24,7 @@ void displayCallback(){
     light->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
     engine->clearDisplay();
 
+
     light->render();
     cube->render();
 

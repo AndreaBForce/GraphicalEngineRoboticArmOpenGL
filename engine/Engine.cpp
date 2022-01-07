@@ -99,6 +99,7 @@ void LIB_API Engine::enableLightSystem(){
 void LIB_API Engine::startEventLoop(){
     while(1){
         glutMainLoopEvent();
+
     }
 }
 
