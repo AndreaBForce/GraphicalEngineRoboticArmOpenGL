@@ -12,15 +12,15 @@ class Object
     public:
         int get_id(){return id;}
 
-        char* get_name(){return name;}
+        std::string get_name(){return name;}
 
-        void set_name(char* new_name){name = new_name;}
+        void set_name(std::string new_name){name = new_name;}
 
         virtual void render() = 0;
 
     private:
         int id;
-        char* name;
+        std::string name;
 };
 
 #endif // OBJECT_H

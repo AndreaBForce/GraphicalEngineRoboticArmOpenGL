@@ -14,6 +14,35 @@ Material* Mesh::get_material(){
     return material;
 }
 
+void Mesh::set_matrix(glm::mat4 mesh_matrix){
+    matrix = mesh_matrix;
+}
+
+void Mesh::set_bBoxMin(glm::vec3 mesh_bBoxMin){
+    bBoxMin = mesh_bBoxMin;
+}
+
+void Mesh::set_bBoxMax(glm::vec3 mesh_bBoxMax){
+    bBoxMax = mesh_bBoxMax;
+}
+
+void Mesh::set_radius(float mesh_radius){
+    radius = mesh_radius;
+}
+
+void Mesh::set_children(unsigned int mesh_children){
+    children = mesh_children;
+}
+
+void Mesh::set_subtype(char mesh_subtypeName[FILENAME_MAX]){
+    strcpy(subtypeName, mesh_subtypeName);
+}
+
+
+void Mesh::set_targetName(char mesh_targetName[FILENAME_MAX]){
+    strcpy(targetName, mesh_targetName);
+}
+
 void Mesh::render(){
 // Clear the screen:
     glClearColor(1.0f, 0.6f, 0.1f, 1.0f); // RGBA components

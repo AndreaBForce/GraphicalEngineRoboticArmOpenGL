@@ -239,40 +239,48 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         Mesh* thisMesh = new Mesh();
 
         // Mesh name:
-        //char meshName[FILENAME_MAX];
-        strcpy(thisMesh->meshName, data + chunkPosition);
+        char meshName[FILENAME_MAX];
+        strcpy(meshName, data + chunkPosition);
+        thisMesh->set_name(meshName);
 
-        chunkPosition += (unsigned int)strlen(thisMesh->meshName) + 1;
-        cout << "   Name  . . . . :  " << thisMesh->meshName << endl;
+        chunkPosition += (unsigned int)strlen(meshName) + 1;
+        cout << "   Name  . . . . :  " << thisMesh->get_name() << endl;
 
         // Mesh matrix:
-        memcpy(&thisMesh->matrix, data + chunkPosition, sizeof(glm::mat4));
+        glm::mat4 matrix;
+        memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
+        thisMesh->set_matrix(matrix);
 
         chunkPosition += sizeof(glm::mat4);
 
         // Mesh nr. of children nodes:
         unsigned int children;
-        memcpy(&thisMesh->children, data + chunkPosition, sizeof(unsigned int));
+        memcpy(&children, data + chunkPosition, sizeof(unsigned int));
         numberOfChildren = children;
         cout << "   Nr. children  :  " << children << endl;
         chunkPosition += sizeof(unsigned int);
+        thisMesh->set_children(children);
 
         // Optional target node, or [none] if not used:
-        strcpy(thisMesh->targetName, data + chunkPosition);
-        cout << "   Target node . :  " << thisMesh->targetName << endl;
-        chunkPosition += (unsigned int)strlen(thisMesh->targetName) + 1;
+        char targetName[FILENAME_MAX];
+        strcpy(targetName, data + chunkPosition);
+        cout << "   Target node . :  " << targetName << endl;
+        chunkPosition += (unsigned int)strlen(targetName) + 1;
+        thisMesh->set_targetName(targetName);
 
         // Mesh subtype (see OvMesh SUBTYPE enum):
         unsigned char subtype;
         memcpy(&subtype, data + chunkPosition, sizeof(unsigned char));
+        char subtypeName[FILENAME_MAX];
         switch ((OvMesh::Subtype)subtype)
         {
-        case OvMesh::Subtype::DEFAULT: strcpy(thisMesh->subtypeName, "standard"); break;
-        case OvMesh::Subtype::NORMALMAPPED: strcpy(thisMesh->subtypeName, "normal-mapped"); break;
-        case OvMesh::Subtype::TESSELLATED: strcpy(thisMesh->subtypeName, "tessellated"); break;
-        default: strcpy(thisMesh->subtypeName, "UNDEFINED");
+        case OvMesh::Subtype::DEFAULT: strcpy(subtypeName, "standard"); break;
+        case OvMesh::Subtype::NORMALMAPPED: strcpy(subtypeName, "normal-mapped"); break;
+        case OvMesh::Subtype::TESSELLATED: strcpy(subtypeName, "tessellated"); break;
+        default: strcpy(subtypeName, "UNDEFINED");
         }
-        cout << "   Subtype . . . :  " << (int)subtype << " (" << thisMesh->subtypeName << ")" << endl;
+        thisMesh->set_subtype(subtypeName);
+        cout << "   Subtype . . . :  " << (int)subtype << " (" << subtypeName << ")" << endl;
         chunkPosition += sizeof(unsigned char);
 
         // Material name, or [none] if not used:
@@ -282,25 +290,32 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
-        memcpy(&thisMesh->radius, data + chunkPosition, sizeof(float));
-        cout << "   Radius  . . . :  " << thisMesh->radius << endl;
+        float radius;
+        memcpy(&radius, data + chunkPosition, sizeof(float));
+        cout << "   Radius  . . . :  " << radius << endl;
         chunkPosition += sizeof(float);
+        thisMesh->set_radius(radius);
 
         // Mesh bounding box minimum corner:
-        memcpy(&thisMesh->bBoxMin, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   BBox minimum  :  " << thisMesh->bBoxMin.x << ", " << thisMesh->bBoxMin.y << ", " << thisMesh->bBoxMin.z << endl;
+        glm::vec3 bBoxMin;
+        memcpy(&bBoxMin, data + chunkPosition, sizeof(glm::vec3));
+        thisMesh->set_bBoxMin(bBoxMin);
+        //cout << "   BBox minimum  :  " << thisMesh->bBoxMin.x << ", " << thisMesh->bBoxMin.y << ", " << thisMesh->bBoxMin.z << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Mesh bounding box maximum corner:
-        memcpy(&thisMesh->bBoxMax, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   BBox maximum  :  " << thisMesh->bBoxMax.x << ", " << thisMesh->bBoxMax.y << ", " << thisMesh->bBoxMax.z << endl;
+        glm::vec3 bBoxMax;
+        memcpy(&bBoxMax, data + chunkPosition, sizeof(glm::vec3));
+        thisMesh->set_bBoxMax(bBoxMax);
+        //cout << "   BBox maximum  :  " << thisMesh->bBoxMax.x << ", " << thisMesh->bBoxMax.y << ", " << thisMesh->bBoxMax.z << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Optional physics properties:
-        memcpy(&thisMesh->hasPhysics, data + chunkPosition, sizeof(unsigned char));
-        cout << "   Physics . . . :  " << (int)thisMesh->hasPhysics << endl;
+        unsigned char hasPhysics;
+        memcpy(&hasPhysics, data + chunkPosition, sizeof(unsigned char));
+        cout << "   Physics . . . :  " << (int)hasPhysics << endl;
         chunkPosition += sizeof(unsigned char);
-        if (thisMesh->hasPhysics)
+        if (hasPhysics)
         {
             /**
              * Mesh physics properties.
