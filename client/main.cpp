@@ -106,11 +106,14 @@ int main(int argc, char *argv[]){
 
     engine->enableLightSystem();
 
-    engine->startEventLoop();
+    //engine->startEventLoop();
 
     //engine->endEventLoop();
+    engine->loadFromFile("C:/Users/andre/Documents/3ds Max 2020/export/room.OVO");
+   
+    std::cout << "non go nulla" << std::endl;
+    std::cout << engine->getRoot()->get_number_of_children() << std::endl;
 
-    //engine->loadFromFile("C:/Users/andre/Documents/3ds Max 2020/export/braccio.OVO");
     return 0;
 
     //VISUAL STUDIO PER APRIRLO,

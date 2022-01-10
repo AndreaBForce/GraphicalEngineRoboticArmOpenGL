@@ -41,6 +41,8 @@ class LIB_API Engine{
 		void swapBuffer();
         void loadTree(Node* root);
 
+		Node* getRoot() { return rootE; };
+
 		Engine(Engine &other) = delete;
 		void operator=(const Engine &) = delete;
 

@@ -165,7 +165,6 @@ void LIB_API Engine::loadFromFile(const char* filePath) {
     OvoRReader OvoReader;
 
     Node* root = OvoReader.readDataFromFile(filePath);
-
-    //TODO ASSIGN ROOT
-
+    loadTree(root);
+    
 }

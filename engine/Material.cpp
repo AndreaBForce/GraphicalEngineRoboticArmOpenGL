@@ -10,20 +10,24 @@ void LIB_API Material::setName(char materialName[FILENAME_MAX]){
     this->name = materialName;
 };
 void LIB_API Material::setEmission(glm::vec3 emission){
-        this->emission = emission;
+    
+        this->emission = glm::vec4(emission,1.0f);
 };
-void LIB_API Material::setAlbedo(glm::vec3 albedo){
-    this->albedo = albedo;
+void LIB_API Material::setAmbient(glm::vec3 albedo){
+    this->ambient = glm::vec4(albedo.r*0.2,albedo.g*0.2,albedo.b*0.2,1.0f);
 };
-void LIB_API Material::setRoughness(float roughness){
-    this->roughness = roughness;
+
+void LIB_API Material::setSpecular(glm::vec3 albedo) {
+    this->specular = glm::vec4(albedo.r * 0.4, albedo.g * 0.4, albedo.b * 0.4, 1.0f);
 };
-void LIB_API Material::setMetalness(float metalness){
-    this->metalness = metalness;
+
+void LIB_API Material::setDiffuse(glm::vec3 albedo) {
+    this->diffuse = glm::vec4(albedo.r * 0.6, albedo.g * 0.6, albedo.b * 0.6, 1.0f);
 };
-void LIB_API Material::setAlpha(float alpha){
-    this->alpha = alpha;
-};
+
+void LIB_API Material::setShininess(float roughness) {
+    this->shininess = ((1 - sqrt(roughness)) * 128);
+}
 
 void LIB_API Material::setTextureName(char textureName[FILENAME_MAX]){
     strcpy(this->textureName, textureName);

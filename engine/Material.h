@@ -13,10 +13,11 @@ public:
 
     void setName(char materialName[FILENAME_MAX]);
     void setEmission(glm::vec3 emission);
-    void setAlbedo(glm::vec3 albedo);
-    void setRoughness(float roughness);
-    void setMetalness(float metalness);
-    void setAlpha(float alpha);
+    void setAmbient(glm::vec3 ambient);
+    void setSpecular(glm::vec3 specular);
+    void setDiffuse(glm::vec3 diffuse);
+
+    void setShininess(float shininess);
 
     void setTextureName(char textureName[FILENAME_MAX]);
     void setNormalMapName(char NormalMapName[FILENAME_MAX]);
@@ -30,11 +31,14 @@ private:
 
     char* name;
     //Campi materiale
-    glm::vec3 emission;
-    glm::vec3 albedo;
-    float roughness;
-    float metalness;
-    float alpha;
+
+    glm::vec4 emission;
+    glm::vec4 ambient;
+    glm::vec4 specular;
+    glm::vec4 diffuse;
+
+    float shininess;
+
     char textureName[FILENAME_MAX];
     char normalMapName[FILENAME_MAX];
     char heightMapName[FILENAME_MAX];
