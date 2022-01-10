@@ -101,6 +101,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
     //Creazione della light
     Light* light1 = new Light();
+    Node* thisNode;
 
     switch ((OvObject::Type)chunkId)
     {
@@ -714,7 +715,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
     // Go recursive when child nodes are avaialble:
     if (numberOfChildren){
-        while (thisNode->getNrOfChildren() < numberOfChildren)
+        while (thisNode->get_number_of_children() < numberOfChildren)
         {
             Node* childNode = recursiveLoad(buffer, position);
             thisNode->addChild(childNode);
