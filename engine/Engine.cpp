@@ -92,7 +92,7 @@ void LIB_API Engine::forceRendering(int windowId){
 void LIB_API Engine::enableLightSystem(){
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
     glEnable(GL_LIGHTING);
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHT0);
 }
 
@@ -108,42 +108,6 @@ void LIB_API Engine::endEventLoop(){
 }
 
 void LIB_API Engine::swapBuffer(){
-    glutSwapBuffers();
-}
-
-float angle = 0.0f;
-float distance = -45.0f;
-//int windowId;
-
-void displayCallback()
-{
-    std::cout << "callback lato engine" << std::endl;
-    // Clear the screen:
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // RGBA components
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Set a matrix to move our triangle:
-    glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, distance));
-    glm::mat4 rotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
-
-    // Compute model matrix:
-    glm::mat4 f = translation * rotationZ;
-
-    glm::mat4 camera = glm::mat4(1.0f);
-
-
-    // Set model matrix as current OpenGL matrix:
-    glLoadMatrixf(glm::value_ptr(f));
-
-    // Pass a triangle (object coordinates: the triangle is centered around the origin):
-    glBegin(GL_TRIANGLES);
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(-10.0f, -10.0f, 0.0f);
-    glVertex3f(10.0f, -10.0f, 0.0f);
-    glVertex3f(0.0f, 10.0f, 0.0f);
-    glEnd();
-
-    // Swap this context's buffer:
     glutSwapBuffers();
 }
 
@@ -170,41 +134,6 @@ void LIB_API Engine::setReshapeCallback(){
     glutReshapeFunc(reshapeCallback);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * This callback is invoked each time a special keyboard key is pressed.
- * @param key key pressed id
- * @param mouseX mouse X coordinate
- * @param mouseY mouse Y coordinate
- */
-void specialCallback(int key, int mouseX, int mouseY)
-{
-    std::cout << "[key pressed]" << std::endl;
-
-    const float speed = 0.5f;
-    switch (key)
-    {
-    case GLUT_KEY_UP:
-        distance -= speed;
-        break;
-
-    case GLUT_KEY_DOWN:
-        distance += speed;
-        break;
-
-    case GLUT_KEY_LEFT:
-        angle += speed;
-        break;
-
-    case GLUT_KEY_RIGHT:
-        angle -= speed;
-        break;
-    }
-
-    // Force rendering refresh:
-    //glutPostWindowRedisplay(windowId);
-}
-
 
 int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
     int windowId;
@@ -221,14 +150,8 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
     // Create the window with a specific title:
     windowId = glutCreateWindow(nomeFinestra);
 
-    //glutDisplayFunc(displayCallback);
-    //glutReshapeFunc(reshapeCallback);
-    //glutSpecialFunc(specialCallback);
+    glEnable(GL_DEPTH_TEST);
 
-    //glEnable(GL_DEPTH_TEST);
-
-
-    //glutMainLoop();
     return windowId;
 }
 

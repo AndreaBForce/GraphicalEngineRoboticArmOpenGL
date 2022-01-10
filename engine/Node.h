@@ -19,6 +19,7 @@ class Node : public Object
 
         void tree_traversal();
         void set_parent(Node *new_parent){parent = new_parent;}
+        void set_pos_matrix(glm::mat4 new_pos_matrix){pos_matrix = new_pos_matrix;}
 
     private:
         glm::mat4 pos_matrix;

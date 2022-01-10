@@ -9,10 +9,6 @@ Light::~Light() {
 	//dtor
 }
 
-void Light::setViewMatrix(glm::mat4 matrix){
-    this->view_matrix = matrix;
-}
-
 void Light::setPosition(glm::vec3 position){
     this->position = position;
 }
@@ -37,6 +33,10 @@ void Light::setCutoff(float cutoff){
     this->cutoff = cutoff;
 }
 
+void Light::setLightType(lightType type){
+    this->type = type;
+}
+
 void Light::render() {
     std::cout << "render light" << std::endl;
 
@@ -50,10 +50,30 @@ void Light::render() {
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(glm::vec4(0.0f)));
 
    // Light position is set to object coordinates and is modified by the current OpenGL matrix (as with any other object):
-   glm::vec4 objectCoordPosition(0.0f, 0.0f, 0.0f, 1.0f);
-   glLightfv(GL_LIGHT0, GL_POSITION, glm::value_ptr(objectCoordPosition));
+   //glm::vec4 objectCoordPosition(0.0f, 0.0f, 0.0f, 1.0f);
+
    glLightfv(GL_LIGHT0, GL_AMBIENT, glm::value_ptr(Light::ambient));
    glLightfv(GL_LIGHT0, GL_DIFFUSE, glm::value_ptr(Light::diffuse));
    glLightfv(GL_LIGHT0, GL_SPECULAR, glm::value_ptr(Light::specular));
+
+   glm::vec4 objectCoordPosition;
+   switch(this->type){
+    case lightType::DIRECTIONAL:
+        objectCoordPosition = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+        break;
+    case lightType::OMNI:
+        objectCoordPosition = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF, &cutoff);
+        break;
+    case lightType::SPOT:
+        objectCoordPosition = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF, &cutoff);
+        glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, glm::value_ptr(this->direction));
+        break;
+    default:
+        break;
+   }
+
+   glLightfv(GL_LIGHT0, GL_POSITION, glm::value_ptr(objectCoordPosition));
 }
 

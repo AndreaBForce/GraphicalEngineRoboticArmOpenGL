@@ -90,10 +90,11 @@ int main(int argc, char *argv[]){
     //engine->loadTree(root);
 
     //light->setPosition(glm::vec3(0.0f, -3.0f, -30.0f));
+    light->setLightType(lightType::OMNI);
     light->setAmbient(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
     light->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
     light->setSpecular(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    light->setDirection(glm::vec3(0.0f, 0.0f, 0.0f));
+    light->setDirection(glm::vec3(-20.0f, 0.0f, -60.0f));
     light->setCutoff(180.0f);
 
     windowId = engine->init3Dcontext("Project", 600, 600, argc, argv);

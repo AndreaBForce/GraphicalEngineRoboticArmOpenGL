@@ -536,7 +536,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Light matrix:
         glm::mat4 matrix;
         memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
-        light1->setViewMatrix(matrix);
+        light1->set_pos_matrix(matrix);
 
         chunkPosition += sizeof(glm::mat4);
 
@@ -559,10 +559,20 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         char subtypeName[FILENAME_MAX];
         switch ((OvLight::Subtype)subtype)
         {
-        case OvLight::Subtype::DIRECTIONAL: strcpy(subtypeName, "directional"); break;
-        case OvLight::Subtype::OMNI: strcpy(subtypeName, "omni"); break;
-        case OvLight::Subtype::SPOT: strcpy(subtypeName, "spot"); break;
-        default: strcpy(subtypeName, "UNDEFINED");
+        case OvLight::Subtype::DIRECTIONAL:
+            strcpy(subtypeName, "directional");
+            light1->setLightType(DIRECTIONAL);
+            break;
+        case OvLight::Subtype::OMNI:
+            strcpy(subtypeName, "omni");
+            light1->setLightType(OMNI);
+            break;
+        case OvLight::Subtype::SPOT:
+            strcpy(subtypeName, "spot");
+            light1->setLightType(SPOT);
+            break;
+        default:
+            strcpy(subtypeName, "UNDEFINED");
         }
         cout << "   Subtype . . . :  " << (int)subtype << " (" << subtypeName << ")" << endl;
         chunkPosition += sizeof(unsigned char);
@@ -572,6 +582,9 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&color, data + chunkPosition, sizeof(glm::vec3));
         cout << "   Color . . . . :  " << color.r << ", " << color.g << ", " << color.b << endl;
         chunkPosition += sizeof(glm::vec3);
+        light1->setAmbient(glm::vec4(color, 1.0f));
+        light1->setDiffuse(glm::vec4(color, 1.0f));
+        light1->setSpecular(glm::vec4(color, 1.0f));
 
         // Influence radius:
         float radius;
