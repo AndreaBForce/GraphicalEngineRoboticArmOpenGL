@@ -10,10 +10,24 @@ public:
     void render() {};
 
 
+    void setName(char materialName[FILENAME_MAX]);
+    void setEmission(glm::vec3 emission);
+    void setAlbedo(glm::vec3 albedo);
+    void setRoughness(float roughness);
+    void setMetalness(float metalness);
+    void setAlpha(float alpha);
 
-    //Da mettere tutto private
+    void setTextureName(char textureName[FILENAME_MAX]);
+    void setNormalMapName(char NormalMapName[FILENAME_MAX]);
+    void setHeightMapName(char heightMapName[FILENAME_MAX]);
+    void setRoughnessMapName(char roughnessMapName[FILENAME_MAX]);
+    void setMetalnessMapName(char metalnessMapName[FILENAME_MAX]);
+
+    //todo add material properties
+private:
+    Texture texture;
+
     char* name;
-
     //Campi materiale
     glm::vec3 emission;
     glm::vec3 albedo;
@@ -25,10 +39,6 @@ public:
     char heightMapName[FILENAME_MAX];
     char roughnessMapName[FILENAME_MAX];
     char metalnessMapName[FILENAME_MAX];
-    //todo add material properties
-private:
-    Texture texture;
-
 };
 
 

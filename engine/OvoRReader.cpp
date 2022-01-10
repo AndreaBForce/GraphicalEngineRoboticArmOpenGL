@@ -161,60 +161,80 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         Material* thisMaterial = new Material();
 
         // Material name:
-        strcpy(thisMaterial->name, data + chunkPosition);
-        cout << "   Name  . . . . :  " << (thisMaterial->name) << endl;
-        chunkPosition += (unsigned int)strlen(thisMaterial->name) + 1;
+        char materialName[FILENAME_MAX];
+        strcpy(materialName, data + chunkPosition);
+        cout << "   Name  . . . . :  " << (materialName) << endl;
+        chunkPosition += (unsigned int)strlen(materialName) + 1;
+        thisMaterial->setName(materialName);
 
         // Material term colors, starting with emissive:
         glm::vec3 emission, albedo;
-        memcpy(&thisMaterial->emission, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   Emission  . . :  " << thisMaterial->emission.r << ", " << thisMaterial->emission.g << ", " << thisMaterial->emission.b << endl;
+        memcpy(&emission, data + chunkPosition, sizeof(glm::vec3));
+        cout << "   Emission  . . :  " << emission.r << ", " << emission.g << ", " << emission.b << endl;
         chunkPosition += sizeof(glm::vec3);
+        thisMaterial->setEmission(emission);
 
         // Albedo:
-        memcpy(&thisMaterial->albedo, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   Albedo  . . . :  " << thisMaterial->albedo.r << ", " << thisMaterial->albedo.g << ", " << thisMaterial->albedo.b << endl;
+        memcpy(&albedo, data + chunkPosition, sizeof(glm::vec3));
+        cout << "   Albedo  . . . :  " << albedo.r << ", " << albedo.g << ", " << albedo.b << endl;
         chunkPosition += sizeof(glm::vec3);
+        thisMaterial->setAlbedo(albedo);
 
         // Roughness factor:
-        memcpy(&thisMaterial->roughness, data + chunkPosition, sizeof(float));
-        cout << "   Roughness . . :  " << thisMaterial->roughness << endl;
+        float roughness;
+        memcpy(&roughness, data + chunkPosition, sizeof(float));
+        cout << "   Roughness . . :  " << roughness << endl;
         chunkPosition += sizeof(float);
+        thisMaterial->setRoughness(roughness);
 
         // Metalness factor:
-        memcpy(&thisMaterial->metalness, data + chunkPosition, sizeof(float));
-        cout << "   Metalness . . :  " << thisMaterial->metalness << endl;
+        float metalness;
+        memcpy(&metalness, data + chunkPosition, sizeof(float));
+        cout << "   Metalness . . :  " << metalness << endl;
         chunkPosition += sizeof(float);
+        thisMaterial->setMetalness(metalness);
 
         // Transparency factor
-        memcpy(&thisMaterial->alpha, data + chunkPosition, sizeof(float));
-        cout << "   Transparency  :  " << thisMaterial->alpha << endl;
+        float alpha;
+        memcpy(&alpha, data + chunkPosition, sizeof(float));
+        cout << "   Transparency  :  " << alpha << endl;
         chunkPosition += sizeof(float);
+        thisMaterial->setAlpha(alpha);
 
         // Albedo texture filename, or [none] if not used:
-        strcpy(thisMaterial->textureName, data + chunkPosition);
-        cout << "   Albedo tex. . :  " << thisMaterial->textureName << endl;
-        chunkPosition += (unsigned int)strlen(thisMaterial->textureName) + 1;
+        char textureName[FILENAME_MAX];
+        strcpy(textureName, data + chunkPosition);
+        cout << "   Albedo tex. . :  " << textureName << endl;
+        chunkPosition += (unsigned int)strlen(textureName) + 1;
+        thisMaterial->setTextureName(textureName);
 
         // Normal map filename, or [none] if not used:
-        strcpy(thisMaterial->normalMapName, data + chunkPosition);
-        cout << "   Normalmap tex.:  " << thisMaterial->normalMapName << endl;
-        chunkPosition += (unsigned int)strlen(thisMaterial->normalMapName) + 1;
+        char normalMapName[FILENAME_MAX];
+        strcpy(normalMapName, data + chunkPosition);
+        cout << "   Normalmap tex.:  " << normalMapName << endl;
+        chunkPosition += (unsigned int)strlen(normalMapName) + 1;
+        thisMaterial->setNormalMapName(normalMapName);
 
         // Height map filename, or [none] if not used:
-        strcpy(thisMaterial->heightMapName, data + chunkPosition);
-        cout << "   Heightmap tex.:  " << thisMaterial->heightMapName << endl;
-        chunkPosition += (unsigned int)strlen(thisMaterial->heightMapName) + 1;
+        char heightMapName[FILENAME_MAX];
+        strcpy(heightMapName, data + chunkPosition);
+        cout << "   Heightmap tex.:  " << heightMapName << endl;
+        chunkPosition += (unsigned int)strlen(heightMapName) + 1;
+        thisMaterial->setHeightMapName(heightMapName);
 
         // Roughness map filename, or [none] if not used:
-        strcpy(thisMaterial->roughnessMapName, data + chunkPosition);
-        cout << "   Roughness tex.:  " << thisMaterial->roughnessMapName << endl;
-        chunkPosition += (unsigned int)strlen(thisMaterial->roughnessMapName) + 1;
+        char roughnessMapName[FILENAME_MAX];
+        strcpy(roughnessMapName, data + chunkPosition);
+        cout << "   Roughness tex.:  " << roughnessMapName << endl;
+        chunkPosition += (unsigned int)strlen(roughnessMapName) + 1;
+        thisMaterial->setRoughnessMapName(roughnessMapName);
 
         // Metalness map filename, or [none] if not used:
-        strcpy(thisMaterial->metalnessMapName, data + chunkPosition);
-        cout << "   Metalness tex.:  " << thisMaterial->metalnessMapName << endl;
-        chunkPosition += (unsigned int)strlen(thisMaterial->metalnessMapName) + 1;
+        char metalnessMapName[FILENAME_MAX];
+        strcpy(metalnessMapName, data + chunkPosition);
+        cout << "   Metalness tex.:  " << metalnessMapName << endl;
+        chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
+        thisMaterial->setMetalnessMapName(metalnessMapName);
     }
     break;
 
