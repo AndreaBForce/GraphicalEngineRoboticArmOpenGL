@@ -68,40 +68,46 @@ void LIB_API Engine::engineMsg(){
     std::cout << "Sono l'engine 1" << std::endl;
 }
 
+void LIB_API Engine::clearDisplay(){
+    //glClearColor(0.0f, 0.6f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
+void LIB_API Engine::setDisplayCallback(void(* callback)(void)){
+    glutDisplayFunc(callback);
+}
 
-float angle = 0.0f;
-float distance = -45.0f;
-int windowId;
+void LIB_API Engine::setSpecialCallback(void(* callback)(int key, int mouseX, int mouseY)){
+    glutSpecialFunc(callback);
+}
 
-void displayCallback()
-{
-    // Clear the screen:
-    glClearColor(1.0f, 0.6f, 0.1f, 1.0f); // RGBA components
-    glClear(GL_COLOR_BUFFER_BIT);
+void LIB_API Engine::setKeyboardCallback(void(* callback)(unsigned char key, int mouseX, int mouseY)){
+    glutKeyboardFunc(callback);
+}
 
-    // Set a matrix to move our triangle:
-    glm::mat4 translation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, distance));
-    glm::mat4 rotationZ = glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(0.0f, 0.0f, 1.0f));
+void LIB_API Engine::forceRendering(int windowId){
+    glutPostWindowRedisplay(windowId);
+}
 
-    // Compute model matrix:
-    glm::mat4 f = translation * rotationZ;
+void LIB_API Engine::enableLightSystem(){
+    glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
+    glEnable(GL_LIGHTING);
+    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHT0);
+}
 
-    glm::mat4 camera = glm::mat4(1.0f);
+void LIB_API Engine::startEventLoop(){
+    while(1){
+        glutMainLoopEvent();
 
+    }
+}
 
-    // Set model matrix as current OpenGL matrix:
-    glLoadMatrixf(glm::value_ptr(f));
+void LIB_API Engine::endEventLoop(){
+    glutLeaveMainLoop();
+}
 
-    // Pass a triangle (object coordinates: the triangle is centered around the origin):
-    glBegin(GL_TRIANGLES);
-    glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(-10.0f, -10.0f, 0.0f);
-    glVertex3f(10.0f, -10.0f, 0.0f);
-    glVertex3f(0.0f, 10.0f, 0.0f);
-    glEnd();
-
-    // Swap this context's buffer:
+void LIB_API Engine::swapBuffer(){
     glutSwapBuffers();
 }
 
@@ -124,60 +130,29 @@ void reshapeCallback(int width, int height)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * This callback is invoked each time a special keyboard key is pressed.
- * @param key key pressed id
- * @param mouseX mouse X coordinate
- * @param mouseY mouse Y coordinate
- */
-void specialCallback(int key, int mouseX, int mouseY)
-{
-    std::cout << "[key pressed]" << std::endl;
-
-    const float speed = 0.5f;
-    switch (key)
-    {
-    case GLUT_KEY_UP:
-        distance -= speed;
-        break;
-
-    case GLUT_KEY_DOWN:
-        distance += speed;
-        break;
-
-    case GLUT_KEY_LEFT:
-        angle += speed;
-        break;
-
-    case GLUT_KEY_RIGHT:
-        angle -= speed;
-        break;
-    }
-
-    // Force rendering refresh:
-    glutPostWindowRedisplay(windowId);
+void LIB_API Engine::setReshapeCallback(){
+    glutReshapeFunc(reshapeCallback);
 }
 
 
-void LIB_API Engine::init(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
+int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
+    int windowId;
 
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowPosition(100, 100);
+    glutInitWindowSize(width, height);
 
     glutInit(&argc, argv);
 
     // Set some optional flags:
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_EXIT);
 
     // Create the window with a specific title:
     windowId = glutCreateWindow(nomeFinestra);
 
-    glutDisplayFunc(displayCallback);
-    glutReshapeFunc(reshapeCallback);
-    glutSpecialFunc(specialCallback);
+    glEnable(GL_DEPTH_TEST);
 
-    glutMainLoop();
+    return windowId;
 }
 
 void Engine::loadTree(Node* root){
