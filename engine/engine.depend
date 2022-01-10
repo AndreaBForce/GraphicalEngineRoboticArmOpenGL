@@ -9,7 +9,7 @@
 	"Object.h"
 	<vector>
 
-1641370624 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Object.h
+1641480671 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Object.h
 	<string>
 	<glm/glm.hpp>
 	<glm/gtc/matrix_transform.hpp>
@@ -19,7 +19,7 @@
 1641370457 source:/home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Mesh.cpp
 	"Mesh.h"
 
-1641370940 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Mesh.h
+1641371148 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Mesh.h
 	"Node.h"
 	"Material.h"
 
@@ -1894,4 +1894,12 @@
 
 1641368780 source:/home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/Texture.cpp
 	"Texture.h"
+
+1641480581 source:/home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/OvoRReader.cpp
+	"OvoRReader.h"
+	<iostream>
+	<fstream>
+	<vector>
+	<iomanip>
+	<limits.h>
 

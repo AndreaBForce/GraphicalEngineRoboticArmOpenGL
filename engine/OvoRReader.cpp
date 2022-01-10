@@ -276,11 +276,10 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         chunkPosition += sizeof(unsigned char);
 
         // Material name, or [none] if not used:
-        //char materialName[FILENAME_MAX];
-        thisMesh->get_material()->set_name(data + chunkPosition);
-        //strcpy(materialName, data + chunkPosition);
-        //cout << "   Material  . . :  " << materialName << endl;
-        chunkPosition += (unsigned int)strlen(thisMesh->get_material()->get_name()) + 1;
+        char materialName[FILENAME_MAX];
+        strcpy(materialName, data + chunkPosition);
+        //thisMesh->get_material()->set_name(materialName); SEGMENTATION FAULT
+        chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
         memcpy(&thisMesh->radius, data + chunkPosition, sizeof(float));
@@ -513,7 +512,6 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         }
     }
     break;
-
 
     //////////////////////////////
     case OvObject::Type::LIGHT: //
