@@ -1,8 +1,9 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 #include "Object.h"
+#include "Utils.h"
 
-class Texture : public Object {
+class LIB_API Texture : public Object {
 public:
 	Texture();
 	~Texture();

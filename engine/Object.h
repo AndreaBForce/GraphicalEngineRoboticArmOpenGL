@@ -1,13 +1,12 @@
 #ifndef OBJECT_H
 #define OBJECT_H
+#include "Utils.h"
 #include <string>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <GL/freeglut.h>
-
-class Object
+class LIB_API Object
 {
     public:
         int get_id(){return id;}

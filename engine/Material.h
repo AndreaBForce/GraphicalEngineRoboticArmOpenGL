@@ -2,8 +2,9 @@
 #define MATERIAL_H
 #include "Object.h"
 #include "Texture.h"
+#include "Utils.h"
 
-class Material : public Object {
+class LIB_API Material : public Object {
 public:
     Material();
     virtual ~Material();

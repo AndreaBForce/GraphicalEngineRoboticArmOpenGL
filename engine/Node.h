@@ -1,10 +1,10 @@
 #ifndef NODE_H
 #define NODE_H
 #include "Object.h"
+#include "Utils.h"
 #include <vector>
 
-
-class Node : public Object
+class LIB_API Node : public Object
 {
     public:
         Node();

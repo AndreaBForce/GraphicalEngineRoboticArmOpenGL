@@ -1,50 +1,52 @@
 #include "Mesh.h"
+#include "Utils.h"
 #include <iostream>
+#include <GL/freeglut.h>
 
-Mesh::Mesh()
+LIB_API Mesh::Mesh()
 {
     //ctor
 }
 
-Mesh::~Mesh()
+LIB_API Mesh::~Mesh()
 {
     //dtor
 }
 
-Material* Mesh::get_material(){
+LIB_API Material* Mesh::get_material(){
     return material;
 }
 
-void Mesh::set_matrix(glm::mat4 mesh_matrix){
+void LIB_API Mesh::set_matrix(glm::mat4 mesh_matrix){
     matrix = mesh_matrix;
 }
 
-void Mesh::set_bBoxMin(glm::vec3 mesh_bBoxMin){
+void LIB_API Mesh::set_bBoxMin(glm::vec3 mesh_bBoxMin){
     bBoxMin = mesh_bBoxMin;
 }
 
-void Mesh::set_bBoxMax(glm::vec3 mesh_bBoxMax){
+void LIB_API Mesh::set_bBoxMax(glm::vec3 mesh_bBoxMax){
     bBoxMax = mesh_bBoxMax;
 }
 
-void Mesh::set_radius(float mesh_radius){
+void LIB_API Mesh::set_radius(float mesh_radius){
     radius = mesh_radius;
 }
 
-void Mesh::set_children(unsigned int mesh_children){
+void LIB_API Mesh::set_children(unsigned int mesh_children){
     children = mesh_children;
 }
 
-void Mesh::set_subtype(char mesh_subtypeName[FILENAME_MAX]){
+void LIB_API Mesh::set_subtype(char mesh_subtypeName[FILENAME_MAX]){
     strcpy(subtypeName, mesh_subtypeName);
 }
 
 
-void Mesh::set_targetName(char mesh_targetName[FILENAME_MAX]){
+void LIB_API Mesh::set_targetName(char mesh_targetName[FILENAME_MAX]){
     strcpy(targetName, mesh_targetName);
 }
 
-void Mesh::render(){
+void LIB_API Mesh::render(){
     std::cout << "redner cube" << std::endl;
 
     // Set material properties:

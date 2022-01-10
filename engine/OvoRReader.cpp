@@ -22,7 +22,7 @@
 #include <limits.h>
 
 using namespace std;
-Node* OvoRReader::readDataFromFile(const char* filePath)
+LIB_API Node* OvoRReader::readDataFromFile(const char* filePath)
 {
 
     //Root of the tree
@@ -66,8 +66,7 @@ Node* OvoRReader::readDataFromFile(const char* filePath)
     return root;
 }
 
-Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
-{
+LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position){
     // Parse the chunk starting at buffer + position:
 
     unsigned int chunkId = 0, chunkSize = 0;
@@ -101,7 +100,7 @@ Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
     //Creazione della light
     Light* light1 = new Light();
-    Node* thisNode;
+    Node* thisNode = new Node();
 
     switch ((OvObject::Type)chunkId)
     {

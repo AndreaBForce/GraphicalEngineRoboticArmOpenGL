@@ -1,11 +1,11 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 #include "Node.h"
-
+#include "Utils.h"
 enum lightType{DIRECTIONAL = 0, OMNI, SPOT};
 
 
-class Light : public Node{
+class LIB_API Light : public Node{
 public:
 public:
     Light();

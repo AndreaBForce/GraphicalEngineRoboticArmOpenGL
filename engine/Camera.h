@@ -1,9 +1,10 @@
+#include "Node.h"
+#include "Utils.h"
+
 #ifndef CAMERA_H
 #define CAMERA_H
-#include "Node.h"
 
-
-class Camera : public Node
+class LIB_API Camera : public Node
 {
     public:
         Camera();

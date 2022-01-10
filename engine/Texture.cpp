@@ -1,8 +1,8 @@
 #include "Texture.h"
 
-Texture::Texture() {
+LIB_API Texture::Texture() {
 
 }
 
-Texture::~Texture() {
+LIB_API Texture::~Texture() {
 }

@@ -1,11 +1,11 @@
 #include "Camera.h"
 
-Camera::Camera()
+LIB_API Camera::Camera()
 {
     //ctor
 }
 
-Camera::~Camera()
+LIB_API Camera::~Camera()
 {
     //dtor
 }

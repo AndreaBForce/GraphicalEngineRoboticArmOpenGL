@@ -1,43 +1,44 @@
 #include "Light.h"
 #include <iostream>
+#include <GL/freeglut.h>
 
-Light::Light() {
+LIB_API Light::Light() {
 	//ctor
 }
 
-Light::~Light() {
+LIB_API Light::~Light() {
 	//dtor
 }
 
-void Light::setPosition(glm::vec3 position){
+void LIB_API Light::setPosition(glm::vec3 position){
     this->position = position;
 }
 
-void Light::setAmbient(glm::vec4 ambient){
+void LIB_API Light::setAmbient(glm::vec4 ambient){
     this->ambient = ambient;
 }
 
-void Light::setDiffuse(glm::vec4 diffuse){
+void LIB_API Light::setDiffuse(glm::vec4 diffuse){
     this->diffuse = diffuse;
 }
 
-void Light::setSpecular(glm::vec4 specular){
+void LIB_API Light::setSpecular(glm::vec4 specular){
     this->specular = specular;
 }
 
-void Light::setDirection(glm::vec3 direction){
+void LIB_API Light::setDirection(glm::vec3 direction){
     this->direction = direction;
 }
 
-void Light::setCutoff(float cutoff){
+void LIB_API Light::setCutoff(float cutoff){
     this->cutoff = cutoff;
 }
 
-void Light::setLightType(lightType type){
+void LIB_API Light::setLightType(lightType type){
     this->type = type;
 }
 
-void Light::render() {
+void LIB_API Light::render() {
     std::cout << "render light" << std::endl;
 
     // Set light position:

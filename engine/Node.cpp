@@ -1,15 +1,15 @@
 #include "Node.h"
 
-Node::Node()
+LIB_API Node::Node()
 {
     //ctor
 }
 
-Node::~Node()
+LIB_API Node::~Node()
 {
     //dtor
 }
 
-void Node::addChild(Node* childNode){
+void LIB_API Node::addChild(Node* childNode){
     this->children.push_back(childNode);
 }

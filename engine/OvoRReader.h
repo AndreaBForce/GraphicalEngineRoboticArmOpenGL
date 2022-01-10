@@ -2,6 +2,7 @@
 #include "Light.h"
 #include "Camera.h"
 #include "Mesh.h"
+#include "Utils.h"
 #include <cstdint>
 
 #ifndef OVOREADER_H
@@ -9,7 +10,7 @@
 
 
 // Stripped-down redefinition of OvObject (just for the chunk IDs):
-class OvObject
+class LIB_API OvObject
 {
 public:
     enum class Type : int  ///< Type of entities
@@ -53,7 +54,7 @@ public:
 };
 
 // Stripped-down redefinition of OvMesh (just for the subtypes):
-class OvMesh
+class LIB_API OvMesh
 {
 public:
     enum class Subtype : int ///< Kind of mesh
@@ -69,7 +70,7 @@ public:
 };
 
 // Stripped-down redefinition of OvLight (just for the subtypes):
-class OvLight
+class LIB_API OvLight
 {
 public:
     enum class Subtype : int ///< Kind of light
@@ -85,7 +86,7 @@ public:
 };
 
 
-class OvoRReader
+class LIB_API OvoRReader
 {
 public:
     Node* readDataFromFile(const char* filePath);

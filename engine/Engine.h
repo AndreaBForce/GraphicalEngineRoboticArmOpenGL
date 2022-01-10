@@ -5,32 +5,17 @@
 // VERSION //
 /////////////
 
-// Generic info:
-   #define LIB_NAME      "Engine library v0.1a"          ///< Library credits
-   #define LIB_VERSION   10                              ///< Library version (divide by 10)
-
-#ifdef _WINDOWS
-   // Export API:
-   // Specifies i/o linkage (VC++ spec):
-   #ifdef ENGINE_EXPORTS
-		#define LIB_API __declspec(dllexport)
-   #else
-		#define LIB_API __declspec(dllimport)
-   #endif
-#else // Under Linux
-   #define LIB_API  // Dummy declaration
-#endif
-
 #include "Node.h"
+#include "Utils.h"
 
 /////////////
 // DEFINE //
 ///////////
 
-#define KEY_UP GLUT_KEY_UP
-#define KEY_DOWN GLUT_KEY_DOWN
-#define KEY_LEFT GLUT_KEY_LEFT
-#define KEY_RIGHT GLUT_KEY_RIGHT
+#define KEY_UP 0x0065
+#define KEY_DOWN 0x0067
+#define KEY_LEFT 0x0064
+#define KEY_RIGHT 0x0066
 
 /////////////
 // CLASSES //

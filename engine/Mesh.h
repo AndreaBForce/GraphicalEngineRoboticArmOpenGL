@@ -2,9 +2,10 @@
 #define MESH_H
 #include "Node.h"
 #include "Material.h"
+#include "Utils.h"
 #include <string>
 
-class Mesh : public Node{
+class LIB_API Mesh : public Node{
     public:
         Mesh();
         virtual ~Mesh();
@@ -14,8 +15,7 @@ class Mesh : public Node{
 
         void load_mesh_from_file();
 
-        void set_mesh_name(char* meshName);
-
+       
         void set_matrix(glm::mat4 matrix);
         void set_bBoxMin(glm::vec3 bBoxMin);
         void set_bBoxMax(glm::vec3 bBoxMax);

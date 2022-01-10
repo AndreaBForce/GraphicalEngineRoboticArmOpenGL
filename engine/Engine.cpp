@@ -16,7 +16,6 @@
 // C/C++:
 #include <iostream>
 
-
 //////////////
 // DLL MAIN //
 //////////////
@@ -33,29 +32,27 @@
  */
 int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
 {
-	// Check use:
-   switch (reason)
-   {
-         ///////////////////////////
-         case DLL_PROCESS_ATTACH: //
-            break;
+    // Check use:
+    switch (reason)
+    {
+        ///////////////////////////
+    case DLL_PROCESS_ATTACH: //
+        break;
 
 
-         ///////////////////////////
-         case DLL_PROCESS_DETACH: //
-            break;
-   }
+        ///////////////////////////
+    case DLL_PROCESS_DETACH: //
+        break;
+    }
 
-   // Done:
-   return true;
+    // Done:
+    return true;
 }
 #endif
-
 
 ///////////////////
 // BODY OF CLASS //
 //////////////////
-
 
 LIB_API Engine*  Engine::GetInstance(){
     if(engine_instance == nullptr){
@@ -118,7 +115,7 @@ void LIB_API Engine::swapBuffer(){
  * @param width new window width
  * @param height new window height
  */
-void reshapeCallback(int width, int height)
+void LIB_API reshapeCallback(int width, int height)
 {
     std::cout << "[reshape func invoked]" << std::endl;
 
@@ -155,7 +152,7 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
     return windowId;
 }
 
-void Engine::loadTree(Node* root){
+void LIB_API Engine::loadTree(Node* root){
     Engine::engine_instance->rootE = root;
 }
 //C++->PREPROCESSOR->PREPROCESSOR DEFINITIONS-> METTI FREEGLUT_STATIC; davanti agli altri
