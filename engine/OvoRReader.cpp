@@ -21,6 +21,8 @@
 #include <iomanip>
 #include <limits.h>
 
+long file_size;
+
 using namespace std;
 LIB_API Node* OvoRReader::readDataFromFile(const char* filePath)
 {
@@ -39,30 +41,41 @@ LIB_API Node* OvoRReader::readDataFromFile(const char* filePath)
     // obtain file size:
     fseek(pFile, 0, SEEK_END);
     lSize = ftell(pFile);
+    file_size = lSize;
     rewind(pFile);
 
     // allocate memory to contain the whole file:
     buffer = (uint8_t*)malloc(sizeof(uint8_t) * lSize);
 
+    long test = sizeof(*buffer);
+
     fread(buffer, sizeof(uint8_t), lSize, pFile);
     fclose(pFile);
+
+    long test3 = sizeof(buffer);
 
     if (buffer == NULL) { fputs("Memory error", stderr); exit(2); }
 
     unsigned int position = 0;
 
-    //std::cout << lSize;
-    recursiveLoad(buffer, position);
     root = recursiveLoad(buffer, position);
-   
-    cout << "finisco qua" << endl;
+
     return root;
 }
-Node* thisNode = NULL;
+
+//current node reference
+Node* curNode = NULL;
+//previous node reference
+Node* prevNode = NULL;
 
 LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position){
+
+    if(position >= file_size){
+        return nullptr;
+    }
+
     // Parse the chunk starting at buffer + position:
-    
+
     unsigned int chunkId = 0, chunkSize = 0;
     unsigned int numberOfChildren = 0;
 
@@ -80,7 +93,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
     cout << "\nStampo l'id: " << chunkId;
     cout << "\nStampo il size: " << chunkSize;
-   
+
     if (chunkId > 200) {
         chunkSize = 0;
     }
@@ -116,7 +129,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     case OvObject::Type::NODE: //
     {
         Node* actualNode = new Node();
-        
+
         cout << "node]" << endl;
 
         // Node name:
@@ -146,7 +159,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(targetName, data + chunkPosition);
         cout << "   Target node . :  " << targetName << endl;
         chunkPosition += (unsigned int)strlen(targetName) + 1;
-        thisNode = actualNode;
+        curNode = actualNode;
     }
     break;
 
@@ -192,14 +205,14 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&metalness, data + chunkPosition, sizeof(float));
         cout << "   Metalness . . :  " << metalness << endl;
         chunkPosition += sizeof(float);
-       
+
 
         // Transparency factor
         float alpha;
         memcpy(&alpha, data + chunkPosition, sizeof(float));
         cout << "   Transparency  :  " << alpha << endl;
         chunkPosition += sizeof(float);
-        
+
 
         // Albedo texture filename, or [none] if not used:
         char textureName[FILENAME_MAX];
@@ -235,7 +248,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         cout << "   Metalness tex.:  " << metalnessMapName << endl;
         chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
         thisMaterial->setMetalnessMapName(metalnessMapName);
-        
+
     }
     break;
 
@@ -544,7 +557,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 }
             }
         }
-        thisNode = thisMesh;
+        curNode = thisMesh;
     }
     break;
 
@@ -651,7 +664,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&isVolumetric, data + chunkPosition, sizeof(unsigned char));
         cout << "   Volumetric  . :  " << (int)isVolumetric << endl;
         chunkPosition += sizeof(unsigned char);
-        thisNode = light1;
+        curNode = light1;
     }
     break;
 
@@ -704,33 +717,37 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     ///////////
     default: //
         cout << "UNKNOWN]" << endl;
-        
-        cout << "entro qua e termino senza crash" << endl;
-        
+
         break;
     }
     //buffer = buffer + position;
-    
+
 
     // Go recursive when child nodes are avaialble:
-    
+
         delete[] data;
-        cout << "non stampo questo perche crasho" << endl;
         if (numberOfChildren) {
-            while (thisNode->get_number_of_children() < numberOfChildren)
+            curNode->set_parent(prevNode);
+            while (curNode->get_number_of_children() < numberOfChildren)
             {
+                prevNode = curNode;
                 Node* childNode = recursiveLoad(buffer, position);
-                thisNode->addChild(childNode);
+                cout << "child node : " << childNode->get_name() << endl;
+                cout << "Cur node : " << curNode->get_name() << endl;
+                cout << "Prev node : " << prevNode->get_name() << endl;
+                prevNode->addChild(childNode);
+                curNode = prevNode;
             }
-            //SE non è mesh fa la ricorsione altrimenti ritorna 
+            prevNode = curNode->get_parent();
+            //SE non è mesh fa la ricorsione altrimenti ritorna
         }else if(chunkId == 9 || chunkId == 0){
             cout << "entro qui ora" << endl;
             recursiveLoad(buffer, position);
         }
-    
+
 
     // Done:
 
-    return thisNode;
+    return curNode;
 }
 

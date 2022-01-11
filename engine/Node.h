@@ -16,6 +16,7 @@ class LIB_API Node : public Object
         int get_number_of_children(){return children.size();}
         Node get_node_by_name();
         glm::mat4 get_final_matrix();
+        std::vector<Node*> getChildren(){return children;};
 
         void tree_traversal();
         void set_parent(Node *new_parent){parent = new_parent;}
