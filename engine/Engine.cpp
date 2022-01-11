@@ -121,8 +121,12 @@ void LIB_API reshapeCallback(int width, int height)
 
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f);
-    glLoadMatrixf(glm::value_ptr(projection));
+    //glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f);
+    
+    Engine::GetInstance()->setProjection(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f));
+    Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
+
+    glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getProjection()));
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -167,4 +171,33 @@ void LIB_API Engine::loadFromFile(const char* filePath) {
     Node* root = OvoReader.readDataFromFile(filePath);
     loadTree(root);
     
+}
+
+/**
+* Va in su di 14 in 14 per dare uno spazio ottimale
+*/
+void LIB_API Engine::write2DText(const char* text, float pos_x, float pos_y) {
+    glMatrixMode(GL_PROJECTION);
+    glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getOrtho()));
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(glm::value_ptr(glm::mat4(1.0f)));
+
+    // Disable lighting before rendering 2D text:
+    glDisable(GL_LIGHTING);
+
+    // Write some text:
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glRasterPos2f(pos_x, pos_y);
+    glutBitmapString(GLUT_BITMAP_8_BY_13, (unsigned char*)text);
+
+    // Reactivate lighting:
+    glEnable(GL_LIGHTING);
+
+    glMatrixMode(GL_PROJECTION); 
+    glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getProjection()));
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void LIB_API Engine::setTimerCallback(void(*callback)(int value),int time,int min_time) {
+   glutTimerFunc(time,callback,min_time);
 }

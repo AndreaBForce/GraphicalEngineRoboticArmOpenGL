@@ -14,6 +14,8 @@ Light* light = new Light();
 float lightPosX = 0.0f;
 float lightPosY = -3.0f;
 float lightPosZ = -30.0f;
+int fps = 0;
+int frames = 0;
 
 /////////////////////////
 // CALLBACK FUNCTIONS //
@@ -28,7 +30,16 @@ void displayCallback(){
     light->render();
     cube->render();
 
+
+    char texts[64];
+    sprintf(texts, "FPS: %d", fps);
+    engine->write2DText(texts,1.0f,783.0f);
+
+    frames++;
+
+
     engine->swapBuffer();
+    engine->forceRendering(windowId);
 }
 
 void specialCallback(int key, int mouseX, int mouseY){
@@ -53,8 +64,8 @@ void specialCallback(int key, int mouseX, int mouseY){
             lightPosX += speed;
             break;
     }
-
-    engine->forceRendering(windowId);
+    
+   engine->forceRendering(windowId);
 }
 
 void keyboardCallback(unsigned char key, int mouseX, int mouseY){
@@ -72,6 +83,12 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
     }
 
     engine->forceRendering(windowId);
+}
+
+void timerCallback(int value) {
+    fps = frames;
+    frames = 0;
+    engine->setTimerCallback(timerCallback,1000, 0);
 }
 
 ///////////
@@ -103,13 +120,15 @@ int main(int argc, char *argv[]){
     engine->setReshapeCallback();
     engine->setSpecialCallback(specialCallback);
     engine->setKeyboardCallback(keyboardCallback);
+    engine->setTimerCallback(timerCallback, 1000, 0);
+
 
     engine->enableLightSystem();
 
-    //engine->startEventLoop();
+    engine->startEventLoop();
 
     //engine->endEventLoop();
-    engine->loadFromFile("C:/Users/andre/Documents/3ds Max 2020/export/room.OVO");
+    //engine->loadFromFile("C:/Users/andre/Documents/3ds Max 2020/export/room.OVO");
    
     std::cout << "non go nulla" << std::endl;
     std::cout << engine->getRoot()->get_number_of_children() << std::endl;
