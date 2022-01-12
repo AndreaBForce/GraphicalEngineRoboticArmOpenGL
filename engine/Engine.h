@@ -41,8 +41,7 @@ class LIB_API Engine{
 		void swapBuffer();
         void loadTree(Node* root);
 
-		//TODO ADD POSITION DOVE VUOI METTERE IL TESTO
-		//TODO ADD FUNZIONE FPS
+		
 		//783 MAX Y(Sul mio pc) la x non son stato a guardare
 		void write2DText(const char* text,float pos_x,float y_pos);
 		void setTimerCallback(void(*callback)(int value),int time,int min_time);

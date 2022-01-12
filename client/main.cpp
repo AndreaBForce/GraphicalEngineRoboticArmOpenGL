@@ -33,7 +33,7 @@ void displayCallback(){
 
     char texts[64];
     sprintf(texts, "FPS: %d", fps);
-    engine->write2DText(texts,1.0f,783.0f);
+    engine->write2DText(texts,1.0f,14.0f);
 
     frames++;
 
