@@ -126,6 +126,9 @@ void LIB_API reshapeCallback(int width, int height)
     Engine::GetInstance()->setProjection(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f));
     Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
 
+    Engine::GetInstance()->set_height(height);
+    Engine::GetInstance()->set_width(width);
+
     glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getProjection()));
     glMatrixMode(GL_MODELVIEW);
 }

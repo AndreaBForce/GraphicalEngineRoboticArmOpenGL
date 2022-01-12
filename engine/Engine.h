@@ -43,6 +43,7 @@ class LIB_API Engine{
 
 		
 		//783 MAX Y(Sul mio pc) la x non son stato a guardare
+		//TODO FARE GET HEIGHT E GET WIDHT COSI PUOI FARLO
 		void write2DText(const char* text,float pos_x,float y_pos);
 		void setTimerCallback(void(*callback)(int value),int time,int min_time);
 
@@ -51,6 +52,12 @@ class LIB_API Engine{
 
 		void setProjection(glm::mat4 projectionMat) { projection = projectionMat; };
 		void setOrtho(glm::mat4 orthoMat) { ortho = orthoMat; };
+
+		int get_width() { return width; };
+		int get_height() { return height;};
+
+		void set_width(int widthS) { width = widthS; };
+		void set_height(int heightS) { height = heightS; };
 
 		glm::mat4 getProjection() { return projection; };
 		glm::mat4 getOrtho() { return ortho; };
@@ -64,6 +71,9 @@ class LIB_API Engine{
         Node* rootE;
 		glm::mat4 projection;
 		glm::mat4 ortho;
+		int width;
+		int height;
+
         static Engine* engine_instance;
 };
 
