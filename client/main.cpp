@@ -31,7 +31,7 @@ void displayCallback(){
 
     //light->render();
     testL->render();
-    cube->render();
+    //cube->render();
 
 
     char texts[64];
@@ -67,7 +67,7 @@ void specialCallback(int key, int mouseX, int mouseY){
             lightPosX += speed;
             break;
     }
-    
+
    engine->forceRendering(windowId);
 }
 
@@ -111,6 +111,9 @@ int main(int argc, char *argv[]){
     }
 
     testL = dynamic_cast<Light*>(engine->getRoot()->getChildren().at(5));
+    Mesh* testMesh = dynamic_cast<Mesh*>(engine->getRoot()->getChildren().at(12));
+
+    testMesh->render();
 
     //light->setPosition(glm::vec3(0.0f, -3.0f, -30.0f));
     light->setLightType(lightType::OMNI);

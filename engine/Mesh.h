@@ -2,6 +2,7 @@
 #define MESH_H
 #include "Node.h"
 #include "Material.h"
+#include "Vertex.h"
 #include "Utils.h"
 #include <string>
 
@@ -15,7 +16,7 @@ class LIB_API Mesh : public Node{
 
         void load_mesh_from_file();
 
-       
+
         void set_matrix(glm::mat4 matrix);
         void set_bBoxMin(glm::vec3 bBoxMin);
         void set_bBoxMax(glm::vec3 bBoxMax);
@@ -23,6 +24,10 @@ class LIB_API Mesh : public Node{
         void set_children(unsigned int children);
         void set_subtype(char subtypeName[FILENAME_MAX]);
         void set_targetName(char targetName[FILENAME_MAX]);
+
+        std::vector<Vertex*> getvertices(){return this->vertices;};
+        std::vector<unsigned int*> getFaces(){return this->faces;};
+
         //void set_material(Material new_material){material = new_material;}
 
         char materialName[FILENAME_MAX];
@@ -38,6 +43,8 @@ class LIB_API Mesh : public Node{
         unsigned int children;
         char subtypeName[FILENAME_MAX];
         char targetName[FILENAME_MAX];
+        std::vector<Vertex*> vertices;
+        std::vector<unsigned int*> faces;
 };
 
 #endif // MESH_H

@@ -20,6 +20,7 @@
 #include <vector>
 #include <iomanip>
 #include <limits.h>
+#include <glm/gtc/packing.hpp>
 
 long file_size;
 
@@ -447,6 +448,8 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
         // For each LOD...:
         vector<unsigned int> verticesPerLOD(LODs); // Let's store this information for the skinned part, in case
+
+        unsigned int prevNumVertices = 0;
         for (unsigned int l = 0; l < LODs; l++)
         {
             cout << "      LOD . . :  " << l + 1 << "/" << LODs << endl;
@@ -463,25 +466,31 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             cout << "   Nr. faces . . :  " << faces << endl;
             chunkPosition += sizeof(unsigned int);
 
+            Vertex* newVertex;
             // Interleaved and compressed vertex/normal/UV/tangent data:
             for (unsigned int c = 0; c < vertices; c++)
             {
 
-
+                newVertex = new Vertex();
                 // Vertex coords:
                 glm::vec3 vertex;
                 memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
+                //cout << "      xyz  . . . :  " << vertex.x << ", " << vertex.y << ", " << vertex.z << endl;
                 chunkPosition += sizeof(glm::vec3);
 
                 // Vertex normal:
                 unsigned int normalData;
                 memcpy(&normalData, data + chunkPosition, sizeof(unsigned int));
+                glm::vec4 normal = glm::unpackSnorm3x10_1x2(normalData);
+                //cout << "      normal . . :  " << normal.x << ", " << normal.y << ", " << normal.z << endl;
 
                 chunkPosition += sizeof(unsigned int);
 
                 // Texture coordinates:
                 unsigned int textureData;
                 memcpy(&textureData, data + chunkPosition, sizeof(unsigned int));
+                glm::vec2 uv = glm::unpackHalf2x16(textureData);
+                //cout << "      uv . . . . :  " << uv.x << ", " << uv.y << endl;
 
                 chunkPosition += sizeof(unsigned int);
 
@@ -490,6 +499,9 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 memcpy(&tangentData, data + chunkPosition, sizeof(unsigned int));
 
                 chunkPosition += sizeof(unsigned int);
+
+                thisMesh->getvertices().push_back(newVertex);
+                cout << "Vertices size: " << thisMesh->getvertices().size() << endl;
             }
 
             // Faces:
@@ -499,8 +511,16 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 unsigned int face[3];
                 memcpy(face, data + chunkPosition, sizeof(unsigned int) * 3);
                 chunkPosition += sizeof(unsigned int) * 3;
+                //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
+                face[0] += prevNumVertices;
+                face[1] += prevNumVertices;
+                face[2] += prevNumVertices;
+                //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
+                thisMesh->getFaces().push_back(face);
 
             }
+
+            prevNumVertices += vertices;
         }
 
         // Extra information for skinned meshes:

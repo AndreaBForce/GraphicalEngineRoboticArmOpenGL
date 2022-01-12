@@ -947,7 +947,7 @@
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/type_ptr.inl
 	<cstring>
 
-1641838310 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.cpp
+1641975209 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.cpp
 	"Engine.h"
 	"Node.h"
 	"OvoRReader.h"
@@ -958,19 +958,20 @@
 	<iostream>
 	<Windows.h>
 
-1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
+1641975209 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
 	"Node.h"
 	"Utils.h"
 
-1641838310 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.cpp
+1641997751 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.cpp
 	"Mesh.h"
 	"Utils.h"
 	<iostream>
 	<GL/freeglut.h>
 
-1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
+1641994319 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
 	"Node.h"
 	"Material.h"
+	"Vertex.h"
 	"Utils.h"
 	<string>
 
@@ -1976,14 +1977,74 @@
 	"Material.h"
 	<GL/freeglut.h>
 
-1641905127 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/OvoRReader.cpp
+1641998539 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/OvoRReader.cpp
 	"OvoRReader.h"
 	<iostream>
 	<fstream>
 	<vector>
 	<iomanip>
 	<limits.h>
+	<glm/gtc/packing.hpp>
 
 1641838310 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.cpp
 	"Texture.h"
+
+1641995062 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Vertex.h
+	"Object.h"
+	"Utils.h"
+
+1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/packing.hpp
+	"type_precision.hpp"
+	"packing.inl"
+
+1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/type_precision.hpp
+	"../gtc/quaternion.hpp"
+	"../gtc/vec1.hpp"
+	"../ext/scalar_int_sized.hpp"
+	"../ext/scalar_uint_sized.hpp"
+	"../detail/type_vec2.hpp"
+	"../detail/type_vec3.hpp"
+	"../detail/type_vec4.hpp"
+	"../detail/type_mat2x2.hpp"
+	"../detail/type_mat2x3.hpp"
+	"../detail/type_mat2x4.hpp"
+	"../detail/type_mat3x2.hpp"
+	"../detail/type_mat3x3.hpp"
+	"../detail/type_mat3x4.hpp"
+	"../detail/type_mat4x2.hpp"
+	"../detail/type_mat4x3.hpp"
+	"../detail/type_mat4x4.hpp"
+	"type_precision.inl"
+
+1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/ext/scalar_int_sized.hpp
+	"../detail/setup.hpp"
+
+1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/ext/scalar_uint_sized.hpp
+	"../detail/setup.hpp"
+
+1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/type_precision.inl
+
+1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/packing.inl
+	"../ext/scalar_relational.hpp"
+	"../ext/vector_relational.hpp"
+	"../common.hpp"
+	"../vec2.hpp"
+	"../vec3.hpp"
+	"../vec4.hpp"
+	"../detail/type_half.hpp"
+	<cstring>
+	<limits>
+
+1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/ext/scalar_relational.hpp
+	"../detail/qualifier.hpp"
+	"scalar_relational.inl"
+
+1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/ext/scalar_relational.inl
+	"../common.hpp"
+	"../ext/scalar_int_sized.hpp"
+	"../ext/scalar_uint_sized.hpp"
+	"../detail/type_float.hpp"
+
+1641993430 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Vertex.cpp
+	"Vertex.h"
 
