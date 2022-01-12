@@ -171,7 +171,8 @@ void LIB_API Engine::loadFromFile(const char* filePath) {
     //Declare the ovoreader
     OvoRReader OvoReader;
 
-    Node* root = OvoReader.readDataFromFile(filePath);
+    Node* root = OvoReader.readDataFromFile(filePath, Engine::engine_instance->get_object_list());
+
     loadTree(root);
     
 }
@@ -181,7 +182,7 @@ void LIB_API Engine::loadFromFile(const char* filePath) {
 */
 void LIB_API Engine::write2DText(const char* text, float pos_x, float pos_y) {
     glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getOrtho()));
+    glLoadMatrixf(glm::value_ptr(Engine::engine_instance->getOrtho()));
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(glm::value_ptr(glm::mat4(1.0f)));
 
@@ -197,7 +198,7 @@ void LIB_API Engine::write2DText(const char* text, float pos_x, float pos_y) {
     glEnable(GL_LIGHTING);
 
     glMatrixMode(GL_PROJECTION); 
-    glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getProjection()));
+    glLoadMatrixf(glm::value_ptr(Engine::engine_instance->getProjection()));
     glMatrixMode(GL_MODELVIEW);
 }
 

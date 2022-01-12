@@ -7,7 +7,7 @@
 
 #include "Node.h"
 #include "Utils.h"
-
+#include "List.h"
 /////////////
 // DEFINE //
 ///////////
@@ -59,6 +59,8 @@ class LIB_API Engine{
 		void set_width(int widthS) { width = widthS; };
 		void set_height(int heightS) { height = heightS; };
 
+		List* get_object_list() { return objectList; }
+
 		glm::mat4 getProjection() { return projection; };
 		glm::mat4 getOrtho() { return ortho; };
 
@@ -73,6 +75,8 @@ class LIB_API Engine{
 		glm::mat4 ortho;
 		int width;
 		int height;
+
+		List* objectList = new List();
 
         static Engine* engine_instance;
 };

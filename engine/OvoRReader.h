@@ -4,9 +4,10 @@
 #include "Mesh.h"
 #include "Utils.h"
 #include <cstdint>
+#include "List.h"
 
 #ifndef OVOREADER_H
-#define OVOREADER_
+#define OVOREADER_H
 
 
 // Stripped-down redefinition of OvObject (just for the chunk IDs):
@@ -89,7 +90,7 @@ public:
 class LIB_API OvoRReader
 {
 public:
-    Node* readDataFromFile(const char* filePath);
+    Node* readDataFromFile(const char* filePath,List* list);
     Node* recursiveLoad(uint8_t* buffer, unsigned int& position);
 
 private:

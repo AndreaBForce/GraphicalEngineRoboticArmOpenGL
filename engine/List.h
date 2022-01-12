@@ -18,6 +18,7 @@ public:
 	std::vector<Object*> get_list() { return listObject; };
 private:
 	std::vector<Object*> listObject;
+
 };
 
 #endif // LIST_H

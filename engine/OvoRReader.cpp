@@ -22,9 +22,10 @@
 #include <limits.h>
 
 long file_size;
+List* objectList;
 
 using namespace std;
-LIB_API Node* OvoRReader::readDataFromFile(const char* filePath)
+LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
 {
 
     //Root of the tree
@@ -58,6 +59,7 @@ LIB_API Node* OvoRReader::readDataFromFile(const char* filePath)
 
     unsigned int position = 0;
 
+    objectList = list;
     root = recursiveLoad(buffer, position);
 
     return root;
@@ -558,6 +560,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             }
         }
         curNode = thisMesh;
+        objectList->put_back_of_vec(curNode);
     }
     break;
 
@@ -665,6 +668,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         cout << "   Volumetric  . :  " << (int)isVolumetric << endl;
         chunkPosition += sizeof(unsigned char);
         curNode = light1;
+        objectList->put_front_of_vec(curNode);
     }
     break;
 
