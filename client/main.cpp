@@ -15,6 +15,8 @@ Light* testL;
 float lightPosX = 0.0f;
 float lightPosY = -3.0f;
 float lightPosZ = -30.0f;
+int fps = 0;
+int frames = 0;
 
 /////////////////////////
 // CALLBACK FUNCTIONS //
@@ -31,7 +33,16 @@ void displayCallback(){
     testL->render();
     cube->render();
 
+
+    char texts[64];
+    sprintf(texts, "FPS: %d", fps);
+    engine->write2DText(texts,1.0f,14.0f);
+
+    frames++;
+
+
     engine->swapBuffer();
+    engine->forceRendering(windowId);
 }
 
 void specialCallback(int key, int mouseX, int mouseY){
@@ -56,8 +67,8 @@ void specialCallback(int key, int mouseX, int mouseY){
             lightPosX += speed;
             break;
     }
-
-    engine->forceRendering(windowId);
+    
+   engine->forceRendering(windowId);
 }
 
 void keyboardCallback(unsigned char key, int mouseX, int mouseY){
@@ -75,6 +86,12 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
     }
 
     engine->forceRendering(windowId);
+}
+
+void timerCallback(int value) {
+    fps = frames;
+    frames = 0;
+    engine->setTimerCallback(timerCallback,1000, 0);
 }
 
 ///////////
@@ -110,6 +127,8 @@ int main(int argc, char *argv[]){
     engine->setReshapeCallback();
     engine->setSpecialCallback(specialCallback);
     engine->setKeyboardCallback(keyboardCallback);
+    engine->setTimerCallback(timerCallback, 1000, 0);
+
 
     engine->enableLightSystem();
 

@@ -41,7 +41,19 @@ class LIB_API Engine{
 		void swapBuffer();
         void loadTree(Node* root);
 
+		
+		//783 MAX Y(Sul mio pc) la x non son stato a guardare
+		void write2DText(const char* text,float pos_x,float y_pos);
+		void setTimerCallback(void(*callback)(int value),int time,int min_time);
+
+
 		Node* getRoot() { return rootE; };
+
+		void setProjection(glm::mat4 projectionMat) { projection = projectionMat; };
+		void setOrtho(glm::mat4 orthoMat) { ortho = orthoMat; };
+
+		glm::mat4 getProjection() { return projection; };
+		glm::mat4 getOrtho() { return ortho; };
 
 		Engine(Engine &other) = delete;
 		void operator=(const Engine &) = delete;
@@ -50,6 +62,8 @@ class LIB_API Engine{
     private:
         Engine(){};
         Node* rootE;
+		glm::mat4 projection;
+		glm::mat4 ortho;
         static Engine* engine_instance;
 };
 
