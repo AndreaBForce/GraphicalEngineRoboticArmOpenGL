@@ -500,8 +500,9 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
                 chunkPosition += sizeof(unsigned int);
 
-                thisMesh->getvertices().push_back(newVertex);
-                cout << "Vertices size: " << thisMesh->getvertices().size() << endl;
+               
+                thisMesh->addVertex(newVertex);
+                
             }
 
             // Faces:
@@ -516,7 +517,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 face[1] += prevNumVertices;
                 face[2] += prevNumVertices;
                 //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
-                thisMesh->getFaces().push_back(face);
+                thisMesh->add_face(face);
 
             }
 

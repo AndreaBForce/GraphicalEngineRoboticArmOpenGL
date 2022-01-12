@@ -25,9 +25,9 @@ class LIB_API Mesh : public Node{
         void set_subtype(char subtypeName[FILENAME_MAX]);
         void set_targetName(char targetName[FILENAME_MAX]);
 
-        std::vector<Vertex*> getvertices(){return this->vertices;};
-        std::vector<unsigned int*> getFaces(){return this->faces;};
-
+        
+        void addVertex(Vertex* vertex) { vertices.push_back(vertex); };
+        void add_face(unsigned int* face) { faces.push_back(face); };
         //void set_material(Material new_material){material = new_material;}
 
         char materialName[FILENAME_MAX];
