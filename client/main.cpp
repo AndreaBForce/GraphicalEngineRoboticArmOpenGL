@@ -34,6 +34,9 @@ void displayCallback(){
     cube->render();
 
 
+    //questo metodo per renderizzare tutto una volta implementato correttamente
+    //engine->get_object_list()->render_list();
+
     char texts[64];
     sprintf(texts, "FPS: %d", fps);
     engine->write2DText(texts,1.0f,engine->get_height()-14);
