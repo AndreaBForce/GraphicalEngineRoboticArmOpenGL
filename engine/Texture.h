@@ -7,7 +7,7 @@ class LIB_API Texture : public Object {
 public:
 	Texture();
 	~Texture();
-	void render() {};
+	void render(glm::mat4 camera) {};
 };
 
 #endif // TEXTURE_H

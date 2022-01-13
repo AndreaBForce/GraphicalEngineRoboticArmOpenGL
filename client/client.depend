@@ -7,7 +7,7 @@
 
 1636185684 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/simpleClass.h
 
-1641938151 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/client/main.cpp
+1642105644 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/client/main.cpp
 	<iostream>
 	"Engine.h"
 	"Node.h"
@@ -16,16 +16,16 @@
 
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/simpleClass.h
 
-1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
+1641975209 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
 	"Node.h"
 	"Utils.h"
 
-1641842413 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Node.h
+1642063467 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Node.h
 	"Object.h"
 	"Utils.h"
 	<vector>
 
-1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Object.h
+1642063447 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Object.h
 	"Utils.h"
 	<string>
 	<glm/glm.hpp>
@@ -918,24 +918,29 @@
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/type_ptr.inl
 	<cstring>
 
-1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
+1642095062 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
 	"Node.h"
 	"Material.h"
+	"Vertex.h"
 	"Utils.h"
 	<string>
 
-1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
+1642095520 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
 	"Object.h"
 	"Texture.h"
 	"Utils.h"
 
-1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
+1642063572 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
 	"Object.h"
 	"Utils.h"
 
-1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Light.h
+1642063507 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Light.h
 	"Node.h"
 	"Utils.h"
 
 1641838310 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Utils.h
+
+1642063486 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Vertex.h
+	"Object.h"
+	"Utils.h"
 

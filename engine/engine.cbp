@@ -63,6 +63,9 @@
 		<Unit filename="OvoRReader.h" />
 		<Unit filename="Texture.cpp" />
 		<Unit filename="Texture.h" />
+		<Unit filename="Utils.h" />
+		<Unit filename="Vertex.cpp" />
+		<Unit filename="Vertex.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

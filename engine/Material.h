@@ -8,10 +8,8 @@ class LIB_API Material : public Object {
 public:
     Material();
     virtual ~Material();
-    void render() {};
+    void render(glm::mat4 camera) override;
 
-
-    void setName(char materialName[FILENAME_MAX]);
     void setEmission(glm::vec3 emission);
     void setAmbient(glm::vec3 ambient);
     void setSpecular(glm::vec3 specular);
@@ -20,17 +18,9 @@ public:
     void setShininess(float shininess);
 
     void setTextureName(char textureName[FILENAME_MAX]);
-    void setNormalMapName(char NormalMapName[FILENAME_MAX]);
-    void setHeightMapName(char heightMapName[FILENAME_MAX]);
-    void setRoughnessMapName(char roughnessMapName[FILENAME_MAX]);
-    void setMetalnessMapName(char metalnessMapName[FILENAME_MAX]);
 
-    //todo add material properties
 private:
-    Texture texture;
-
-    char* name;
-    //Campi materiale
+    Texture* texture;
 
     glm::vec4 emission;
     glm::vec4 ambient;
@@ -40,10 +30,6 @@ private:
     float shininess;
 
     char textureName[FILENAME_MAX];
-    char normalMapName[FILENAME_MAX];
-    char heightMapName[FILENAME_MAX];
-    char roughnessMapName[FILENAME_MAX];
-    char metalnessMapName[FILENAME_MAX];
 };
 
 

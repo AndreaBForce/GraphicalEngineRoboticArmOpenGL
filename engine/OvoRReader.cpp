@@ -20,6 +20,7 @@
 #include <vector>
 #include <iomanip>
 #include <limits.h>
+#include <glm/gtc/packing.hpp>
 
 long file_size;
 List* objectList;
@@ -177,7 +178,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(materialName, data + chunkPosition);
         cout << "   Name  . . . . :  " << (materialName) << endl;
         chunkPosition += (unsigned int)strlen(materialName) + 1;
-        thisMaterial->setName(materialName);
+        thisMaterial->set_name(materialName);
 
         // Material term colors, starting with emissive:
         glm::vec3 emission, albedo;
@@ -228,28 +229,24 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(normalMapName, data + chunkPosition);
         cout << "   Normalmap tex.:  " << normalMapName << endl;
         chunkPosition += (unsigned int)strlen(normalMapName) + 1;
-        thisMaterial->setNormalMapName(normalMapName);
 
         // Height map filename, or [none] if not used:
         char heightMapName[FILENAME_MAX];
         strcpy(heightMapName, data + chunkPosition);
         cout << "   Heightmap tex.:  " << heightMapName << endl;
         chunkPosition += (unsigned int)strlen(heightMapName) + 1;
-        thisMaterial->setHeightMapName(heightMapName);
 
         // Roughness map filename, or [none] if not used:
         char roughnessMapName[FILENAME_MAX];
         strcpy(roughnessMapName, data + chunkPosition);
         cout << "   Roughness tex.:  " << roughnessMapName << endl;
         chunkPosition += (unsigned int)strlen(roughnessMapName) + 1;
-        thisMaterial->setRoughnessMapName(roughnessMapName);
 
         // Metalness map filename, or [none] if not used:
         char metalnessMapName[FILENAME_MAX];
         strcpy(metalnessMapName, data + chunkPosition);
         cout << "   Metalness tex.:  " << metalnessMapName << endl;
         chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
-        thisMaterial->setMetalnessMapName(metalnessMapName);
 
     }
     break;
@@ -282,7 +279,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Mesh matrix:
         glm::mat4 matrix;
         memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
-        thisMesh->set_matrix(matrix);
+        thisMesh->set_pos_matrix(matrix);
 
         chunkPosition += sizeof(glm::mat4);
 
@@ -299,7 +296,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(targetName, data + chunkPosition);
         cout << "   Target node . :  " << targetName << endl;
         chunkPosition += (unsigned int)strlen(targetName) + 1;
-        thisMesh->set_targetName(targetName);
 
         // Mesh subtype (see OvMesh SUBTYPE enum):
         unsigned char subtype;
@@ -312,7 +308,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         case OvMesh::Subtype::TESSELLATED: strcpy(subtypeName, "tessellated"); break;
         default: strcpy(subtypeName, "UNDEFINED");
         }
-        thisMesh->set_subtype(subtypeName);
         cout << "   Subtype . . . :  " << (int)subtype << " (" << subtypeName << ")" << endl;
         chunkPosition += sizeof(unsigned char);
 
@@ -320,6 +315,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
         cout << materialName << endl;
+        //TODO
         //thisMesh->get_material()->set_name(materialName); SEGMENTATION FAULT
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
@@ -449,6 +445,8 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
         // For each LOD...:
         vector<unsigned int> verticesPerLOD(LODs); // Let's store this information for the skinned part, in case
+
+        unsigned int prevNumVertices = 0;
         for (unsigned int l = 0; l < LODs; l++)
         {
             cout << "      LOD . . :  " << l + 1 << "/" << LODs << endl;
@@ -465,26 +463,33 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             cout << "   Nr. faces . . :  " << faces << endl;
             chunkPosition += sizeof(unsigned int);
 
+            Vertex* newVertex;
             // Interleaved and compressed vertex/normal/UV/tangent data:
             for (unsigned int c = 0; c < vertices; c++)
             {
 
-
+                newVertex = new Vertex();
                 // Vertex coords:
                 glm::vec3 vertex;
                 memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
+                //cout << "      xyz  . . . :  " << vertex.x << ", " << vertex.y << ", " << vertex.z << endl;
+                newVertex->setVertex(vertex);
                 chunkPosition += sizeof(glm::vec3);
 
                 // Vertex normal:
                 unsigned int normalData;
                 memcpy(&normalData, data + chunkPosition, sizeof(unsigned int));
-
+                glm::vec4 normal = glm::unpackSnorm3x10_1x2(normalData);
+                //cout << "      normal . . :  " << normal.x << ", " << normal.y << ", " << normal.z << endl;
+                newVertex->setNormal(normal);
                 chunkPosition += sizeof(unsigned int);
 
                 // Texture coordinates:
                 unsigned int textureData;
                 memcpy(&textureData, data + chunkPosition, sizeof(unsigned int));
-
+                glm::vec2 uv = glm::unpackHalf2x16(textureData);
+                //cout << "      uv . . . . :  " << uv.x << ", " << uv.y << endl;
+                newVertex->setUv(uv);
                 chunkPosition += sizeof(unsigned int);
 
                 // Tangent vector:
@@ -492,17 +497,31 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 memcpy(&tangentData, data + chunkPosition, sizeof(unsigned int));
 
                 chunkPosition += sizeof(unsigned int);
+
+
+                thisMesh->addVertex(newVertex);
+
             }
+
+            newVertex->getVertex();
 
             // Faces:
             for (unsigned int c = 0; c < faces; c++)
             {
                 // Face indexes:
-                unsigned int face[3];
+                unsigned int* face = new unsigned int[3];
                 memcpy(face, data + chunkPosition, sizeof(unsigned int) * 3);
                 chunkPosition += sizeof(unsigned int) * 3;
+                //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
+                face[0] += prevNumVertices;
+                face[1] += prevNumVertices;
+                face[2] += prevNumVertices;
+                //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
+                thisMesh->add_face(face);
 
             }
+
+            prevNumVertices += vertices;
         }
 
         // Extra information for skinned meshes:
