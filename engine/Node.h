@@ -9,7 +9,7 @@ class LIB_API Node : public Object
     public:
         Node();
         virtual ~Node();
-        void render() {};
+        void render(glm::mat4 camera) {};
 
         glm::mat4 get_pos_matrix(){return pos_matrix;}
         Node* get_parent(){return parent;}

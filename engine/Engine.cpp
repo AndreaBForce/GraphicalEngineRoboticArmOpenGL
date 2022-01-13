@@ -122,7 +122,7 @@ void LIB_API reshapeCallback(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     //glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f);
-    
+
     Engine::GetInstance()->setProjection(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f));
     Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
 
@@ -153,6 +153,8 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
 
     glEnable(GL_DEPTH_TEST);
 
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     return windowId;
 }
 
@@ -170,7 +172,7 @@ void LIB_API Engine::loadFromFile(const char* filePath) {
 
     Node* root = OvoReader.readDataFromFile(filePath);
     loadTree(root);
-    
+
 }
 
 /**
@@ -193,7 +195,7 @@ void LIB_API Engine::write2DText(const char* text, float pos_x, float pos_y) {
     // Reactivate lighting:
     glEnable(GL_LIGHTING);
 
-    glMatrixMode(GL_PROJECTION); 
+    glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getProjection()));
     glMatrixMode(GL_MODELVIEW);
 }

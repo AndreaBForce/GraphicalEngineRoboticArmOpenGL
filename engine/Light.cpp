@@ -38,12 +38,12 @@ void LIB_API Light::setLightType(lightType type){
     this->type = type;
 }
 
-void LIB_API Light::render() {
+void LIB_API Light::render(glm::mat4 camera) {
     std::cout << "render light" << std::endl;
 
     // Set light position:
    glm::mat4 transLight = glm::translate(glm::mat4(1.0f), this->position);
-   glLoadMatrixf(glm::value_ptr(transLight));
+   glLoadMatrixf(glm::value_ptr(camera * transLight));
 
    // Draw a small emissive sphere to show light position:
    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(glm::vec4(1.0f)));

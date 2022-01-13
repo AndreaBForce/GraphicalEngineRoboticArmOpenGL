@@ -20,7 +20,7 @@ public:
     void setCutoff(float cutoff);
     void setLightType(lightType type);
 
-    void render() override;
+    void render(glm::mat4 camera) override;
 
 private:
     glm::vec3 position ;

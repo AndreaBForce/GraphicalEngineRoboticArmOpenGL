@@ -17,10 +17,6 @@ LIB_API Material* Mesh::get_material(){
     return material;
 }
 
-void LIB_API Mesh::set_matrix(glm::mat4 mesh_matrix){
-    matrix = mesh_matrix;
-}
-
 void LIB_API Mesh::set_bBoxMin(glm::vec3 mesh_bBoxMin){
     bBoxMin = mesh_bBoxMin;
 }
@@ -37,30 +33,51 @@ void LIB_API Mesh::set_children(unsigned int mesh_children){
     children = mesh_children;
 }
 
-void LIB_API Mesh::set_subtype(char mesh_subtypeName[FILENAME_MAX]){
-    strcpy(subtypeName, mesh_subtypeName);
-}
 
-
-void LIB_API Mesh::set_targetName(char mesh_targetName[FILENAME_MAX]){
-    strcpy(targetName, mesh_targetName);
-}
-
-void LIB_API Mesh::render(){
-    std::cout << "redner cube" << std::endl;
+void LIB_API Mesh::render(glm::mat4 camera){
+    std::cout << "render mesh -> " << this->get_name() << std::endl;
 
     // Set material properties:
-    //glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128.0f);
-    //glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, glm::value_ptr(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f)));
-    //glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, glm::value_ptr(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f)));
-    //glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128.0f);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, glm::value_ptr(glm::vec4(0.5f, 0.0f, 0.0f, 1.0f)));
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, glm::value_ptr(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f)));
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
 
-    std::cout << "Nr faces: " << this->faces.size() << std::endl;
-    std::cout << "Nr vertices: " << this->vertices.size() << std::endl;
+    //std::cout << "Nr faces: " << this->faces.size() << std::endl;
+    //std::cout << "Nr vertices: " << this->vertices.size() << std::endl;
 
-    //for(unsigned int* face : faces){
-    //    std::cout << "   Face data . . :  f" << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << std::endl;
+
+    //for(Vertex* vert : vertices){
+    //    glm::vec3 firstVertex = vert->getVertex();
+    //    std::cout << "Vertex: " << " (" << firstVertex.x << ", " << firstVertex.y << ", " << firstVertex.z << ")" << std::endl;
     //}
+
+    //unsigned int* ptr = this->faces.front();
+    //std::cout << "   Face data . . :  f" << " (" << ptr[0] << ", " << ptr[1] << ", " << ptr[2] << ")" << std::endl;
+
+    //glm::mat4 transCube = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -60.0f));
+    //glLoadMatrixf(glm::value_ptr(transCube));
+
+    glLoadMatrixf(glm::value_ptr(camera * this->get_pos_matrix()));
+
+
+    glEnable(GL_NORMALIZE);
+
+    for(unsigned int* face : faces){
+        //std::cout << "   Face data . . :  f" << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << std::endl;
+        glBegin(GL_TRIANGLES);
+
+            glNormal3fv(glm::value_ptr(vertices.at(face[0])->getNormal()));
+            glVertex3fv(glm::value_ptr(vertices.at(face[0])->getVertex()));
+
+            glNormal3fv(glm::value_ptr(vertices.at(face[1])->getNormal()));
+            glVertex3fv(glm::value_ptr(vertices.at(face[1])->getVertex()));
+
+            glNormal3fv(glm::value_ptr(vertices.at(face[2])->getNormal()));
+            glVertex3fv(glm::value_ptr(vertices.at(face[2])->getVertex()));
+
+        glEnd();
+    }
 
     // Position and render the cube:
     //glm::mat4 transCube = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -60.0f));

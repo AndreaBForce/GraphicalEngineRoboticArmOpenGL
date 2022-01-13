@@ -15,7 +15,7 @@ class LIB_API Object
 
         void set_name(std::string new_name){name = new_name;}
 
-        virtual void render() = 0;
+        virtual void render(glm::mat4 camera) = 0;
 
     private:
         int id;

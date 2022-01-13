@@ -12,25 +12,33 @@ Engine* engine;
 Mesh* cube = new Mesh();
 Light* light = new Light();
 Light* testL;
+Mesh* testMesh;
 float lightPosX = 0.0f;
-float lightPosY = -3.0f;
+float lightPosY = 5.0f;
 float lightPosZ = -30.0f;
 int fps = 0;
 int frames = 0;
+glm::mat4 cameraMat;
+
+//camera params
+glm::vec3 eye(0.0f, 20.0f, 0.0f);
+glm::vec3 up(0.0f, 1.0f, 0.0f);
 
 /////////////////////////
 // CALLBACK FUNCTIONS //
 ///////////////////////
 
 void displayCallback(){
-    std::cout << "callback lato client" << std::endl;
     //light->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
+    cameraMat = glm::lookAt(eye, glm::vec3(lightPosX, lightPosY, lightPosZ), up);
     testL->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
     engine->clearDisplay();
 
 
     //light->render();
-    testL->render();
+
+    testL->render(cameraMat);
+    testMesh->render(cameraMat);
     //cube->render();
 
 
@@ -111,9 +119,9 @@ int main(int argc, char *argv[]){
     }
 
     testL = dynamic_cast<Light*>(engine->getRoot()->getChildren().at(5));
-    Mesh* testMesh = dynamic_cast<Mesh*>(engine->getRoot()->getChildren().at(12));
+    testMesh = dynamic_cast<Mesh*>(engine->getRoot()->getChildren().at(11));
 
-    testMesh->render();
+    //testMesh->render();
 
     //light->setPosition(glm::vec3(0.0f, -3.0f, -30.0f));
     light->setLightType(lightType::OMNI);
