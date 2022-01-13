@@ -156,7 +156,7 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
 
     glEnable(GL_DEPTH_TEST);
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     return windowId;
 }
@@ -199,7 +199,7 @@ void LIB_API Engine::write2DText(const char* text, float pos_x, float pos_y) {
     // Reactivate lighting:
     glEnable(GL_LIGHTING);
 
-    glMatrixMode(GL_PROJECTION); 
+    glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(glm::value_ptr(Engine::engine_instance->getProjection()));
     glMatrixMode(GL_MODELVIEW);
 }

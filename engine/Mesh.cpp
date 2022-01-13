@@ -35,7 +35,7 @@ void LIB_API Mesh::set_children(unsigned int mesh_children){
 
 
 void LIB_API Mesh::render(glm::mat4 camera){
-    std::cout << "render mesh -> " << this->get_name() << std::endl;
+    //std::cout << "render mesh -> " << this->get_name() << std::endl;
 
     // Set material properties:
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128.0f);
@@ -58,7 +58,7 @@ void LIB_API Mesh::render(glm::mat4 camera){
     //glm::mat4 transCube = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -60.0f));
     //glLoadMatrixf(glm::value_ptr(transCube));
 
-    glLoadMatrixf(glm::value_ptr(camera * this->get_pos_matrix()));
+    glLoadMatrixf(glm::value_ptr(camera * this->get_final_matrix()));
 
 
     glEnable(GL_NORMALIZE);

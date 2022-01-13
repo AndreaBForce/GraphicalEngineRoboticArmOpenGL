@@ -51,6 +51,8 @@
 		<Unit filename="Engine.h" />
 		<Unit filename="Light.cpp" />
 		<Unit filename="Light.h" />
+		<Unit filename="List.cpp" />
+		<Unit filename="List.h" />
 		<Unit filename="Material.cpp" />
 		<Unit filename="Material.h" />
 		<Unit filename="Mesh.cpp" />

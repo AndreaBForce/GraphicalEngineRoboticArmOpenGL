@@ -749,8 +749,13 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     // Go recursive when child nodes are avaialble:
 
         delete[] data;
-        if (numberOfChildren) {
+
+        if(curNode != NULL){
             curNode->set_parent(prevNode);
+        }
+
+        if (numberOfChildren) {
+            //curNode->set_parent(prevNode);
             while (curNode->get_number_of_children() < numberOfChildren)
             {
                 prevNode = curNode;

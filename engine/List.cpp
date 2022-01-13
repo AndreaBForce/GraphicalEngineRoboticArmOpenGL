@@ -6,9 +6,9 @@ LIB_API List::List() {
 LIB_API List::~List() {
 }
 
-void LIB_API List::render_list() {
+void LIB_API List::render_list(glm::mat4 camera) {
 	for (auto& element : get_list()) {
-		element->render();
+		element->render(camera);
 	}
 }
 

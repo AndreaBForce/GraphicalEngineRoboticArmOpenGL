@@ -37,13 +37,13 @@ void displayCallback(){
 
     //light->render();
 
-    testL->render(cameraMat);
-    testMesh->render(cameraMat);
+    //testL->render(cameraMat);
+    //testMesh->render(cameraMat);
     //cube->render();
 
 
     //questo metodo per renderizzare tutto una volta implementato correttamente
-    //engine->get_object_list()->render_list();
+    engine->get_object_list()->render_list(cameraMat);
 
     char texts[64];
     sprintf(texts, "FPS: %d", fps);
@@ -122,7 +122,8 @@ int main(int argc, char *argv[]){
     }
 
     testL = dynamic_cast<Light*>(engine->getRoot()->getChildren().at(5));
-    testMesh = dynamic_cast<Mesh*>(engine->getRoot()->getChildren().at(11));
+    //testMesh = dynamic_cast<Mesh*>(engine->getRoot()->getChildren().at(0));
+    testMesh = dynamic_cast<Mesh*>(engine->get_object_list()->get_list().at(16));
 
     //testMesh->render();
 
