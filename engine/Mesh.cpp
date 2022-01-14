@@ -38,10 +38,11 @@ void LIB_API Mesh::render(glm::mat4 camera){
     //std::cout << "render mesh -> " << this->get_name() << std::endl;
 
     // Set material properties:
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128.0f);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, glm::value_ptr(glm::vec4(0.5f, 0.0f, 0.0f, 1.0f)));
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, glm::value_ptr(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f)));
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
+    material->render(camera);
+    //glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128.0f);
+    //glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, glm::value_ptr(glm::vec4(0.5f, 0.0f, 0.0f, 1.0f)));
+    //glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, glm::value_ptr(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f)));
+    //glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
 
     //std::cout << "Nr faces: " << this->faces.size() << std::endl;
     //std::cout << "Nr vertices: " << this->vertices.size() << std::endl;

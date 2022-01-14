@@ -41,7 +41,7 @@ class LIB_API Engine{
 		void swapBuffer();
         void loadTree(Node* root);
 
-		
+
 		//783 MAX Y(Sul mio pc) la x non son stato a guardare
 		//TODO FARE GET HEIGHT E GET WIDHT COSI PUOI FARLO
 		void write2DText(const char* text,float pos_x,float y_pos);
@@ -59,7 +59,7 @@ class LIB_API Engine{
 		void set_width(int widthS) { width = widthS; };
 		void set_height(int heightS) { height = heightS; };
 
-		List* get_object_list() { return objectList; }
+		List* get_object_list() { return nodeList; }
 
 		glm::mat4 getProjection() { return projection; };
 		glm::mat4 getOrtho() { return ortho; };
@@ -76,7 +76,7 @@ class LIB_API Engine{
 		int width;
 		int height;
 
-		List* objectList = new List();
+		List* nodeList = new List();
 
         static Engine* engine_instance;
 };

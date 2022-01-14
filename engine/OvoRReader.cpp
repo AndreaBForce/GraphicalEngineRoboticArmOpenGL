@@ -23,7 +23,8 @@
 #include <glm/gtc/packing.hpp>
 
 long file_size;
-List* objectList;
+List* nodeList;
+List* materialList = new List();
 
 using namespace std;
 LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
@@ -60,9 +61,10 @@ LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
 
     unsigned int position = 0;
 
-    objectList = list;
+    nodeList = list;
     root = recursiveLoad(buffer, position);
 
+    delete materialList;
     return root;
 }
 
@@ -248,6 +250,8 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         cout << "   Metalness tex.:  " << metalnessMapName << endl;
         chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
 
+        materialList->put_back_of_vec(thisMaterial);
+
     }
     break;
 
@@ -316,6 +320,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(materialName, data + chunkPosition);
         cout << materialName << endl;
         //TODO
+        thisMesh->set_material(dynamic_cast<Material*>(materialList->get_element_by_name(materialName)));
         //thisMesh->get_material()->set_name(materialName); SEGMENTATION FAULT
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
@@ -579,7 +584,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             }
         }
         curNode = thisMesh;
-        objectList->put_back_of_vec(curNode);
+        nodeList->put_back_of_vec(curNode);
     }
     break;
 
@@ -687,7 +692,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         cout << "   Volumetric  . :  " << (int)isVolumetric << endl;
         chunkPosition += sizeof(unsigned char);
         curNode = light1;
-        objectList->put_front_of_vec(curNode);
+        nodeList->put_front_of_vec(curNode);
     }
     break;
 
