@@ -8,6 +8,7 @@
 #include "Node.h"
 #include "Utils.h"
 #include "List.h"
+#include "Texture.h"
 /////////////
 // DEFINE //
 ///////////
@@ -40,6 +41,7 @@ class LIB_API Engine{
 		void clearDisplay();
 		void swapBuffer();
         void loadTree(Node* root);
+        void setTextureFilePath(const char* dirPath){ Texture::setPath(dirPath);};
 
 
 		//783 MAX Y(Sul mio pc) la x non son stato a guardare
@@ -84,7 +86,5 @@ class LIB_API Engine{
 
         static Engine* engine_instance;
 };
-
-Engine* Engine::engine_instance = nullptr;;
 
 #endif // ENGINE_H_INCLUDED

@@ -34,14 +34,6 @@ void displayCallback(){
     testL->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
     engine->clearDisplay();
 
-
-    //light->render();
-
-    //testL->render(cameraMat);
-    //testMesh->render(cameraMat);
-    //cube->render();
-
-
     //questo metodo per renderizzare tutto una volta implementato correttamente
     engine->get_object_list()->render_list(cameraMat);
 
@@ -75,7 +67,6 @@ void displayCallback(){
     strcpy(texts, "[n] Rotate Asse Forca DOWN");
     engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 11));
     frames++;
-
 
     engine->swapBuffer();
     engine->forceRendering(windowId);
@@ -215,14 +206,16 @@ void timerCallback(int value) {
 ///////////
 // MAIN //
 /////////
-
 int main(int argc, char *argv[]){
-
     std::cout << "Sono il client" << std::endl;
     engine = Engine::GetInstance();
 
     engine->engineMsg();
-    engine->loadFromFile("../files/finalroom.ovo");
+
+    windowId = engine->init3Dcontext("Project", 600, 600, argc, argv);
+
+    engine->setTextureFilePath("../files/");
+    engine->loadFromFile("../files/room.ovo");
 
     for(int i = 0; i < engine->getRoot()->get_number_of_children(); i++){
         std::cout << engine->getRoot()->getChildren().at(i)->get_name() << std::endl;
@@ -243,8 +236,6 @@ int main(int argc, char *argv[]){
     light->setCutoff(180.0f);
 
 
-    windowId = engine->init3Dcontext("Project", 600, 600, argc, argv);
-
     engine->setDisplayCallback(displayCallback);
     engine->setReshapeCallback();
     engine->setSpecialCallback(specialCallback);
@@ -256,7 +247,7 @@ int main(int argc, char *argv[]){
 
     engine->startEventLoop();
 
-    //engine->endEventLoop();
+    engine->endEventLoop();
 
     return 0;
 
