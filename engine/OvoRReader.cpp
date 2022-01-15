@@ -508,8 +508,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
             }
 
-            newVertex->getVertex();
-
+           
             // Faces:
             for (unsigned int c = 0; c < faces; c++)
             {

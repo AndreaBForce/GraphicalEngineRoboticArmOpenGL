@@ -61,6 +61,10 @@ class LIB_API Engine{
 
 		List* get_object_list() { return nodeList; }
 
+		void rotate_node(const char* node_name, float angle,glm::vec3 axis);
+
+
+
 		glm::mat4 getProjection() { return projection; };
 		glm::mat4 getOrtho() { return ortho; };
 

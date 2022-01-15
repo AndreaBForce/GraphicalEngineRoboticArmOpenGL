@@ -207,3 +207,11 @@ void LIB_API Engine::write2DText(const char* text, float pos_x, float pos_y) {
 void LIB_API Engine::setTimerCallback(void(*callback)(int value),int time,int min_time) {
    glutTimerFunc(time,callback,min_time);
 }
+
+void LIB_API Engine::rotate_node(const char* node_name, float angle, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->get_object_list()->get_element_by_name(node_name));
+    
+    thisNode->set_pos_matrix(glm::rotate(thisNode->get_pos_matrix(), glm::radians(angle), axis));
+
+
+}

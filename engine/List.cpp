@@ -12,7 +12,7 @@ void LIB_API List::render_list(glm::mat4 camera) {
 	}
 }
 
-LIB_API Object* List::get_element_by_name(char* name) {
+LIB_API Object* List::get_element_by_name(const char* name) {
 	for (auto& element : get_list()) {
 		if (element->get_name() == name) {
 			return element;

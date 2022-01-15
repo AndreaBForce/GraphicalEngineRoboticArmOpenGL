@@ -14,7 +14,7 @@ public:
 	void put_back_of_vec(Object* oggetto) { listObject.push_back(oggetto); };
 	void put_front_of_vec(Object* oggetto) { listObject.insert(listObject.begin(), oggetto); };
 	void render_list(glm::mat4 camera);
-	Object* get_element_by_name(char* name);
+	Object* get_element_by_name(const char* name);
 
 	std::vector<Object*> get_list() { return listObject; };
 private:
