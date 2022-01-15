@@ -194,6 +194,8 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             //chiud pinza
             std::cout << "K PRESSED" << std::endl;
            
+            
+
             engine->translate_node("forca1", -translate_forca);
             engine->translate_node("forca2", translate_forca);
                
@@ -220,7 +222,7 @@ int main(int argc, char *argv[]){
     engine = Engine::GetInstance();
 
     engine->engineMsg();
-    engine->loadFromFile("../files/room2.ovo");
+    engine->loadFromFile("../files/finalroom.ovo");
 
     for(int i = 0; i < engine->getRoot()->get_number_of_children(); i++){
         std::cout << engine->getRoot()->getChildren().at(i)->get_name() << std::endl;
