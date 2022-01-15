@@ -110,9 +110,11 @@ void specialCallback(int key, int mouseX, int mouseY){
 void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
     float speed = 0.5f;
+    float forca = 2.0f;
     glm::vec3 rotateAxisX(1.0f, 0.0f, 0.0f);
     glm::vec3 rotateAxisY(0.0f, 1.0f, 0.0f);
     glm::vec3 rotateAxisZ(0.0f, 0.0f, 1.0f);
+    glm::vec3 translate_forca(0.0f, forca, 0.0f);
     switch(key){
         case 'w':
             std::cout << "W PRESSED" << std::endl;
@@ -179,6 +181,24 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             std::cout << "N PRESSED" << std::endl;
             engine->rotate_node("RuotaAsseForca", -0.5f, rotateAxisY);
             break;
+        case 'j':
+            //apri pinza
+            std::cout << "J PRESSED" << std::endl;
+            
+            engine->translate_node("forca1", translate_forca);
+            engine->translate_node("forca2", -translate_forca);
+               
+            break;
+
+        case 'k':
+            //chiud pinza
+            std::cout << "K PRESSED" << std::endl;
+           
+            engine->translate_node("forca1", -translate_forca);
+            engine->translate_node("forca2", translate_forca);
+               
+            break;
+
     }
 
     engine->forceRendering(windowId);
@@ -200,7 +220,7 @@ int main(int argc, char *argv[]){
     engine = Engine::GetInstance();
 
     engine->engineMsg();
-    engine->loadFromFile("../files/room.ovo");
+    engine->loadFromFile("../files/room2.ovo");
 
     for(int i = 0; i < engine->getRoot()->get_number_of_children(); i++){
         std::cout << engine->getRoot()->getChildren().at(i)->get_name() << std::endl;

@@ -215,3 +215,9 @@ void LIB_API Engine::rotate_node(const char* node_name, float angle, glm::vec3 a
 
 
 }
+
+void LIB_API Engine::translate_node(const char* node_name, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->get_object_list()->get_element_by_name(node_name));
+
+    thisNode->set_pos_matrix(glm::translate(thisNode->get_pos_matrix(), axis));
+}
