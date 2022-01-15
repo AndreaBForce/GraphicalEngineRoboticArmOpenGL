@@ -1,5 +1,6 @@
 #include "Material.h"
 #include <GL/freeglut.h>
+#include <iostream>
 LIB_API Material::Material() {
 }
 
@@ -26,12 +27,19 @@ void LIB_API Material::setShininess(float roughness) {
     this->shininess = ((1 - sqrt(roughness)) * 128);
 }
 
-void LIB_API Material::setTextureName(char textureName[FILENAME_MAX]){
-    strcpy(this->textureName, textureName);
+void LIB_API Material::setTexture(char textureName[FILENAME_MAX]){
+    if(textureName != NULL){
+        Texture* texture = new Texture(textureName);
+        this->texture = texture;
+    }else
+        this->texture = nullptr;
 }
 
-
 void LIB_API Material::render(glm::mat4 camera){
+
+    if(texture != nullptr){
+        texture->render(camera);
+    }
 
     // Set material properties:
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, this->shininess);

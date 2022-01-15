@@ -17,7 +17,9 @@ public:
 
     void setShininess(float shininess);
 
-    void setTextureName(char textureName[FILENAME_MAX]);
+    void setTexture(char textureName[FILENAME_MAX]);
+
+    bool hasTexture(){return texture != nullptr;}
 
 private:
     Texture* texture;
@@ -28,8 +30,6 @@ private:
     glm::vec4 diffuse;
 
     float shininess;
-
-    char textureName[FILENAME_MAX];
 };
 
 

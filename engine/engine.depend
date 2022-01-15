@@ -947,7 +947,7 @@
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/type_ptr.inl
 	<cstring>
 
-1642109242 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.cpp
+1642268258 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.cpp
 	"Engine.h"
 	"Node.h"
 	"OvoRReader.h"
@@ -955,6 +955,7 @@
 	<glm/gtc/matrix_transform.hpp>
 	<glm/gtc/type_ptr.hpp>
 	<GL/freeglut.h>
+	<FreeImage.h>
 	<iostream>
 	<Windows.h>
 
@@ -963,7 +964,7 @@
 	"Utils.h"
 	"List.h"
 
-1642178392 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.cpp
+1642266807 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.cpp
 	"Mesh.h"
 	"Utils.h"
 	<iostream>
@@ -1962,12 +1963,12 @@
 	"Node.h"
 	"Utils.h"
 
-1642106117 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
+1642265991 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
 	"Object.h"
 	"Texture.h"
 	"Utils.h"
 
-1642106117 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
+1642273797 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
 	"Object.h"
 	"Utils.h"
 
@@ -1976,11 +1977,12 @@
 	<iostream>
 	<GL/freeglut.h>
 
-1642106117 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.cpp
+1642265991 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.cpp
 	"Material.h"
 	<GL/freeglut.h>
+	<iostream>
 
-1642109091 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/OvoRReader.cpp
+1642265991 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/OvoRReader.cpp
 	"OvoRReader.h"
 	<iostream>
 	<fstream>
@@ -1989,8 +1991,11 @@
 	<limits.h>
 	<glm/gtc/packing.hpp>
 
-1641838310 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.cpp
+1642273797 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.cpp
 	"Texture.h"
+	<FreeImage.h>
+	<GL/freeglut.h>
+	<iostream>
 
 1642106117 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Vertex.h
 	"Object.h"

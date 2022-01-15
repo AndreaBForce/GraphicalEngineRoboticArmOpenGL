@@ -13,6 +13,9 @@
 // FreeGLUT:
 #include <GL/freeglut.h>
 
+//FreeImage
+#include <FreeImage.h>
+
 // C/C++:
 #include <iostream>
 
@@ -49,6 +52,9 @@ int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
     return true;
 }
 #endif
+
+//define static variable
+Engine* Engine::engine_instance = nullptr;
 
 ///////////////////
 // BODY OF CLASS //
@@ -102,6 +108,7 @@ void LIB_API Engine::startEventLoop(){
 
 void LIB_API Engine::endEventLoop(){
     glutLeaveMainLoop();
+    FreeImage_DeInitialise();
 }
 
 void LIB_API Engine::swapBuffer(){
@@ -123,7 +130,7 @@ void LIB_API reshapeCallback(int width, int height)
     glMatrixMode(GL_PROJECTION);
     //glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f);
 
-    Engine::GetInstance()->setProjection(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f));
+    Engine::GetInstance()->setProjection(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 500.0f));
     Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
 
     Engine::GetInstance()->set_height(height);
@@ -155,7 +162,7 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
     windowId = glutCreateWindow(nomeFinestra);
 
     glEnable(GL_DEPTH_TEST);
-
+    glShadeModel(GL_SMOOTH);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     return windowId;
@@ -169,6 +176,8 @@ void LIB_API Engine::loadTree(Node* root){
 //C++-> GENERAL -> ADDITIONAL SOCI -> metti ..\dependencies\freeglut\include;..\dependencies\glm\include
 
 void LIB_API Engine::loadFromFile(const char* filePath) {
+
+    FreeImage_Initialise();
 
     //Declare the ovoreader
     OvoRReader OvoReader;

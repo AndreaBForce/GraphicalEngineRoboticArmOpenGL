@@ -224,7 +224,12 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(textureName, data + chunkPosition);
         cout << "   Albedo tex. . :  " << textureName << endl;
         chunkPosition += (unsigned int)strlen(textureName) + 1;
-        thisMaterial->setTextureName(textureName);
+        if(strcmp(textureName, "[none]") != 0){
+            thisMaterial->setTexture(textureName);
+        }else{
+            thisMaterial->setTexture(NULL);
+        }
+
 
         // Normal map filename, or [none] if not used:
         char normalMapName[FILENAME_MAX];

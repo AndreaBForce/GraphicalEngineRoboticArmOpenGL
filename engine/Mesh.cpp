@@ -39,49 +39,33 @@ void LIB_API Mesh::render(glm::mat4 camera){
 
     // Set material properties:
     material->render(camera);
-    //glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128.0f);
-    //glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, glm::value_ptr(glm::vec4(0.5f, 0.0f, 0.0f, 1.0f)));
-    //glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, glm::value_ptr(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f)));
-    //glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)));
-
-    //std::cout << "Nr faces: " << this->faces.size() << std::endl;
-    //std::cout << "Nr vertices: " << this->vertices.size() << std::endl;
-
-
-    //for(Vertex* vert : vertices){
-    //    glm::vec3 firstVertex = vert->getVertex();
-    //    std::cout << "Vertex: " << " (" << firstVertex.x << ", " << firstVertex.y << ", " << firstVertex.z << ")" << std::endl;
-    //}
-
-    //unsigned int* ptr = this->faces.front();
-    //std::cout << "   Face data . . :  f" << " (" << ptr[0] << ", " << ptr[1] << ", " << ptr[2] << ")" << std::endl;
-
-    //glm::mat4 transCube = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -60.0f));
-    //glLoadMatrixf(glm::value_ptr(transCube));
 
     glLoadMatrixf(glm::value_ptr(camera * this->get_final_matrix()));
 
-
     glEnable(GL_NORMALIZE);
+
+    if(material->hasTexture())
+        glEnable(GL_TEXTURE_2D);
 
     for(unsigned int* face : faces){
         //std::cout << "   Face data . . :  f" << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << std::endl;
         glBegin(GL_TRIANGLES);
 
             glNormal3fv(glm::value_ptr(vertices.at(face[0])->getNormal()));
+            glTexCoord2fv(glm::value_ptr(vertices.at(face[0])->getUv()));
             glVertex3fv(glm::value_ptr(vertices.at(face[0])->getVertex()));
 
             glNormal3fv(glm::value_ptr(vertices.at(face[1])->getNormal()));
+            glTexCoord2fv(glm::value_ptr(vertices.at(face[1])->getUv()));
             glVertex3fv(glm::value_ptr(vertices.at(face[1])->getVertex()));
 
             glNormal3fv(glm::value_ptr(vertices.at(face[2])->getNormal()));
+            glTexCoord2fv(glm::value_ptr(vertices.at(face[2])->getUv()));
             glVertex3fv(glm::value_ptr(vertices.at(face[2])->getVertex()));
 
         glEnd();
     }
 
-    // Position and render the cube:
-    //glm::mat4 transCube = glm::translate(glm::mat4(1.0f), glm::vec3(-20.0f, 0.0f, -60.0f));
-    //glLoadMatrixf(glm::value_ptr(transCube));
-    //glutSolidCube(10.0f);
+    if(material->hasTexture())
+        glDisable(GL_TEXTURE_2D);
 }
