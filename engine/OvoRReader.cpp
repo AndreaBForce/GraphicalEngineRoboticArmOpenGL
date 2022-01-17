@@ -516,7 +516,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 unsigned int* face = new unsigned int[3];
                 memcpy(face, data + chunkPosition, sizeof(unsigned int) * 3);
                 chunkPosition += sizeof(unsigned int) * 3;
-                cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
+                //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
                 face[0] += prevNumVertices;
                 face[1] += prevNumVertices;
                 face[2] += prevNumVertices;

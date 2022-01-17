@@ -13,8 +13,6 @@
 // FreeGLUT:
 #include <GL/freeglut.h>
 
-//FreeImage
-#include <FreeImage.h>
 
 // C/C++:
 #include <iostream>
@@ -53,6 +51,8 @@ int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
 }
 #endif
 
+//FreeImage
+#include <FreeImage.h>
 //define static variable
 Engine* Engine::engine_instance = nullptr;
 
