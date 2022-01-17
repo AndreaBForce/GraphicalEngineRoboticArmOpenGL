@@ -9,8 +9,6 @@
 /////////////////////
 int windowId;
 Engine* engine;
-Mesh* cube = new Mesh();
-Light* light = new Light();
 Light* testL;
 Mesh* testMesh;
 float lightPosX = 0.0f;
@@ -31,7 +29,7 @@ glm::vec3 up(0.0f, 1.0f, 0.0f);
 void displayCallback(){
     //light->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
     cameraMat = glm::lookAt(eye, glm::vec3(lightPosX, lightPosY, lightPosZ), up);
-    testL->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
+    //testL->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
     engine->clearDisplay();
 
     //questo metodo per renderizzare tutto una volta implementato correttamente
@@ -41,7 +39,7 @@ void displayCallback(){
     sprintf(texts, "FPS: %d", fps);
     engine->write2DText(texts,1.0f,engine->get_height()-14);
 
-   
+
     strcpy(texts,"[y] Rotate Base CCW");
     engine->write2DText(texts, 1.0f, engine->get_height() - (14*2));
     strcpy(texts,"[x] Rotate Base CW");
@@ -175,21 +173,25 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
         case 'j':
             //apri pinza
             std::cout << "J PRESSED" << std::endl;
-            
+
             engine->translate_node("forca1", translate_forca);
             engine->translate_node("forca2", -translate_forca);
-               
+
             break;
 
         case 'k':
             //chiud pinza
             std::cout << "K PRESSED" << std::endl;
-           
-            
 
             engine->translate_node("forca1", -translate_forca);
             engine->translate_node("forca2", translate_forca);
-               
+
+            break;
+        case 'z':
+            engine->enableWireframe(true);
+            break;
+        case 'u':
+            engine->enableWireframe(false);
             break;
 
     }
@@ -214,8 +216,8 @@ int main(int argc, char *argv[]){
 
     windowId = engine->init3Dcontext("Project", 600, 600, argc, argv);
 
-    engine->setTextureFilePath("../files/");
-    engine->loadFromFile("../files/room.ovo");
+    engine->setTextureFilePath("../files/textures/");
+    engine->loadFromFile("../files/stanza.OVO");
 
     for(int i = 0; i < engine->getRoot()->get_number_of_children(); i++){
         std::cout << engine->getRoot()->getChildren().at(i)->get_name() << std::endl;
@@ -226,15 +228,6 @@ int main(int argc, char *argv[]){
     testMesh = dynamic_cast<Mesh*>(engine->get_object_list()->get_list().at(16));
 
     //testMesh->render();
-
-    //light->setPosition(glm::vec3(0.0f, -3.0f, -30.0f));
-    light->setLightType(lightType::OMNI);
-    light->setAmbient(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    light->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    light->setSpecular(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    light->setDirection(glm::vec3(0.0f, 0.0f, 0.0f));
-    light->setCutoff(180.0f);
-
 
     engine->setDisplayCallback(displayCallback);
     engine->setReshapeCallback();

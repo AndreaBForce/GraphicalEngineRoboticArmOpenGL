@@ -1,3 +1,5 @@
+#include "Engine.h"
+
 #ifndef LIGHT_H
 #define LIGHT_H
 #include "Node.h"
@@ -22,6 +24,8 @@ public:
 
     void render(glm::mat4 camera) override;
 
+    uint16_t getLightNr(){return lightNr;};
+
 private:
     glm::vec3 position ;
     glm::vec4 ambient ;
@@ -30,6 +34,9 @@ private:
     glm::vec3 direction ;
     float cutoff ;
     lightType type;
+    uint16_t lightNr;
+
+    static int lightsCnt;
 };
 
 #endif // LIGHT_H

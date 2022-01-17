@@ -36,7 +36,6 @@ LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
     FILE* pFile;
     long lSize;
     uint8_t* buffer;
-    size_t result;
 
     pFile = fopen(filePath, "rb");
     if (pFile == NULL) { fputs("File error", stderr); exit(1); }
@@ -50,12 +49,8 @@ LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
     // allocate memory to contain the whole file:
     buffer = (uint8_t*)malloc(sizeof(uint8_t) * lSize);
 
-    long test = sizeof(*buffer);
-
     fread(buffer, sizeof(uint8_t), lSize, pFile);
     fclose(pFile);
-
-    long test3 = sizeof(buffer);
 
     if (buffer == NULL) { fputs("Memory error", stderr); exit(2); }
 
@@ -513,7 +508,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
             }
 
-           
+
             // Faces:
             for (unsigned int c = 0; c < faces; c++)
             {
@@ -521,7 +516,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 unsigned int* face = new unsigned int[3];
                 memcpy(face, data + chunkPosition, sizeof(unsigned int) * 3);
                 chunkPosition += sizeof(unsigned int) * 3;
-                //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
+                cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
                 face[0] += prevNumVertices;
                 face[1] += prevNumVertices;
                 face[2] += prevNumVertices;
@@ -595,7 +590,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     //////////////////////////////
     case OvObject::Type::LIGHT: //
     {
-        Light* light1 = new Light();
+        Light* thisLight = new Light();
         cout << "light]" << endl;
 
         // Light name:
@@ -603,12 +598,12 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(lightName, data + chunkPosition);
         cout << "   Name  . . . . :  " << lightName << endl;
         chunkPosition += (unsigned int)strlen(lightName) + 1;
-        light1->set_name(lightName);
+        thisLight->set_name(lightName);
 
         // Light matrix:
         glm::mat4 matrix;
         memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
-        light1->set_pos_matrix(matrix);
+        thisLight->set_pos_matrix(matrix);
 
         chunkPosition += sizeof(glm::mat4);
 
@@ -633,15 +628,15 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         {
         case OvLight::Subtype::DIRECTIONAL:
             strcpy(subtypeName, "directional");
-            light1->setLightType(DIRECTIONAL);
+            thisLight->setLightType(DIRECTIONAL);
             break;
         case OvLight::Subtype::OMNI:
             strcpy(subtypeName, "omni");
-            light1->setLightType(OMNI);
+            thisLight->setLightType(OMNI);
             break;
         case OvLight::Subtype::SPOT:
             strcpy(subtypeName, "spot");
-            light1->setLightType(SPOT);
+            thisLight->setLightType(SPOT);
             break;
         default:
             strcpy(subtypeName, "UNDEFINED");
@@ -654,9 +649,9 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&color, data + chunkPosition, sizeof(glm::vec3));
         cout << "   Color . . . . :  " << color.r << ", " << color.g << ", " << color.b << endl;
         chunkPosition += sizeof(glm::vec3);
-        light1->setAmbient(glm::vec4(color, 1.0f));
-        light1->setDiffuse(glm::vec4(color, 1.0f));
-        light1->setSpecular(glm::vec4(color, 1.0f));
+        thisLight->setAmbient(glm::vec4(color, 1.0f));
+        thisLight->setDiffuse(glm::vec4(color, 1.0f));
+        thisLight->setSpecular(glm::vec4(color, 1.0f));
 
         // Influence radius:
         float radius;
@@ -669,14 +664,14 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&direction, data + chunkPosition, sizeof(glm::vec3));
         cout << "   Direction . . :  " << direction.r << ", " << direction.g << ", " << direction.b << endl;
         chunkPosition += sizeof(glm::vec3);
-        light1->setDirection(direction);
+        thisLight->setDirection(direction);
 
         // Cutoff:
         float cutoff;
         memcpy(&cutoff, data + chunkPosition, sizeof(float));
         cout << "   Cutoff  . . . :  " << cutoff << endl;
         chunkPosition += sizeof(float);
-        light1->setCutoff(cutoff);
+        thisLight->setCutoff(cutoff);
 
         // Exponent:
         float spotExponent;
@@ -695,8 +690,13 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&isVolumetric, data + chunkPosition, sizeof(unsigned char));
         cout << "   Volumetric  . :  " << (int)isVolumetric << endl;
         chunkPosition += sizeof(unsigned char);
-        curNode = light1;
-        nodeList->put_front_of_vec(curNode);
+        curNode = thisLight;
+
+        if(thisLight->getLightNr() == 0){
+            cout << "MASSIMO " << MAX_LIGHTS << " GESTIBILI" << endl;
+
+        }else
+            nodeList->put_front_of_vec(curNode);
     }
     break;
 

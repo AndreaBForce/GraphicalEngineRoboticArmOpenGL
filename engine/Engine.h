@@ -13,6 +13,9 @@
 // DEFINE //
 ///////////
 
+#define MAX_LIGHTS 2
+#define LIGHT0 0x4000
+#define LIGHT1 0x4001
 #define KEY_UP 0x0065
 #define KEY_DOWN 0x0067
 #define KEY_LEFT 0x0064
@@ -42,6 +45,7 @@ class LIB_API Engine{
 		void swapBuffer();
         void loadTree(Node* root);
         void setTextureFilePath(const char* dirPath){ Texture::setPath(dirPath);};
+        void enableWireframe(bool enable);
 
 
 		//783 MAX Y(Sul mio pc) la x non son stato a guardare

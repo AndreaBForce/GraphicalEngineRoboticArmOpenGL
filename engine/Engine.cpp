@@ -95,8 +95,8 @@ void LIB_API Engine::forceRendering(int windowId){
 void LIB_API Engine::enableLightSystem(){
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
     glEnable(GL_LIGHTING);
-    //glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHT0);
+    glEnable(LIGHT0);
+    glEnable(LIGHT1);
 }
 
 void LIB_API Engine::startEventLoop(){
@@ -115,6 +115,12 @@ void LIB_API Engine::swapBuffer(){
     glutSwapBuffers();
 }
 
+void LIB_API Engine::enableWireframe(bool enable){
+    if(enable)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
@@ -163,7 +169,6 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
 
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     return windowId;
 }
@@ -219,7 +224,7 @@ void LIB_API Engine::setTimerCallback(void(*callback)(int value),int time,int mi
 
 void LIB_API Engine::rotate_node(const char* node_name, float angle, glm::vec3 axis) {
     Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->get_object_list()->get_element_by_name(node_name));
-    
+
     thisNode->set_pos_matrix(glm::rotate(thisNode->get_pos_matrix(), glm::radians(angle), axis));
 
 
