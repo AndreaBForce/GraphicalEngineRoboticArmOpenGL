@@ -1970,7 +1970,7 @@
 	"Texture.h"
 	"Utils.h"
 
-1642284939 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
+1642454035 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
 	"Object.h"
 	"Utils.h"
 
@@ -1984,7 +1984,7 @@
 	<GL/freeglut.h>
 	<iostream>
 
-1642330967 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/OvoRReader.cpp
+1642425362 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/OvoRReader.cpp
 	"OvoRReader.h"
 	<iostream>
 	<fstream>
