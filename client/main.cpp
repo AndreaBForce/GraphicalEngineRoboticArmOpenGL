@@ -64,6 +64,11 @@ void displayCallback(){
     engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 10));
     strcpy(texts, "[n] Rotate Asse Forca DOWN");
     engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 11));
+
+    strcpy(texts, "[j] Apri forche");
+    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 12));
+    strcpy(texts, "[k] Stringi forche");
+    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 13));
     frames++;
 
     engine->swapBuffer();

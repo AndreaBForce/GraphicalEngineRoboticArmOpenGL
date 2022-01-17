@@ -62,7 +62,7 @@ void LIB_API Light::setLightType(lightType type){
 }
 
 void LIB_API Light::render(glm::mat4 camera) {
-    std::cout << "render light" << std::endl;
+    //std::cout << "render light" << std::endl;
 
     // Set light position:
    glLoadMatrixf(glm::value_ptr(camera * this->get_final_matrix()));
