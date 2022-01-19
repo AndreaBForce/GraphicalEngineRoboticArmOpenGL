@@ -1,4 +1,9 @@
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_access.hpp>
+#include <glm/gtx/string_cast.hpp>
+
+
 #include "Engine.h"
 #include "Node.h"
 #include "Mesh.h"
@@ -13,9 +18,17 @@ Light* testL;
 Mesh* testMesh;
 float lightPosX = 0.0f;
 float lightPosY = 5.0f;
-float lightPosZ = -30.0f;
+float lightPosZ = 30.0f;
 int fps = 0;
 int frames = 0;
+
+//GLOBAL FORK SETINGS
+int max_fork_close = 17;
+int actual_fork = 0;
+int max_ball_close = 5;
+bool ball_grabbed = false;
+
+
 glm::mat4 cameraMat;
 
 //camera params
@@ -101,14 +114,53 @@ void specialCallback(int key, int mouseX, int mouseY){
    engine->forceRendering(windowId);
 }
 
+bool check_distance_two_vectors(Node* node1,Node* node2,float range) {
+    
+    //L'ultima colonna delle final matrix contiene i vettori in world cordinates cosi possiamo confrontarli
+
+    glm::vec4 node1_world_coordinate = glm::column(node1->get_final_matrix(), 3);
+    glm::vec4 node2_world_coordinate = glm::column(node2->get_final_matrix(), 3);
+
+    std::cout << node1_world_coordinate.r << std::endl;
+    std::cout << node1_world_coordinate.g << std::endl;
+    std::cout << node1_world_coordinate.b << std::endl;
+
+    std::cout << node2_world_coordinate.r << std::endl;
+    std::cout << node2_world_coordinate.g << std::endl;
+    std::cout << node2_world_coordinate.b << std::endl;
+
+    std::cout << glm::distance(node1_world_coordinate, node2_world_coordinate) << std::endl;
+    if (glm::distance(node1_world_coordinate, node2_world_coordinate) <= range) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
     float speed = 0.5f;
-    float forca = 2.0f;
+    float translate_factor_fork = 0.05f;
+
+
+    Node* ball_object_to_be_taken;
+    Node* rotate_axis_fork_father;
+    Node* rotate_axis_base;
+
     glm::vec3 rotateAxisX(1.0f, 0.0f, 0.0f);
     glm::vec3 rotateAxisY(0.0f, 1.0f, 0.0f);
     glm::vec3 rotateAxisZ(0.0f, 0.0f, 1.0f);
-    glm::vec3 translate_forca(0.0f, forca, 0.0f);
+
+    glm::vec3 translate_fork(0.0f, 0.0f, translate_factor_fork);
+    glm::vec3 translate_nulla(0.0f, 0.0f, 0.0f);
+
+    glm::vec3 translate_ball(-3.5f, 1.5f, 2.6f);
+    
+    glm::vec3 translate_ball_floor(0.0f,0.25f,0.0f);
+
+    glm::vec3 scale_ball(0.5f, 0.5f, 0.5f);
+
     switch(key){
         case 'w':
             std::cout << "W PRESSED" << std::endl;
@@ -134,63 +186,133 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
         case 'd':
             //Up
             std::cout << "D PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse00", 0.5f, rotateAxisY);
+            engine->rotate_node("RuotaAsse00", 0.5f, rotateAxisZ);
             break;
 
         case 'c':
             //Down
             std::cout << "C PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse00", -0.5f, rotateAxisY);
+            engine->rotate_node("RuotaAsse00", -0.5f, rotateAxisZ);
             break;
         case 'f':
             //Up
             std::cout << "F PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse01", 0.5f, rotateAxisY);
+            engine->rotate_node("RuotaAsse01", 0.5f, rotateAxisZ);
             break;
 
         case 'v':
             //Down
             std::cout << "V PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse01", -0.5f, rotateAxisY);
+            engine->rotate_node("RuotaAsse01", -0.5f, rotateAxisZ);
             break;
         case 'g':
             //Up
             std::cout << "G PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse02", 0.5f, rotateAxisY);
+            engine->rotate_node("RuotaAsse02", 0.5f, rotateAxisZ);
             break;
 
         case 'b':
             //Down
             std::cout << "B PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse02", -0.5f, rotateAxisY);
+            engine->rotate_node("RuotaAsse02", -0.5f, rotateAxisZ);
             break;
         case 'h':
             //Up
             std::cout << "H PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsseForca", 0.5f, rotateAxisY);
+            engine->rotate_node("RuotaAsseForca", 0.5f, rotateAxisZ);
             break;
 
         case 'n':
             //Down
             std::cout << "N PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsseForca", -0.5f, rotateAxisY);
+            engine->rotate_node("RuotaAsseForca", -0.5f, rotateAxisZ);
             break;
         case 'j':
             //apri pinza
             std::cout << "J PRESSED" << std::endl;
 
-            engine->translate_node("forca1", translate_forca);
-            engine->translate_node("forca2", -translate_forca);
 
+            if (actual_fork >= 0) {
+
+                if (actual_fork == 0 && ball_grabbed) {
+                    //release ball
+                    ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
+                    rotate_axis_base = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("forca1")));
+                     
+                    //Cosi la palla va al centro della room ovvero dove c'è la root (boh)
+                    //ball_object_to_be_taken->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("root"))));
+                    //ball_object_to_be_taken->set_parent(nullptr);
+                    //engine->translate_node("Sphere001", translate_ball_floor);
+
+                    glm::vec4 node1_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
+                    glm::mat4 ball_pos_mat = ball_object_to_be_taken->get_pos_matrix();
+                    
+                    std::cout << "final prima di rilascio" << std::endl;
+                    std::cout << glm::to_string(ball_object_to_be_taken->get_final_matrix()) << std::endl;
+                    std::cout << "pos prima di rilascio" << std::endl;
+                    std::cout << glm::to_string(ball_pos_mat) << std::endl;
+
+                    while (node1_world_coordinate.g >= 1) {
+                    
+                        
+                        //engine->translate_node("Sphere001", -translate_ball_floor);
+                        ball_pos_mat = ball_object_to_be_taken->get_pos_matrix();
+                        ball_object_to_be_taken->set_pos_matrix(glm::translate(ball_pos_mat, -translate_ball_floor));
+                        //std::cout << "traslo" << std::endl;
+                        //std::cout << node1_world_coordinate.g << std::endl;
+                        node1_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
+
+                        displayCallback();
+                       
+                    }
+                    ball_object_to_be_taken->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("[root]"))));
+                   // ball_object_to_be_taken->set_parent(nullptr);
+
+                    std::cout << "final final" << std::endl;
+                    std::cout << glm::to_string(ball_object_to_be_taken->get_final_matrix()) << std::endl;
+                    std::cout << "pos final" << std::endl;
+                    std::cout << glm::to_string(ball_pos_mat) << std::endl;
+                    ball_object_to_be_taken->set_pos_matrix(ball_pos_mat);
+                    ball_grabbed = false;
+                }
+
+                
+                engine->translate_node("forca1", translate_fork);
+                engine->translate_node("forca2", -translate_fork);
+                
+                actual_fork--;
+            }
             break;
 
         case 'k':
+            //TODO: FIXARE IL K CHE CRASHA
             //chiud pinza
             std::cout << "K PRESSED" << std::endl;
+            ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
+            rotate_axis_fork_father = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca")));
 
-            engine->translate_node("forca1", -translate_forca);
-            engine->translate_node("forca2", translate_forca);
+            std::cout << ball_object_to_be_taken->get_parent()->get_name() << std::endl;
+            
+            //TODO CONTROLLI
+            if (actual_fork < max_fork_close) {
 
+                if (actual_fork == 0 && check_distance_two_vectors(ball_object_to_be_taken, rotate_axis_fork_father, 5.0f)) {
+                    std::cout << "final init" << std::endl;
+                    std::cout << glm::to_string(ball_object_to_be_taken->get_final_matrix()) << std::endl;
+
+
+                    ball_object_to_be_taken->set_pos_matrix(rotate_axis_fork_father->get_pos_matrix());
+                    ball_object_to_be_taken->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))));
+
+                    engine->translate_node("Sphere001", translate_ball);
+                    
+                    ball_grabbed = true;
+                }
+                //puoi farlo tot volte e casot dopo
+                engine->translate_node("forca1", -translate_fork);
+                engine->translate_node("forca2", translate_fork);
+                actual_fork++;
+            }
             break;
         case 'z':
             engine->enableWireframe(true);

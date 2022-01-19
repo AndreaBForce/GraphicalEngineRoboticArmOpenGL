@@ -235,3 +235,9 @@ void LIB_API Engine::translate_node(const char* node_name, glm::vec3 axis) {
 
     thisNode->set_pos_matrix(glm::translate(thisNode->get_pos_matrix(), axis));
 }
+
+void LIB_API Engine::scale_node(const char* node_name, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->get_object_list()->get_element_by_name(node_name));
+
+    thisNode->set_pos_matrix(glm::scale(thisNode->get_pos_matrix(), axis));
+}

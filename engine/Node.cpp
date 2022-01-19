@@ -1,6 +1,6 @@
 #include "Node.h"
 #include <iostream>
-
+#include <glm/gtx/matrix_decompose.hpp>
 LIB_API Node::Node()
 {
     //ctor
@@ -29,3 +29,23 @@ glm::mat4 LIB_API Node::get_final_matrix(){
 
     return finalMat;
 }
+
+void LIB_API Node::set_affine_decomposition(Node* nodo_affine) {
+    glm::vec3 scale;
+    glm::quat orientation;
+    glm::vec3 translation;
+    glm::vec3 skew;
+    glm::vec4 perspective;
+
+    glm::decompose(nodo_affine->get_pos_matrix(), scale, orientation, translation, skew, perspective);
+    
+    nodo_affine->set_scale(scale);
+    nodo_affine->set_orientation(orientation);
+
+}
+
+//https://forum.openframeworks.cc/t/decomposing-glm-mat4-and-setting-transform-to-ofnode/29516
+//decomposizione affine
+//solo componenti vettore scaling trasformi in matrie 
+//invera matrice e molti per matrice pallina cosi annulli socio 
+//attacchi casot

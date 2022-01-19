@@ -23,12 +23,28 @@ class LIB_API Node : public Object
         void addChild(Node* childNode);
         void set_pos_matrix(glm::mat4 new_pos_matrix){pos_matrix = new_pos_matrix;}
 
+        void set_affine_decomposition(Node* nodo_affine);
+
+        void set_scale(glm::vec3 scala) { scale = scala; };
+        void set_orientation(glm::quat orientation1) { orientation = orientation1; };
+
+        void set_translation(glm::vec3 translatio) { translation = translatio; };
+
+        glm::vec3 get_translation() { return translation; };
+        glm::vec3 get_scale() { return scale; };
 
     private:
 
         glm::mat4 pos_matrix;
         Node* parent;
         std::vector<Node*> children;
+
+
+        glm::vec3 scale;
+        glm::quat orientation;
+        glm::vec3 translation;
+        glm::vec3 skew;
+        glm::vec4 perspective;
 };
 
 #endif // NODE_H
