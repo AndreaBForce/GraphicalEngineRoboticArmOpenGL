@@ -238,23 +238,24 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     //release ball
                     ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
                     
-                     
-              
-                    glm::vec4 node1_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
+                    
+                    glm::vec4 ball_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
                     glm::mat4 ball_pos_mat = ball_object_to_be_taken->get_pos_matrix();
                     
                   
-                    glm::mat4 matriceFinalePalle = glm::translate(glm::mat4(1.0f), glm::vec3(node1_world_coordinate.r, 1.0f, node1_world_coordinate.b));
+                    glm::mat4 matriceInzialeePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, ball_world_coordinate.g, ball_world_coordinate.b));
+                    glm::mat4 matriceFinalePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, 1.0f, ball_world_coordinate.b));
                    
-                    while (node1_world_coordinate.g >= 1) {
-                    
-                        
-                        //engine->translate_node("Sphere001", -translate_ball_floor);
+
+                    // while per fare l'animazione di caduta palla
+                    //E' un po buggato se ruoti l'asse della forca
+                    while (ball_world_coordinate.g >= 1) {
+                   
+
                         ball_pos_mat = ball_object_to_be_taken->get_pos_matrix();
                         ball_object_to_be_taken->set_pos_matrix(glm::translate(ball_pos_mat, -translate_ball_floor));
-                        //std::cout << "traslo" << std::endl;
-                        //std::cout << node1_world_coordinate.g << std::endl;
-                        node1_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
+                        
+                        ball_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
 
                         displayCallback();
                        
@@ -278,22 +279,15 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             break;
 
         case 'k':
-            //TODO: FIXARE IL K CHE CRASHA
             //chiud pinza
             std::cout << "K PRESSED" << std::endl;
             ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
             rotate_axis_fork_father = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca")));
 
-            std::cout << ball_object_to_be_taken->get_parent()->get_name() << std::endl;
-            
-            //TODO CONTROLLI
             if (actual_fork < max_fork_close) {
 
                 if (actual_fork == 0 && check_distance_two_vectors(ball_object_to_be_taken, rotate_axis_fork_father, 5.0f)) {
-                    std::cout << "final init" << std::endl;
-                    std::cout << glm::to_string(ball_object_to_be_taken->get_final_matrix()) << std::endl;
-
-
+                   
                     ball_object_to_be_taken->set_pos_matrix(rotate_axis_fork_father->get_pos_matrix());
                     ball_object_to_be_taken->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))));
 
@@ -301,11 +295,12 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     
                     ball_grabbed = true;
                 }
-                //puoi farlo tot volte e casot dopo
+                
                 engine->translate_node("forca1", -translate_fork);
                 engine->translate_node("forca2", translate_fork);
                 actual_fork++;
             }
+
             break;
         case 'z':
             engine->enableWireframe(true);

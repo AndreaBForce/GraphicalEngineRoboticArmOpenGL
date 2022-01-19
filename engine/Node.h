@@ -30,9 +30,6 @@ class LIB_API Node : public Object
 
         void set_translation(glm::vec3 translatio) { translation = translatio; };
 
-        void set_finalmatrix_savepoint(glm::mat4 save) { final_matrix_savepoint = save; };
-        glm::mat4 get_finalmatrix_savepoint() { return final_matrix_savepoint; };
-
         glm::vec3 get_translation() { return translation; };
         glm::vec3 get_scale() { return scale; };
 
@@ -42,9 +39,7 @@ class LIB_API Node : public Object
         Node* parent;
         std::vector<Node*> children;
 
-
-
-        glm::mat4 final_matrix_savepoint;
+        //decomposizioni affini (non usate)
         glm::vec3 scale;
         glm::quat orientation;
         glm::vec3 translation;
