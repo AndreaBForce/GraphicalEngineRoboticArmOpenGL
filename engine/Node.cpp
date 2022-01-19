@@ -22,6 +22,7 @@ glm::mat4 LIB_API Node::get_final_matrix(){
     glm::mat4 finalMat(1.0f);
 
     while(cur->get_parent() != nullptr){
+        
         finalMat = cur->get_pos_matrix() * finalMat;
 
         cur = cur->get_parent();

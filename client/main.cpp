@@ -237,21 +237,15 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                 if (actual_fork == 0 && ball_grabbed) {
                     //release ball
                     ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
-                    rotate_axis_base = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("forca1")));
+                    
                      
-                    //Cosi la palla va al centro della room ovvero dove c'è la root (boh)
-                    //ball_object_to_be_taken->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("root"))));
-                    //ball_object_to_be_taken->set_parent(nullptr);
-                    //engine->translate_node("Sphere001", translate_ball_floor);
-
+              
                     glm::vec4 node1_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
                     glm::mat4 ball_pos_mat = ball_object_to_be_taken->get_pos_matrix();
                     
-                    std::cout << "final prima di rilascio" << std::endl;
-                    std::cout << glm::to_string(ball_object_to_be_taken->get_final_matrix()) << std::endl;
-                    std::cout << "pos prima di rilascio" << std::endl;
-                    std::cout << glm::to_string(ball_pos_mat) << std::endl;
-
+                  
+                    glm::mat4 matriceFinalePalle = glm::translate(glm::mat4(1.0f), glm::vec3(node1_world_coordinate.r, 1.0f, node1_world_coordinate.b));
+                   
                     while (node1_world_coordinate.g >= 1) {
                     
                         
@@ -265,14 +259,13 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                         displayCallback();
                        
                     }
-                    ball_object_to_be_taken->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("[root]"))));
-                   // ball_object_to_be_taken->set_parent(nullptr);
+                    
+                    
+                   
+                    ball_object_to_be_taken->set_pos_matrix(matriceFinalePalle);
 
-                    std::cout << "final final" << std::endl;
-                    std::cout << glm::to_string(ball_object_to_be_taken->get_final_matrix()) << std::endl;
-                    std::cout << "pos final" << std::endl;
-                    std::cout << glm::to_string(ball_pos_mat) << std::endl;
-                    ball_object_to_be_taken->set_pos_matrix(ball_pos_mat);
+                    ball_object_to_be_taken->set_parent(engine->getRoot());
+                   
                     ball_grabbed = false;
                 }
 

@@ -40,8 +40,9 @@ void LIB_API Mesh::render(glm::mat4 camera){
     // Set material properties:
     material->render(camera);
 
-    glLoadMatrixf(glm::value_ptr(camera * this->get_final_matrix()));
-
+   
+   glLoadMatrixf(glm::value_ptr(camera * this->get_final_matrix()));
+   
     glEnable(GL_NORMALIZE);
 
     if(material->hasTexture())
