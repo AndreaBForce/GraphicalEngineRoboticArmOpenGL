@@ -19,15 +19,21 @@ Mesh* testMesh;
 float lightPosX = 0.0f;
 float lightPosY = 5.0f;
 float lightPosZ = 30.0f;
+
+
 int fps = 0;
 int frames = 0;
+
+//GLOBAL ARM ANGLES
+float asse00 = 0.0f;
+
 
 //GLOBAL FORK SETINGS
 int max_fork_close = 17;
 int actual_fork = 0;
 int max_ball_close = 5;
 bool ball_grabbed = false;
-
+glm::mat4 old_ball;
 
 glm::mat4 cameraMat;
 
@@ -159,7 +165,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
     
     glm::vec3 translate_ball_floor(0.0f,0.25f,0.0f);
 
-    glm::vec3 scale_ball(0.5f, 0.5f, 0.5f);
+    glm::vec3 scale_ball(1.25f, 1.0f, 1.0f);
 
     switch(key){
         case 'w':
@@ -173,12 +179,14 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
         case 'y':
             //CCW
+            //Ruota base free
             std::cout << "Y PRESSED" << std::endl;
             engine->rotate_node("RotateBase", 0.5f, rotateAxisY);
             break;
 
         case 'x':
             //CW
+            //Ruota base free
             std::cout << "X PRESSED" << std::endl;
             engine->rotate_node("RotateBase", -0.5f, rotateAxisY);
             break;
@@ -186,13 +194,14 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
         case 'd':
             //Up
             std::cout << "D PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse00", 0.5f, rotateAxisZ);
+           
+            engine->rotate_node("RuotaAsse00", 0.5, rotateAxisZ);
             break;
 
         case 'c':
             //Down
             std::cout << "C PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse00", -0.5f, rotateAxisZ);
+            engine->rotate_node("RuotaAsse00", -0.5, rotateAxisZ);
             break;
         case 'f':
             //Up
@@ -233,7 +242,10 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
 
             if (actual_fork >= 0) {
-
+                if (ball_grabbed) {
+                    ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
+                    ball_object_to_be_taken->set_pos_matrix(old_ball);
+                }
                 if (actual_fork == 0 && ball_grabbed) {
                     //release ball
                     ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
@@ -262,7 +274,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     }
                     
                     
-                   
+                    std::cout << glm::to_string(matriceFinalePalle) << std::endl;
                     ball_object_to_be_taken->set_pos_matrix(matriceFinalePalle);
 
                     ball_object_to_be_taken->set_parent(engine->getRoot());
@@ -270,7 +282,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     ball_grabbed = false;
                 }
 
-                
+               
                 engine->translate_node("forca1", translate_fork);
                 engine->translate_node("forca2", -translate_fork);
                 
@@ -283,6 +295,8 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             std::cout << "K PRESSED" << std::endl;
             ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
             rotate_axis_fork_father = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca")));
+            
+
 
             if (actual_fork < max_fork_close) {
 
@@ -293,11 +307,22 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
                     engine->translate_node("Sphere001", translate_ball);
                     
+                    old_ball = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001"))->get_pos_matrix());
+                    
                     ball_grabbed = true;
                 }
                 
-                engine->translate_node("forca1", -translate_fork);
-                engine->translate_node("forca2", translate_fork);
+
+                if (ball_grabbed && actual_fork <= 2) {
+                    engine->scale_node("Sphere001", scale_ball);
+                    engine->translate_node("forca1", -translate_fork);
+                    engine->translate_node("forca2", translate_fork);
+                }
+                else if(!ball_grabbed) {
+                    engine->translate_node("forca1", -translate_fork);
+                    engine->translate_node("forca2", translate_fork);
+                }
+                
                 actual_fork++;
             }
 
