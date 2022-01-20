@@ -9,6 +9,7 @@
 #include "Utils.h"
 #include "List.h"
 #include "Texture.h"
+#include "Material.h"
 /////////////
 // DEFINE //
 ///////////
@@ -46,6 +47,7 @@ class LIB_API Engine{
         void loadTree(Node* root);
         void setTextureFilePath(const char* dirPath){ Texture::setPath(dirPath);};
         void enableWireframe(bool enable);
+        void setShadowFlag(const char* noShadowName);
 
 
 		//783 MAX Y(Sul mio pc) la x non son stato a guardare
@@ -65,6 +67,7 @@ class LIB_API Engine{
 		void set_width(int widthS) { width = widthS; };
 		void set_height(int heightS) { height = heightS; };
 
+		Material* getShadowMaterial(){return shadowMaterial;};
 		List* get_object_list() { return nodeList; }
 
 		void rotate_node(const char* node_name, float angle,glm::vec3 axis);
@@ -73,6 +76,7 @@ class LIB_API Engine{
 
 		glm::mat4 getProjection() { return projection; };
 		glm::mat4 getOrtho() { return ortho; };
+		glm::mat4 getShadowMatrix(){return shadowMatrix;};
 
 		Engine(Engine &other) = delete;
 		void operator=(const Engine &) = delete;
@@ -83,6 +87,8 @@ class LIB_API Engine{
         Node* rootE;
 		glm::mat4 projection;
 		glm::mat4 ortho;
+        Material* shadowMaterial;
+        glm::mat4 shadowMatrix;
 		int width;
 		int height;
 

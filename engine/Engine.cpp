@@ -122,6 +122,21 @@ void LIB_API Engine::enableWireframe(bool enable){
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
+void LIB_API Engine::setShadowFlag(const char* noShadowName){
+    std::string excludeName = noShadowName;
+
+    for(auto& element : nodeList->get_list()){
+
+        if(dynamic_cast<Mesh*>(element)){
+            std::string meshName = element->get_name();
+            if(meshName.find(excludeName) == std::string::npos){
+                Mesh* mesh = dynamic_cast<Mesh*>(element);
+                mesh->setHasShadow(true);
+            }
+        }
+    }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * This callback is invoked each time the window gets resized (and once also when created).
@@ -166,6 +181,15 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
 
     // Create the window with a specific title:
     windowId = glutCreateWindow(nomeFinestra);
+
+    //set shadow properties
+    shadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.001f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 1.0f));
+    shadowMaterial = new Material();
+    shadowMaterial->setAmbient(glm::vec3(0.0f, 0.0f, 0.0f));
+    shadowMaterial->setEmission(glm::vec3(0.0f, 0.0f, 0.0f));
+    shadowMaterial->setDiffuse(glm::vec3(0.0f, 0.0f, 0.0f));
+    shadowMaterial->setSpecular(glm::vec3(0.0f, 0.0f, 0.0f));
+    shadowMaterial->setShininess(1.0f);
 
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
