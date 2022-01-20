@@ -1,10 +1,12 @@
 #include "Mesh.h"
 #include "Utils.h"
+#include "Engine.h"
 #include <iostream>
 #include <GL/freeglut.h>
 
 LIB_API Mesh::Mesh()
 {
+    hasShadow = false;
     //ctor
 }
 
@@ -35,9 +37,8 @@ void LIB_API Mesh::set_children(unsigned int mesh_children){
 
 
 void LIB_API Mesh::render(glm::mat4 camera){
-    //std::cout << "render mesh -> " << this->get_name() << std::endl;
 
-    // Set material properties:
+    // render material
     material->render(camera);
 
    
@@ -49,7 +50,6 @@ void LIB_API Mesh::render(glm::mat4 camera){
         glEnable(GL_TEXTURE_2D);
 
     for(unsigned int* face : faces){
-        //std::cout << "   Face data . . :  f" << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << std::endl;
         glBegin(GL_TRIANGLES);
 
             glNormal3fv(glm::value_ptr(vertices.at(face[0])->getNormal()));
@@ -69,4 +69,37 @@ void LIB_API Mesh::render(glm::mat4 camera){
 
     if(material->hasTexture())
         glDisable(GL_TEXTURE_2D);
+
+    if(hasShadow)
+        renderShadow(camera);
+}
+
+void LIB_API Mesh::renderShadow(glm::mat4 camera){
+
+    glm::mat4 scaleShadow = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 1.0f));
+    glm::mat4 transShadow = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.001f, 0.0f));
+    glm::mat4 shadowMat = Engine::GetInstance()->getShadowMatrix();
+
+    //render material
+    Engine::GetInstance()->getShadowMaterial()->render(camera);
+
+    glLoadMatrixf(glm::value_ptr(camera * shadowMat * this->get_final_matrix()));
+
+    for(unsigned int* face : faces){
+        glBegin(GL_TRIANGLES);
+
+            glNormal3fv(glm::value_ptr(vertices.at(face[0])->getNormal()));
+            glTexCoord2fv(glm::value_ptr(vertices.at(face[0])->getUv()));
+            glVertex3fv(glm::value_ptr(vertices.at(face[0])->getVertex()));
+
+            glNormal3fv(glm::value_ptr(vertices.at(face[1])->getNormal()));
+            glTexCoord2fv(glm::value_ptr(vertices.at(face[1])->getUv()));
+            glVertex3fv(glm::value_ptr(vertices.at(face[1])->getVertex()));
+
+            glNormal3fv(glm::value_ptr(vertices.at(face[2])->getNormal()));
+            glTexCoord2fv(glm::value_ptr(vertices.at(face[2])->getUv()));
+            glVertex3fv(glm::value_ptr(vertices.at(face[2])->getVertex()));
+
+        glEnd();
+    }
 }

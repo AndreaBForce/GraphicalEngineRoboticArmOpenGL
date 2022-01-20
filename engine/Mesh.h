@@ -12,6 +12,7 @@ class LIB_API Mesh : public Node{
         virtual ~Mesh();
 
         void render(glm::mat4 camera) override;
+
         Material* get_material();
 
         void load_mesh_from_file();
@@ -21,6 +22,7 @@ class LIB_API Mesh : public Node{
         void set_radius(float radius);
         void set_children(unsigned int children);
         void set_material(Material* new_material){material = new_material;}
+        void setHasShadow(bool flag){ hasShadow = flag;}
 
 
         void addVertex(Vertex* vertex) { vertices.push_back(vertex); };
@@ -30,6 +32,7 @@ class LIB_API Mesh : public Node{
     private:
         Material* material;
         char materialName[FILENAME_MAX];
+        bool hasShadow;
 
         glm::vec3 bBoxMin;
         glm::vec3 bBoxMax;
@@ -37,6 +40,8 @@ class LIB_API Mesh : public Node{
         unsigned int children;
         std::vector<Vertex*> vertices;
         std::vector<unsigned int*> faces;
+
+        void renderShadow(glm::mat4 camera);
 };
 
 #endif // MESH_H
