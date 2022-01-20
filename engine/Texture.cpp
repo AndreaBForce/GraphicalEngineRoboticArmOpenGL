@@ -53,6 +53,5 @@ void LIB_API Texture::setPath(const char* dirPath){
 }
 
 void LIB_API Texture::render(glm::mat4 camera){
-
     glBindTexture(GL_TEXTURE_2D, textureId);
 }

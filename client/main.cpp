@@ -14,13 +14,9 @@
 /////////////////////
 int windowId;
 Engine* engine;
-Light* testL;
-Mesh* testMesh;
-float lightPosX = 0.0f;
-float lightPosY = 5.0f;
-float lightPosZ = 30.0f;
-
-
+float cameraPosX = 0.0f;
+float cameraPosY = 5.0f;
+float cameraPosZ = 30.0f;
 int fps = 0;
 int frames = 0;
 
@@ -38,17 +34,16 @@ glm::mat4 old_ball;
 glm::mat4 cameraMat;
 
 //camera params
-glm::vec3 eye(0.0f, 20.0f, 0.0f);
+glm::vec3 eye(-40.0f, 60.0f, 65.0f);
 glm::vec3 up(0.0f, 1.0f, 0.0f);
+
 
 /////////////////////////
 // CALLBACK FUNCTIONS //
 ///////////////////////
 
 void displayCallback(){
-    //light->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
-    cameraMat = glm::lookAt(eye, glm::vec3(lightPosX, lightPosY, lightPosZ), up);
-    //testL->setPosition(glm::vec3(lightPosX, lightPosY, lightPosZ));
+    cameraMat = glm::lookAt(eye, glm::vec3(cameraPosX, cameraPosY, cameraPosZ), up);
     engine->clearDisplay();
 
     //questo metodo per renderizzare tutto una volta implementato correttamente
@@ -101,19 +96,19 @@ void specialCallback(int key, int mouseX, int mouseY){
     switch(key){
         case KEY_UP:
             std::cout << "KEY UP" << std::endl;
-            lightPosZ -= speed;
+            cameraPosZ -= speed;
             break;
         case KEY_DOWN:
             std::cout << "KEY DOWN" << std::endl;
-            lightPosZ += speed;
+            cameraPosZ += speed;
             break;
         case KEY_LEFT:
             std::cout << "KEY LEFT" << std::endl;
-            lightPosX -= speed;
+            cameraPosX -= speed;
             break;
         case KEY_RIGHT:
             std::cout << "KEY RIGHT" << std::endl;
-            lightPosX += speed;
+            cameraPosX += speed;
             break;
     }
 
@@ -170,11 +165,11 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
     switch(key){
         case 'w':
             std::cout << "W PRESSED" << std::endl;
-            lightPosY += speed;
+            cameraPosY += speed;
             break;
         case 's':
             std::cout << "S PRESSED" << std::endl;
-            lightPosY -= speed;
+            cameraPosY -= speed;
             break;
 
         case 'y':
@@ -360,23 +355,13 @@ int main(int argc, char *argv[]){
 
     engine->setTextureFilePath("../files/textures/");
     engine->loadFromFile("../files/stanza.OVO");
-
-    for(int i = 0; i < engine->getRoot()->get_number_of_children(); i++){
-        std::cout << engine->getRoot()->getChildren().at(i)->get_name() << std::endl;
-    }
-
-    testL = dynamic_cast<Light*>(engine->getRoot()->getChildren().at(5));
-    //testMesh = dynamic_cast<Mesh*>(engine->getRoot()->getChildren().at(0));
-    testMesh = dynamic_cast<Mesh*>(engine->get_object_list()->get_list().at(16));
-
-    //testMesh->render();
+    engine->setShadowFlag("Plane");
 
     engine->setDisplayCallback(displayCallback);
     engine->setReshapeCallback();
     engine->setSpecialCallback(specialCallback);
     engine->setKeyboardCallback(keyboardCallback);
     engine->setTimerCallback(timerCallback, 1000, 0);
-
 
     engine->enableLightSystem();
 
