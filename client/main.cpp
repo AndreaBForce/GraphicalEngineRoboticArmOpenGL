@@ -317,13 +317,15 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     engine->scale_node("Sphere001", scale_ball);
                     engine->translate_node("forca1", -translate_fork);
                     engine->translate_node("forca2", translate_fork);
+                    actual_fork++;
                 }
                 else if(!ball_grabbed) {
                     engine->translate_node("forca1", -translate_fork);
                     engine->translate_node("forca2", translate_fork);
+                    actual_fork++;
                 }
                 
-                actual_fork++;
+                
             }
 
             break;
@@ -354,7 +356,7 @@ int main(int argc, char *argv[]){
 
     engine->engineMsg();
 
-    windowId = engine->init3Dcontext("Project", 600, 600, argc, argv);
+    windowId = engine->init3Dcontext("Mangrovie Robotic Arm Project", 600, 600, argc, argv);
 
     engine->setTextureFilePath("../files/textures/");
     engine->loadFromFile("../files/stanza.OVO");
