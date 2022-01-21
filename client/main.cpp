@@ -238,74 +238,79 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             break;
         case 'j':
             //apri pinza
+            //Per capire meglio parti dal caso K che spiega la parte di chiusura, poi guardare l'apertura
             std::cout << "J PRESSED" << std::endl;
 
-
+            //If che se ho le forche che sono maggiori di 0 significa che sono parzialmente chiuse quindi entro qua
             if (actual_fork >= 0) {
-                if (ball_grabbed) {
-                    ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
 
-                    
+                //Questo if serve per la parte di scalare la palla quando apro le forche
+                if (ball_grabbed) {
+                    //Prendo il nodo palla, metto la vecchia matrice di posizione ovvero quella originale senza transformazioni
+                    ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
                     ball_object_to_be_taken->set_pos_matrix(old_ball);
-                    for (int i = 0; i <= actual_fork; i++) {
-                        
+
+                    //Qua applico la transformazione n-1 volte di quanto erano state applicate prima
+                    for (int i = 0; i < actual_fork; i++) {    
                         engine->scale_node("Sphere001",scale_ball);
                     }
-                   
-                    
+                    //ri renderizzo la scena
                     displayCallback();
                 }
 
+
+                //Questo if serve per quando rilascio la palla
                 if (actual_fork == 0 && ball_grabbed) {
                     //release ball
-                    //Prendo nodo palla
-
+                    
+                    //Prendo il nodo palla
                     ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
                     
+                   
                     
-   
+                    //Vado a leggere l'ultima colonna della matrice finale,Essa corrisponde alle world coordinates della palla.
                     glm::vec4 ball_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
-                    glm::mat4 ball_pos_mat = ball_object_to_be_taken->get_pos_matrix();
                     
-                  
+                    //Qua mi salvo la matrice iniziale(ovvero presa sulla forca) in world coordinates
                     glm::mat4 matriceInzialeePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, ball_world_coordinate.g, ball_world_coordinate.b));
+                    //Qua salvo la matrice finale della palla in world coordinates, ovvero con la y messa a 1
                     glm::mat4 matriceFinalePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, 1.0f, ball_world_coordinate.b));
                    
-                    ball_pos_mat = matriceInzialeePalle;
-                    // while per fare l'animazione di caduta palla
-                    //E' un po buggato se ruoti l'asse della forca
                     
+                    //Setto il padre della palla il nodo root della scena, poi metto la sua pos matrix come la matrice in world coordinates che ha adesso
                     ball_object_to_be_taken->set_parent(engine->getRoot());
                     ball_object_to_be_taken->set_pos_matrix(matriceInzialeePalle);
 
+                    //while che fa l'animazione di caduta della palla
+                    //finche la componente y delle world coordinates della palla non è >=1 lui decrementa
                     while (ball_world_coordinate.g >= 1) {
                    
+                        //Aggiorno la matrice inziale della palla
+                        matriceInzialeePalle = ball_object_to_be_taken->get_pos_matrix();
+                      
+                        //Effetuo la traslazione della palla
+                        ball_object_to_be_taken->set_pos_matrix(glm::translate(matriceInzialeePalle, -translate_ball_floor));
 
-                        ball_pos_mat = ball_object_to_be_taken->get_pos_matrix();
-                        std::cout << glm::to_string(ball_pos_mat) << std::endl;
-
-
-                        ball_object_to_be_taken->set_pos_matrix(glm::translate(ball_pos_mat, -translate_ball_floor));
-                        
+                        //aggiorno il ball_world coordinates della palla
                         ball_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
 
+                        //renderizzo la scena
                         displayCallback();
                        
                     }
                     
                     
-                    std::cout << glm::to_string(matriceFinalePalle) << std::endl;
+                    //Setto come matrice della palla quella finale dichiarata prima, perchè è piu precisa
                     ball_object_to_be_taken->set_pos_matrix(matriceFinalePalle);
-
-                    ball_object_to_be_taken->set_parent(engine->getRoot());
                    
+                    //resetto la flag
                     ball_grabbed = false;
                 }
 
-               
+                //traslo le forche
                 engine->translate_node("forca1", translate_fork);
                 engine->translate_node("forca2", -translate_fork);
-                
+                //nego le pinze
                 actual_fork--;
             }
             break;
@@ -313,38 +318,50 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
         case 'k':
             //chiud pinza
             std::cout << "K PRESSED" << std::endl;
+
+            //Qui vado a prendere i nodi che mi servono ovvero la palla e il RuotaAsseForca, che usero come padre dopo
             ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
             rotate_axis_fork_father = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca")));
             
 
-
+            //Questo if, controlla se la forca abbia raggiunto la posizione massima di chiusura
             if (actual_fork < max_fork_close) {
 
+                //Questo if, controlla se la forca sia aperta del tutto e se la distanza tra la palla e il padre sia < 5.0
                 if (actual_fork == 0 && check_distance_two_vectors(ball_object_to_be_taken, rotate_axis_fork_father, 5.0f)) {
                    
-                    ball_object_to_be_taken->set_pos_matrix(rotate_axis_fork_father->get_pos_matrix());
-                    ball_object_to_be_taken->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))));
+                    
 
+                    //Qui vado a settare la matrice di posizione della palla, uguale a quella della ruota asse forca
+                    ball_object_to_be_taken->set_pos_matrix(rotate_axis_fork_father->get_pos_matrix());
+
+                    //Poi vado a settare la ruota asse forca come padre
+                    ball_object_to_be_taken->set_parent(rotate_axis_fork_father);
+
+                    //Dopo di che effettuo una traslazione perche altrimenti sarebbe dentro il padre
                     engine->translate_node("Sphere001", translate_ball);
                     
-                    old_ball = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001"))->get_pos_matrix());
+                    //Salvo un save point di come era originalmente la palla che viene usato dopo nella parte di release della palla
+                    old_ball = ball_object_to_be_taken->get_pos_matrix();
                     
+                    //flaggo a true il fatto che ho la palla grabbata
                     ball_grabbed = true;
                 }
                 
 
+                //If che controlla se palla presa, e le forche sono <=2, posso chiudere ancora
                 if (ball_grabbed && actual_fork <= 2) {
                     engine->scale_node("Sphere001", scale_ball);
                     engine->translate_node("forca1", -translate_fork);
                     engine->translate_node("forca2", translate_fork);
                     actual_fork++;
                 }
+                //Altrimenti controllo se ho o meno la palla e se non l'ho posso chiudere di piu le forche
                 else if(!ball_grabbed) {
                     engine->translate_node("forca1", -translate_fork);
                     engine->translate_node("forca2", translate_fork);
                     actual_fork++;
                 }
-                
                 
             }
 

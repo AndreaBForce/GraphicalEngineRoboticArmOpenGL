@@ -5,6 +5,7 @@
 // #INCLUDE //
 //////////////
 
+
    // GLM:
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -100,9 +101,9 @@ void LIB_API Engine::enableLightSystem(){
 }
 
 void LIB_API Engine::startEventLoop(){
+    
     while(1){
         glutMainLoopEvent();
-
     }
 }
 
