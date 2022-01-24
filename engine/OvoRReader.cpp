@@ -91,9 +91,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     memcpy(&chunkSize, buffer + position, sizeof(unsigned int));
     position = position + sizeof(unsigned int);
 
-    cout << "\nStampo l'id: " << chunkId;
-    cout << "\nStampo il size: " << chunkSize;
-
     if (chunkId > 200) {
         chunkSize = 0;
     }
@@ -111,12 +108,9 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         ///////////////////////////////
     case OvObject::Type::OBJECT: //
     {
-
-        std::cout << "version]" << endl;
         // OVO revision number:
         unsigned int versionId = 0;
         memcpy(&versionId, data + chunkPosition, sizeof(unsigned int));
-        cout << "   Version . . . :  " << versionId << endl;
         chunkPosition += sizeof(unsigned int);
     }
     break;
@@ -127,12 +121,9 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     {
         Node* actualNode = new Node();
 
-        cout << "node]" << endl;
-
         // Node name:
         char nodeName[FILENAME_MAX];
         strcpy(nodeName, data + chunkPosition);
-        cout << "   Name  . . . . :  " << nodeName << endl;
         actualNode->set_name(nodeName);
 
         chunkPosition += (unsigned int)strlen(nodeName) + 1;
@@ -148,13 +139,11 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         unsigned int children;
         memcpy(&children, data + chunkPosition, sizeof(unsigned int));
         numberOfChildren = children;
-        cout << "   Nr. children  :  " << children << endl;
         chunkPosition += sizeof(unsigned int);
 
         // Optional target node, [none] if not used:
         char targetName[FILENAME_MAX];
         strcpy(targetName, data + chunkPosition);
-        cout << "   Target node . :  " << targetName << endl;
         chunkPosition += (unsigned int)strlen(targetName) + 1;
         curNode = actualNode;
     }
@@ -164,27 +153,23 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     /////////////////////////////////
     case OvObject::Type::MATERIAL: //
     {
-        cout << "material]" << endl;
         Material* thisMaterial = new Material();
 
         // Material name:
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
-        cout << "   Name  . . . . :  " << (materialName) << endl;
         chunkPosition += (unsigned int)strlen(materialName) + 1;
         thisMaterial->set_name(materialName);
 
         // Material term colors, starting with emissive:
         glm::vec3 emission, albedo;
         memcpy(&emission, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   Emission  . . :  " << emission.r << ", " << emission.g << ", " << emission.b << endl;
         chunkPosition += sizeof(glm::vec3);
 
         thisMaterial->setEmission(emission);
 
         // Albedo:
         memcpy(&albedo, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   Albedo  . . . :  " << albedo.r << ", " << albedo.g << ", " << albedo.b << endl;
         chunkPosition += sizeof(glm::vec3);
         thisMaterial->setAmbient(albedo);
         thisMaterial->setSpecular(albedo);
@@ -193,28 +178,24 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Roughness factor:
         float roughness;
         memcpy(&roughness, data + chunkPosition, sizeof(float));
-        cout << "   Roughness . . :  " << roughness << endl;
         chunkPosition += sizeof(float);
         thisMaterial->setShininess(roughness);
 
         // Metalness factor:
         float metalness;
         memcpy(&metalness, data + chunkPosition, sizeof(float));
-        cout << "   Metalness . . :  " << metalness << endl;
         chunkPosition += sizeof(float);
 
 
         // Transparency factor
         float alpha;
         memcpy(&alpha, data + chunkPosition, sizeof(float));
-        cout << "   Transparency  :  " << alpha << endl;
         chunkPosition += sizeof(float);
 
 
         // Albedo texture filename, or [none] if not used:
         char textureName[FILENAME_MAX];
         strcpy(textureName, data + chunkPosition);
-        cout << "   Albedo tex. . :  " << textureName << endl;
         chunkPosition += (unsigned int)strlen(textureName) + 1;
         if(strcmp(textureName, "[none]") != 0){
             thisMaterial->setTexture(textureName);
@@ -226,25 +207,21 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Normal map filename, or [none] if not used:
         char normalMapName[FILENAME_MAX];
         strcpy(normalMapName, data + chunkPosition);
-        cout << "   Normalmap tex.:  " << normalMapName << endl;
         chunkPosition += (unsigned int)strlen(normalMapName) + 1;
 
         // Height map filename, or [none] if not used:
         char heightMapName[FILENAME_MAX];
         strcpy(heightMapName, data + chunkPosition);
-        cout << "   Heightmap tex.:  " << heightMapName << endl;
         chunkPosition += (unsigned int)strlen(heightMapName) + 1;
 
         // Roughness map filename, or [none] if not used:
         char roughnessMapName[FILENAME_MAX];
         strcpy(roughnessMapName, data + chunkPosition);
-        cout << "   Roughness tex.:  " << roughnessMapName << endl;
         chunkPosition += (unsigned int)strlen(roughnessMapName) + 1;
 
         // Metalness map filename, or [none] if not used:
         char metalnessMapName[FILENAME_MAX];
         strcpy(metalnessMapName, data + chunkPosition);
-        cout << "   Metalness tex.:  " << metalnessMapName << endl;
         chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
 
         materialList->pushBackOfVec(thisMaterial);
@@ -262,10 +239,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         if ((OvObject::Type)chunkId == OvObject::Type::SKINNED)
         {
             isSkinned = true;
-            cout << "skinned mesh]" << endl;
         }
-        else
-            cout << "mesh]" << endl;
 
         Mesh* thisMesh = new Mesh();
 
@@ -275,7 +249,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         thisMesh->set_name(meshName);
 
         chunkPosition += (unsigned int)strlen(meshName) + 1;
-        cout << "   Name  . . . . :  " << thisMesh->get_name() << endl;
 
         // Mesh matrix:
         glm::mat4 matrix;
@@ -288,14 +261,12 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         unsigned int children;
         memcpy(&children, data + chunkPosition, sizeof(unsigned int));
         numberOfChildren = children;
-        cout << "   Nr. children  :  " << children << endl;
         chunkPosition += sizeof(unsigned int);
         thisMesh->set_children(children);
 
         // Optional target node, or [none] if not used:
         char targetName[FILENAME_MAX];
         strcpy(targetName, data + chunkPosition);
-        cout << "   Target node . :  " << targetName << endl;
         chunkPosition += (unsigned int)strlen(targetName) + 1;
 
         // Mesh subtype (see OvMesh SUBTYPE enum):
@@ -309,20 +280,17 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         case OvMesh::Subtype::TESSELLATED: strcpy(subtypeName, "tessellated"); break;
         default: strcpy(subtypeName, "UNDEFINED");
         }
-        cout << "   Subtype . . . :  " << (int)subtype << " (" << subtypeName << ")" << endl;
         chunkPosition += sizeof(unsigned char);
 
         // Material name, or [none] if not used:
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
-        cout << materialName << endl;
         thisMesh->set_material(dynamic_cast<Material*>(materialList->getElementByName(materialName)));
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
         float radius;
         memcpy(&radius, data + chunkPosition, sizeof(float));
-        cout << "   Radius  . . . :  " << radius << endl;
         chunkPosition += sizeof(float);
         thisMesh->set_radius(radius);
 
@@ -341,7 +309,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Optional physics properties:
         unsigned char hasPhysics;
         memcpy(&hasPhysics, data + chunkPosition, sizeof(unsigned char));
-        cout << "   Physics . . . :  " << (int)hasPhysics << endl;
         chunkPosition += sizeof(unsigned char);
         if (hasPhysics)
         {
@@ -375,18 +342,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             PhysProps mp;
             memcpy(&mp, data + chunkPosition, sizeof(PhysProps));
             chunkPosition += sizeof(PhysProps);
-            cout << "      Type . . . :  " << (int)mp.type << endl;
-            cout << "      Hull type  :  " << (int)mp.hullType << endl;
-            cout << "      Cont. coll.:  " << (int)mp.contCollisionDetection << endl;
-            cout << "      Col. bodies:  " << (int)mp.collideWithRBodies << endl;
-            cout << "      Center . . :  " << mp.massCenter.x << ", " << mp.massCenter.y << ", " << mp.massCenter.z << endl;
-            cout << "      Mass . . . :  " << mp.mass << endl;
-            cout << "      Static . . :  " << mp.staticFriction << endl;
-            cout << "      Dynamic  . :  " << mp.dynamicFriction << endl;
-            cout << "      Bounciness :  " << mp.bounciness << endl;
-            cout << "      Linear . . :  " << mp.linearDamping << endl;
-            cout << "      Angular  . :  " << mp.angularDamping << endl;
-            cout << "      Nr. hulls  :  " << mp.nrOfHulls << endl;
 
             // Custom hull(s) used?
             if (mp.nrOfHulls)
@@ -438,7 +393,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Nr. of LODs:
         unsigned int LODs;
         memcpy(&LODs, data + chunkPosition, sizeof(unsigned int));
-        cout << "   Nr. of LODs   :  " << LODs << endl;
         chunkPosition += sizeof(unsigned int);
 
         // For each LOD...:
@@ -446,18 +400,15 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
         for (unsigned int l = 0; l < LODs; l++)
         {
-            cout << "      LOD . . :  " << l + 1 << "/" << LODs << endl;
 
             // Nr. of vertices:
             unsigned int vertices, faces;
             memcpy(&vertices, data + chunkPosition, sizeof(unsigned int));
-            cout << "   Nr. vertices  :  " << vertices << endl;
             chunkPosition += sizeof(unsigned int);
             verticesPerLOD[l] = vertices;
 
             // ...and faces:
             memcpy(&faces, data + chunkPosition, sizeof(unsigned int));
-            cout << "   Nr. faces . . :  " << faces << endl;
             chunkPosition += sizeof(unsigned int);
 
             Vertex* newVertex;
@@ -524,7 +475,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             // Bone list:
             unsigned int nrOfBones;
             memcpy(&nrOfBones, data + chunkPosition, sizeof(unsigned int));
-            cout << "   Nr. bones . . :  " << nrOfBones << endl;
             chunkPosition += sizeof(unsigned int);
 
             // For each bone...:
@@ -533,7 +483,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 // Bone name:
                 char boneName[FILENAME_MAX];
                 strcpy(boneName, data + chunkPosition);
-                cout << "      Bone name  :  " << boneName << " (" << c << ")" << endl;
                 chunkPosition += (unsigned int)strlen(boneName) + 1;
 
                 // Initial bone pose matrix (already inverted):
@@ -546,12 +495,10 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             // For each LOD...:
             for (unsigned int l = 0; l < LODs; l++)
             {
-                cout << "      LOD . . :  " << l + 1 << "/" << LODs << endl;
 
                 // Per vertex bone weights and indexes:
                 for (unsigned int c = 0; c < verticesPerLOD[l]; c++)
                 {
-
 
                     // Bone indexes:
                     unsigned int boneIndex[4];
@@ -574,12 +521,10 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     case OvObject::Type::LIGHT: //
     {
         Light* thisLight = new Light();
-        cout << "light]" << endl;
 
         // Light name:
         char lightName[FILENAME_MAX];
         strcpy(lightName, data + chunkPosition);
-        cout << "   Name  . . . . :  " << lightName << endl;
         chunkPosition += (unsigned int)strlen(lightName) + 1;
         thisLight->set_name(lightName);
 
@@ -594,13 +539,11 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         unsigned int children;
         memcpy(&children, data + chunkPosition, sizeof(unsigned int));
         numberOfChildren = children;
-        cout << "   Nr. children  :  " << children << endl;
         chunkPosition += sizeof(unsigned int);
 
         // Optional target node name, or [none] if not used:
         char targetName[FILENAME_MAX];
         strcpy(targetName, data + chunkPosition);
-        cout << "   Target node . :  " << targetName << endl;
         chunkPosition += (unsigned int)strlen(targetName) + 1;
 
         // Light subtype (see OvLight SUBTYPE enum):
@@ -624,13 +567,11 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         default:
             strcpy(subtypeName, "UNDEFINED");
         }
-        cout << "   Subtype . . . :  " << (int)subtype << " (" << subtypeName << ")" << endl;
         chunkPosition += sizeof(unsigned char);
 
         // Light color:
         glm::vec3 color;
         memcpy(&color, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   Color . . . . :  " << color.r << ", " << color.g << ", " << color.b << endl;
         chunkPosition += sizeof(glm::vec3);
         thisLight->setAmbient(glm::vec4(color, 1.0f));
         thisLight->setDiffuse(glm::vec4(color, 1.0f));
@@ -639,39 +580,33 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Influence radius:
         float radius;
         memcpy(&radius, data + chunkPosition, sizeof(float));
-        cout << "   Radius  . . . :  " << radius << endl;
         chunkPosition += sizeof(float);
 
         // Direction:
         glm::vec3 direction;
         memcpy(&direction, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   Direction . . :  " << direction.r << ", " << direction.g << ", " << direction.b << endl;
         chunkPosition += sizeof(glm::vec3);
         thisLight->setDirection(direction);
 
         // Cutoff:
         float cutoff;
         memcpy(&cutoff, data + chunkPosition, sizeof(float));
-        cout << "   Cutoff  . . . :  " << cutoff << endl;
         chunkPosition += sizeof(float);
         thisLight->setCutoff(cutoff);
 
         // Exponent:
         float spotExponent;
         memcpy(&spotExponent, data + chunkPosition, sizeof(float));
-        cout << "   Spot exponent :  " << spotExponent << endl;
         chunkPosition += sizeof(float);
 
         // Cast shadow flag:
         unsigned char castShadows;
         memcpy(&castShadows, data + chunkPosition, sizeof(unsigned char));
-        cout << "   Cast shadows  :  " << (int)castShadows << endl;
         chunkPosition += sizeof(unsigned char);
 
         // Volumetric lighting flag:
         unsigned char isVolumetric;
         memcpy(&isVolumetric, data + chunkPosition, sizeof(unsigned char));
-        cout << "   Volumetric  . :  " << (int)isVolumetric << endl;
         chunkPosition += sizeof(unsigned char);
         curNode = thisLight;
 
@@ -682,12 +617,10 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     /////////////////////////////
     case OvObject::Type::BONE: //
     {
-        cout << "bone]" << endl;
 
         // Bone name:
         char boneName[FILENAME_MAX];
         strcpy(boneName, data + chunkPosition);
-        cout << "   Name  . . . . :  " << boneName << endl;
         chunkPosition += (unsigned int)strlen(boneName) + 1;
 
         // Bone matrix:
@@ -700,25 +633,21 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         unsigned int children;
         memcpy(&children, data + chunkPosition, sizeof(unsigned int));
         numberOfChildren = children;
-        cout << "   Nr. children  :  " << children << endl;
         chunkPosition += sizeof(unsigned int);
 
         // Optional target node, or [none] if not used:
         char targetName[FILENAME_MAX];
         strcpy(targetName, data + chunkPosition);
-        cout << "   Target node . :  " << targetName << endl;
         chunkPosition += (unsigned int)strlen(targetName) + 1;
 
         // Mesh bounding box minimum corner:
         glm::vec3 bBoxMin;
         memcpy(&bBoxMin, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   BBox minimum  :  " << bBoxMin.x << ", " << bBoxMin.y << ", " << bBoxMin.z << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Mesh bounding box maximum corner:
         glm::vec3 bBoxMax;
         memcpy(&bBoxMax, data + chunkPosition, sizeof(glm::vec3));
-        cout << "   BBox maximum  :  " << bBoxMax.x << ", " << bBoxMax.y << ", " << bBoxMax.z << endl;
         chunkPosition += sizeof(glm::vec3);
     }
     break;
@@ -726,7 +655,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
     ///////////
     default: //
-        cout << "UNKNOWN]" << endl;
 
         break;
     }
