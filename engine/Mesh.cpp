@@ -19,19 +19,7 @@ LIB_API Material* Mesh::get_material(){
     return material;
 }
 
-void LIB_API Mesh::set_bBoxMin(glm::vec3 mesh_bBoxMin){
-    bBoxMin = mesh_bBoxMin;
-}
-
-void LIB_API Mesh::set_bBoxMax(glm::vec3 mesh_bBoxMax){
-    bBoxMax = mesh_bBoxMax;
-}
-
-void LIB_API Mesh::set_radius(float mesh_radius){
-    radius = mesh_radius;
-}
-
-void LIB_API Mesh::set_children(unsigned int mesh_children){
+void LIB_API Mesh::setChildren(unsigned int mesh_children){
     children = mesh_children;
 }
 

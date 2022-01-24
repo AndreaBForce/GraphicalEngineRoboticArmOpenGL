@@ -11,7 +11,7 @@ class LIB_API Node : public Object
         virtual ~Node();
         void render(glm::mat4 camera) {};
 
-        glm::mat4 get_pos_matrix(){return pos_matrix;}
+        glm::mat4 getPosMatrix(){return posMatrix;}
         Node* getParent(){return parent;}
         int getNumberOfChildren(){return children.size();}
         Node getNodeByName();
@@ -19,24 +19,20 @@ class LIB_API Node : public Object
         std::vector<Node*> getChildren(){return children;};
         glm::quat getOrientation() { return orientation; };
 
-        void tree_traversal();
-        void set_parent(Node* new_parent){parent = new_parent;}
+        void treeTraversal();
+        void setParent(Node* newParent){parent = newParent;}
         void addChild(Node* childNode);
-        void set_pos_matrix(glm::mat4 new_pos_matrix){pos_matrix = new_pos_matrix;}
+        void setPosMatrix(glm::mat4 newPosMatrix){posMatrix = newPosMatrix;}
 
-        void set_affine_decomposition(Node* nodo_affine);
+        void setScale(glm::vec3 scala) { scale = scala; };
+        void setOrientation(glm::quat orientation1) { orientation = orientation1; };
+        void setTranslation(glm::vec3 translatio) { translation = translatio; };
 
-        void set_scale(glm::vec3 scala) { scale = scala; };
-        void set_orientation(glm::quat orientation1) { orientation = orientation1; };
-
-        void set_translation(glm::vec3 translatio) { translation = translatio; };
-
-        glm::vec3 get_translation() { return translation; };
-        glm::vec3 get_scale() { return scale; };
+        glm::vec3 getTranslation() { return translation; };
+        glm::vec3 getScale() { return scale; };
 
     private:
-
-        glm::mat4 pos_matrix;
+        glm::mat4 posMatrix;
         Node* parent;
         std::vector<Node*> children;
 

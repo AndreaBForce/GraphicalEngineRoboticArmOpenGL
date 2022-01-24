@@ -82,16 +82,7 @@ void LIB_API Test::testMesh() {
     std::cout << "TESTING MESH" << std::endl;
 	Mesh* mesh = new Mesh();
 
-	mesh->set_bBoxMin(glm::vec3(1.0f, 1.0f, 1.0f));
-	assert(mesh->getBoxMin() == glm::vec3(1.0f, 1.0f, 1.0f));
-
-	mesh->set_bBoxMax(glm::vec3(2.0f, 2.0f, 2.0f));
-	assert(mesh->getBoxMax() == glm::vec3(2.0f, 2.0f, 2.0f));
-
-	mesh->set_radius(2.0f);
-	assert(mesh->getRadius() == 2.0f);
-
-	mesh->set_children(4);
+	mesh->setChildren(4);
 	assert(mesh->getChildren() == 4);
 
 	mesh->setHasShadow(true);
@@ -156,16 +147,16 @@ void LIB_API Test::testNode() {
     std::cout << "TESTING NODE" << std::endl;
 	Node* node = new Node();
 
-	node->set_scale(glm::vec3(1.0f, 1.0f, 1.0f));
-	assert(node->get_scale() == glm::vec3(1.0f, 1.0f, 1.0f));
+	node->setScale(glm::vec3(1.0f, 1.0f, 1.0f));
+	assert(node->getScale() == glm::vec3(1.0f, 1.0f, 1.0f));
 
-	node->set_translation(glm::vec3(2.0f, 2.0f, 2.0f));
-	assert(node->get_translation() == glm::vec3(2.0f, 2.0f, 2.0f));
+	node->setTranslation(glm::vec3(2.0f, 2.0f, 2.0f));
+	assert(node->getTranslation() == glm::vec3(2.0f, 2.0f, 2.0f));
 
-	node->set_pos_matrix(glm::mat4(1.0f));
-	assert(node->get_pos_matrix() == glm::mat4(1.0f));
+	node->setPosMatrix(glm::mat4(1.0f));
+	assert(node->getPosMatrix() == glm::mat4(1.0f));
 
-	node->set_orientation(glm::quat());
+	node->setOrientation(glm::quat());
 	assert(node->getOrientation() == glm::quat());
 
 	delete(node);

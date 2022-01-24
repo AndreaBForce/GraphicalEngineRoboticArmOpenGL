@@ -51,7 +51,7 @@ class LIB_API Engine{
 
 		//783 MAX Y(Sul mio pc) la x non son stato a guardare
 		//TODO FARE GET HEIGHT E GET WIDHT COSI PUOI FARLO
-		void write2DText(const char* text,float pos_x,float y_pos);
+		void write2DText(const char* text,float xPos,float yPos);
 		void setTimerCallback(void(*callback)(int value),int time,int min_time);
 
 
@@ -69,9 +69,9 @@ class LIB_API Engine{
 		Material* getShadowMaterial(){return shadowMaterial;};
 		List* getRenderList() { return nodeList; }
 
-		void rotateNode(const char* node_name, float angle,glm::vec3 axis);
-		void translateNode(const char* node_name, glm::vec3 axis);
-		void scaleNode(const char* node_name, glm::vec3 axis);
+		void rotateNode(const char* nodeName, float angle,glm::vec3 axis);
+		void translateNode(const char* nodeName, glm::vec3 axis);
+		void scaleNode(const char* nodeName, glm::vec3 axis);
 
 		glm::mat4 getProjection() { return projection; };
 		glm::mat4 getOrtho() { return ortho; };
@@ -93,7 +93,7 @@ class LIB_API Engine{
 
 		List* nodeList = new List();
 
-        static Engine* engine_instance;
+        static Engine* engineInstance;
 };
 
 #endif // ENGINE_H_INCLUDED

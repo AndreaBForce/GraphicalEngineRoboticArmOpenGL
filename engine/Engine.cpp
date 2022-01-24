@@ -55,21 +55,20 @@ int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
 //FreeImage
 #include <FreeImage.h>
 //define static variable
-Engine* Engine::engine_instance = nullptr;
+Engine* Engine::engineInstance = nullptr;
 
 ///////////////////
 // BODY OF CLASS //
 //////////////////
 
 LIB_API Engine*  Engine::GetInstance(){
-    if(engine_instance == nullptr){
-        engine_instance = new Engine();
+    if(engineInstance == nullptr){
+        engineInstance = new Engine();
     }
-    return engine_instance;
+    return engineInstance;
 }
 
 void LIB_API Engine::clearDisplay(){
-    //glClearColor(0.0f, 0.6f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -196,11 +195,8 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
 }
 
 void LIB_API Engine::loadTree(Node* root){
-    Engine::engine_instance->rootE = root;
+    Engine::engineInstance->rootE = root;
 }
-//C++->PREPROCESSOR->PREPROCESSOR DEFINITIONS-> METTI FREEGLUT_STATIC; davanti agli altri
-//Linker->general_> additional librarys-> metti ..\dependencies\freeglut\lib\$(Platform)\$(Configuration);
-//C++-> GENERAL -> ADDITIONAL SOCI -> metti ..\dependencies\freeglut\include;..\dependencies\glm\include
 
 void LIB_API Engine::loadFromFile(const char* filePath) {
 
@@ -209,7 +205,7 @@ void LIB_API Engine::loadFromFile(const char* filePath) {
     //Declare the ovoreader
     OvoRReader OvoReader;
 
-    Node* root = OvoReader.readDataFromFile(filePath, Engine::engine_instance->getRenderList());
+    Node* root = OvoReader.readDataFromFile(filePath, Engine::engineInstance->getRenderList());
 
     loadTree(root);
 
@@ -218,9 +214,9 @@ void LIB_API Engine::loadFromFile(const char* filePath) {
 /**
 * Va in su di 14 in 14 per dare uno spazio ottimale
 */
-void LIB_API Engine::write2DText(const char* text, float pos_x, float pos_y) {
+void LIB_API Engine::write2DText(const char* text, float xPos, float yPos) {
     glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(glm::value_ptr(Engine::engine_instance->getOrtho()));
+    glLoadMatrixf(glm::value_ptr(Engine::engineInstance->getOrtho()));
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(glm::value_ptr(glm::mat4(1.0f)));
 
@@ -229,35 +225,35 @@ void LIB_API Engine::write2DText(const char* text, float pos_x, float pos_y) {
 
     // Write some text:
     glColor3f(1.0f, 1.0f, 1.0f);
-    glRasterPos2f(pos_x, pos_y);
+    glRasterPos2f(xPos, yPos);
     glutBitmapString(GLUT_BITMAP_8_BY_13, (unsigned char*)text);
 
     // Reactivate lighting:
     glEnable(GL_LIGHTING);
 
     glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(glm::value_ptr(Engine::engine_instance->getProjection()));
+    glLoadMatrixf(glm::value_ptr(Engine::engineInstance->getProjection()));
     glMatrixMode(GL_MODELVIEW);
 }
 
-void LIB_API Engine::setTimerCallback(void(*callback)(int value),int time,int min_time) {
-   glutTimerFunc(time,callback,min_time);
+void LIB_API Engine::setTimerCallback(void(*callback)(int value),int time,int minTime) {
+   glutTimerFunc(time,callback,minTime);
 }
 
-void LIB_API Engine::rotateNode(const char* node_name, float angle, glm::vec3 axis) {
-    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->getRenderList()->getElementByName(node_name));
+void LIB_API Engine::rotateNode(const char* nodeName, float angle, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engineInstance->getRenderList()->getElementByName(nodeName));
 
-    thisNode->set_pos_matrix(glm::rotate(thisNode->get_pos_matrix(), glm::radians(angle), axis));
+    thisNode->setPosMatrix(glm::rotate(thisNode->getPosMatrix(), glm::radians(angle), axis));
 }
 
-void LIB_API Engine::translateNode(const char* node_name, glm::vec3 axis) {
-    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->getRenderList()->getElementByName(node_name));
+void LIB_API Engine::translateNode(const char* nodeName, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engineInstance->getRenderList()->getElementByName(nodeName));
 
-    thisNode->set_pos_matrix(glm::translate(thisNode->get_pos_matrix(), axis));
+    thisNode->setPosMatrix(glm::translate(thisNode->getPosMatrix(), axis));
 }
 
-void LIB_API Engine::scaleNode(const char* node_name, glm::vec3 axis) {
-    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->getRenderList()->getElementByName(node_name));
+void LIB_API Engine::scaleNode(const char* nodeName, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engineInstance->getRenderList()->getElementByName(nodeName));
 
-    thisNode->set_pos_matrix(glm::scale(thisNode->get_pos_matrix(), axis));
+    thisNode->setPosMatrix(glm::scale(thisNode->getPosMatrix(), axis));
 }

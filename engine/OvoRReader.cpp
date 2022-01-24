@@ -131,7 +131,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Node matrix:
         glm::mat4 matrix;
         memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
-        actualNode->set_pos_matrix(matrix);
+        actualNode->setPosMatrix(matrix);
 
         chunkPosition += sizeof(glm::mat4);
 
@@ -253,7 +253,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Mesh matrix:
         glm::mat4 matrix;
         memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
-        thisMesh->set_pos_matrix(matrix);
+        thisMesh->setPosMatrix(matrix);
 
         chunkPosition += sizeof(glm::mat4);
 
@@ -262,7 +262,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         memcpy(&children, data + chunkPosition, sizeof(unsigned int));
         numberOfChildren = children;
         chunkPosition += sizeof(unsigned int);
-        thisMesh->set_children(children);
+        thisMesh->setChildren(children);
 
         // Optional target node, or [none] if not used:
         char targetName[FILENAME_MAX];
@@ -285,25 +285,22 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Material name, or [none] if not used:
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
-        thisMesh->set_material(dynamic_cast<Material*>(materialList->getElementByName(materialName)));
+        thisMesh->setMaterial(dynamic_cast<Material*>(materialList->getElementByName(materialName)));
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
         float radius;
         memcpy(&radius, data + chunkPosition, sizeof(float));
         chunkPosition += sizeof(float);
-        thisMesh->set_radius(radius);
 
         // Mesh bounding box minimum corner:
         glm::vec3 bBoxMin;
         memcpy(&bBoxMin, data + chunkPosition, sizeof(glm::vec3));
-        thisMesh->set_bBoxMin(bBoxMin);
         chunkPosition += sizeof(glm::vec3);
 
         // Mesh bounding box maximum corner:
         glm::vec3 bBoxMax;
         memcpy(&bBoxMax, data + chunkPosition, sizeof(glm::vec3));
-        thisMesh->set_bBoxMax(bBoxMax);
         chunkPosition += sizeof(glm::vec3);
 
         // Optional physics properties:
@@ -531,7 +528,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Light matrix:
         glm::mat4 matrix;
         memcpy(&matrix, data + chunkPosition, sizeof(glm::mat4));
-        thisLight->set_pos_matrix(matrix);
+        thisLight->setPosMatrix(matrix);
 
         chunkPosition += sizeof(glm::mat4);
 
@@ -664,7 +661,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         delete[] data;
 
         if(curNode != NULL){
-            curNode->set_parent(prevNode);
+            curNode->setParent(prevNode);
             nodeList->addRenderObject(curNode);
         }
 
