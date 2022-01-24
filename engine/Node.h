@@ -31,8 +31,15 @@ class LIB_API Node : public Object
         glm::vec3 getTranslation() { return translation; };
         glm::vec3 getScale() { return scale; };
 
+        void restoreMemento();
+        void setMemento();
     private:
+
+
         glm::mat4 posMatrix;
+        glm::mat4 memento;
+        Node* mementoParent;
+
         Node* parent;
         std::vector<Node*> children;
 

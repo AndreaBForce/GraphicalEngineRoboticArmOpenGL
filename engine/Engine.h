@@ -80,6 +80,9 @@ class LIB_API Engine{
 		Engine(Engine &other) = delete;
 		void operator=(const Engine &) = delete;
 
+		void enableMemento();
+		void restoreMemento();
+
         void loadFromFile(const char* filePath);
     private:
         Engine(){};
