@@ -24,6 +24,11 @@ class LIB_API Mesh : public Node{
         void set_material(Material* new_material){material = new_material;}
         void setHasShadow(bool flag){ hasShadow = flag;}
 
+        glm::vec3 getBoxMin() { return this->bBoxMin; };
+        glm::vec3 getBoxMax() { return this->bBoxMax; };
+        float getRadius() { return this->radius; };
+        unsigned int getChildren() { return this->children; };
+        bool getHasShadow() { return this->hasShadow; };
 
         void addVertex(Vertex* vertex) { vertices.push_back(vertex); };
         void add_face(unsigned int* face) { faces.push_back(face); };

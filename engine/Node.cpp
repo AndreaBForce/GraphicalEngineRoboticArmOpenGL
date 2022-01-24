@@ -16,16 +16,16 @@ void LIB_API Node::addChild(Node* childNode){
 }
 
 
-glm::mat4 LIB_API Node::get_final_matrix(){
+glm::mat4 LIB_API Node::getFinalMatrix(){
 
     Node* cur = this;
     glm::mat4 finalMat(1.0f);
 
-    while(cur->get_parent() != nullptr){
+    while(cur->getParent() != nullptr){
         
         finalMat = cur->get_pos_matrix() * finalMat;
 
-        cur = cur->get_parent();
+        cur = cur->getParent();
     }
 
     return finalMat;
@@ -44,9 +44,3 @@ void LIB_API Node::set_affine_decomposition(Node* nodo_affine) {
     nodo_affine->set_orientation(orientation);
 
 }
-
-//https://forum.openframeworks.cc/t/decomposing-glm-mat4-and-setting-transform-to-ofnode/29516
-//decomposizione affine
-//solo componenti vettore scaling trasformi in matrie 
-//invera matrice e molti per matrice pallina cosi annulli socio 
-//attacchi casot

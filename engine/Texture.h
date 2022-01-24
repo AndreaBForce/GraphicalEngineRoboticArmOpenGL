@@ -11,6 +11,8 @@ class LIB_API Texture : public Object {
         Texture(char textureName[FILENAME_MAX]);
         ~Texture();
 
+
+        unsigned int getTextureId();
         void render(glm::mat4 camera) override;
 
 	private:

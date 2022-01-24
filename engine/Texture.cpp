@@ -35,13 +35,18 @@ LIB_API Texture::Texture(char textureName[FILENAME_MAX]) {
 
     FIBITMAP* bitmap = FreeImage_Load(FreeImage_GetFileType(fullPath.c_str(),0), fullPath.c_str());
 
-    FreeImage_FlipVertical(bitmap);
+    if (FreeImage_GetMemorySize(bitmap) != 0) {
+        FreeImage_FlipVertical(bitmap);
 
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void *)FreeImage_GetBits(bitmap));
+        gluBuild2DMipmaps(GL_TEXTURE_2D, 4, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
 
-    //glTexImage2D(GL_TEXTURE_2D, 0 , GL_RGBA, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
+        //glTexImage2D(GL_TEXTURE_2D, 0 , GL_RGBA, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
 
-    FreeImage_Unload(bitmap);
+        FreeImage_Unload(bitmap);
+    }
+    else {
+        textureId = 0;
+    }
 
 }
 
@@ -50,6 +55,10 @@ LIB_API Texture::~Texture() {
 
 void LIB_API Texture::setPath(const char* dirPath){
     path = dirPath;
+}
+
+unsigned int LIB_API Texture::getTextureId() {
+    return textureId;
 }
 
 void LIB_API Texture::render(glm::mat4 camera){

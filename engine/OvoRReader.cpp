@@ -761,7 +761,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
         if (numberOfChildren) {
             //curNode->set_parent(prevNode);
-            while (curNode->get_number_of_children() < numberOfChildren)
+            while (curNode->getNumberOfChildren() < numberOfChildren)
             {
                 prevNode = curNode;
                 Node* childNode = recursiveLoad(buffer, position);
@@ -771,7 +771,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 prevNode->addChild(childNode);
                 curNode = prevNode;
             }
-            prevNode = curNode->get_parent();
+            prevNode = curNode->getParent();
             //SE non è mesh fa la ricorsione altrimenti ritorna
         }else if(chunkId == 9 || chunkId == 0){
             cout << "entro qui ora" << endl;

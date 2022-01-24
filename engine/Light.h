@@ -22,6 +22,13 @@ public:
     void setCutoff(float cutoff);
     void setLightType(lightType type);
 
+    glm::vec4 getAmbient();
+    glm::vec4 getDiffuse();
+    glm::vec4 getSpecular();
+    glm::vec3 getDirection();
+    float getCutoff();
+    lightType getLightType();
+
     void render(glm::mat4 camera) override;
 
     uint16_t getLightNr(){return lightNr;};

@@ -14,12 +14,16 @@ public:
     void setAmbient(glm::vec3 ambient);
     void setSpecular(glm::vec3 specular);
     void setDiffuse(glm::vec3 diffuse);
-
     void setShininess(float shininess);
-
     void setTexture(char textureName[FILENAME_MAX]);
 
     bool hasTexture(){return texture != nullptr;}
+        
+    glm::vec4 getEmission();
+    glm::vec4 getAmbient();
+    glm::vec4 getSpecular();
+    glm::vec4 getDiffuse();
+    float getShiness();
 
 private:
     Texture* texture;

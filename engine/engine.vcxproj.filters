@@ -51,6 +51,9 @@
     <ClInclude Include="Vertex.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="Test.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -87,6 +90,9 @@
       <Filter>File di origine</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="Test.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>

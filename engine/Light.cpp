@@ -30,7 +30,7 @@ LIB_API Light::Light() {
 }
 
 LIB_API Light::~Light() {
-	//dtor
+    lightsCnt--;
 }
 
 void LIB_API Light::setPosition(glm::vec3 position){
@@ -61,11 +61,35 @@ void LIB_API Light::setLightType(lightType type){
     this->type = type;
 }
 
+glm::vec4 LIB_API Light::getAmbient() {
+    return this->ambient;
+}
+
+glm::vec4 LIB_API Light::getDiffuse() {
+    return this->diffuse;
+}
+
+glm::vec4 LIB_API Light::getSpecular() {
+    return this->specular;
+}
+
+glm::vec3 LIB_API Light::getDirection() {
+    return this->direction;
+}
+
+float LIB_API Light::getCutoff() {
+    return this->cutoff;
+}
+
+lightType LIB_API Light::getLightType() {
+    return this->type;
+}
+
 void LIB_API Light::render(glm::mat4 camera) {
     //std::cout << "render light" << std::endl;
 
     // Set light position:
-   glLoadMatrixf(glm::value_ptr(camera * this->get_final_matrix()));
+   glLoadMatrixf(glm::value_ptr(camera * this->getFinalMatrix()));
 
    // Draw a small emissive sphere to show light position:
    //glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(glm::vec4(1.0f)));

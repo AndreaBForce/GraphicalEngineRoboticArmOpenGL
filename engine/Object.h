@@ -9,6 +9,9 @@
 class LIB_API Object
 {
     public:
+
+        Object();
+
         int get_id(){return id;}
 
         std::string get_name(){return name;}

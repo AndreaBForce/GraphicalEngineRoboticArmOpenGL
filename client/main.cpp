@@ -8,6 +8,7 @@
 #include "Node.h"
 #include "Mesh.h"
 #include "Light.h"
+#include "Test.h"
 
 ///////////////////////
 // GLOBAL VARIABLES //
@@ -121,8 +122,8 @@ bool check_distance_two_vectors(Node* node1,Node* node2,float range) {
     
     //L'ultima colonna delle final matrix contiene i vettori in world cordinates cosi possiamo confrontarli
 
-    glm::vec4 node1_world_coordinate = glm::column(node1->get_final_matrix(), 3);
-    glm::vec4 node2_world_coordinate = glm::column(node2->get_final_matrix(), 3);
+    glm::vec4 node1_world_coordinate = glm::column(node1->getFinalMatrix(), 3);
+    glm::vec4 node2_world_coordinate = glm::column(node2->getFinalMatrix(), 3);
 
     std::cout << node1_world_coordinate.r << std::endl;
     std::cout << node1_world_coordinate.g << std::endl;
@@ -227,14 +228,14 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             std::cout << "H PRESSED" << std::endl;
             
             engine->rotate_node("RuotaAsseForca", 0.5f, rotateAxisZ);
-            std::cout << glm::to_string((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))->get_final_matrix())) << std::endl;
+            std::cout << glm::to_string((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))->getFinalMatrix())) << std::endl;
             break;
 
         case 'n':
             //Down
             std::cout << "N PRESSED" << std::endl;
             engine->rotate_node("RuotaAsseForca", -0.5f, rotateAxisZ);
-            std::cout << glm::to_string((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))->get_final_matrix())) << std::endl;
+            std::cout << glm::to_string((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))->getFinalMatrix())) << std::endl;
             break;
         case 'j':
             //apri pinza
@@ -269,7 +270,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                    
                     
                     //Vado a leggere l'ultima colonna della matrice finale,Essa corrisponde alle world coordinates della palla.
-                    glm::vec4 ball_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
+                    glm::vec4 ball_world_coordinate = glm::column(ball_object_to_be_taken->getFinalMatrix(), 3);
                     
                     //Qua mi salvo la matrice iniziale(ovvero presa sulla forca) in world coordinates
                     glm::mat4 matriceInzialeePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, ball_world_coordinate.g, ball_world_coordinate.b));
@@ -292,7 +293,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                         ball_object_to_be_taken->set_pos_matrix(glm::translate(matriceInzialeePalle, -translate_ball_floor));
 
                         //aggiorno il ball_world coordinates della palla
-                        ball_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
+                        ball_world_coordinate = glm::column(ball_object_to_be_taken->getFinalMatrix(), 3);
 
                         //renderizzo la scena
                         displayCallback();
@@ -389,11 +390,15 @@ void timerCallback(int value) {
 /////////
 int main(int argc, char *argv[]){
     std::cout << "Sono il client" << std::endl;
+
     engine = Engine::GetInstance();
 
     engine->engineMsg();
 
     windowId = engine->init3Dcontext("Mangrovie Robotic Arm Project", 600, 600, argc, argv);
+    
+    Test* test = new Test();
+    test->testExec();
 
     engine->setTextureFilePath("../files/textures/");
     engine->loadFromFile("../files/stanza.OVO");

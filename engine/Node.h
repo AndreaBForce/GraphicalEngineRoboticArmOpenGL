@@ -12,11 +12,12 @@ class LIB_API Node : public Object
         void render(glm::mat4 camera) {};
 
         glm::mat4 get_pos_matrix(){return pos_matrix;}
-        Node* get_parent(){return parent;}
-        int get_number_of_children(){return children.size();}
-        Node get_node_by_name();
-        glm::mat4 get_final_matrix();
+        Node* getParent(){return parent;}
+        int getNumberOfChildren(){return children.size();}
+        Node getNodeByName();
+        glm::mat4 getFinalMatrix();
         std::vector<Node*> getChildren(){return children;};
+        glm::quat getOrientation() { return orientation; };
 
         void tree_traversal();
         void set_parent(Node* new_parent){parent = new_parent;}
@@ -39,7 +40,6 @@ class LIB_API Node : public Object
         Node* parent;
         std::vector<Node*> children;
 
-        //decomposizioni affini (non usate)
         glm::vec3 scale;
         glm::quat orientation;
         glm::vec3 translation;

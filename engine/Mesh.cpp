@@ -42,7 +42,7 @@ void LIB_API Mesh::render(glm::mat4 camera){
     material->render(camera);
 
    
-   glLoadMatrixf(glm::value_ptr(camera * this->get_final_matrix()));
+   glLoadMatrixf(glm::value_ptr(camera * this->getFinalMatrix()));
    
     glEnable(GL_NORMALIZE);
 
@@ -70,7 +70,7 @@ void LIB_API Mesh::render(glm::mat4 camera){
     if(material->hasTexture())
         glDisable(GL_TEXTURE_2D);
 
-    if(hasShadow)
+    if (hasShadow)
         renderShadow(camera);
 }
 
@@ -83,7 +83,7 @@ void LIB_API Mesh::renderShadow(glm::mat4 camera){
     //render material
     Engine::GetInstance()->getShadowMaterial()->render(camera);
 
-    glLoadMatrixf(glm::value_ptr(camera * shadowMat * this->get_final_matrix()));
+    glLoadMatrixf(glm::value_ptr(camera * shadowMat * this->getFinalMatrix()));
 
     for(unsigned int* face : faces){
         glBegin(GL_TRIANGLES);

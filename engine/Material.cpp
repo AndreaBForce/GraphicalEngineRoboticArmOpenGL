@@ -35,6 +35,27 @@ void LIB_API Material::setTexture(char textureName[FILENAME_MAX]){
         this->texture = nullptr;
 }
 
+
+glm::vec4 LIB_API Material::getEmission() {
+    return emission;
+}
+
+glm::vec4 LIB_API Material::getAmbient() {
+    return ambient;
+}
+
+glm::vec4 LIB_API Material::getSpecular() {
+    return specular;
+}
+
+glm::vec4 LIB_API Material::getDiffuse() {
+    return diffuse;
+}
+
+float LIB_API Material::getShiness() {
+    return shininess;
+}
+
 void LIB_API Material::render(glm::mat4 camera){
 
     if(texture != nullptr){
