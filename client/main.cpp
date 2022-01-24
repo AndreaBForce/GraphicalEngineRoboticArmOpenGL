@@ -419,7 +419,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             break;
         case 'q':
             std::cout << "Q PRESSED" << std::endl;
-            ball_grabbed = false;
+            ballGrabbed = false;
             engine->restoreMemento();
             break;
 

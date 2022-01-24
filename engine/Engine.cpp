@@ -260,14 +260,14 @@ void LIB_API Engine::scaleNode(const char* nodeName, glm::vec3 axis) {
 
 void LIB_API Engine::enableMemento() {
 
-    for (auto& element : Engine::engine_instance->getRenderList()->getList()) {
+    for (auto& element : Engine::engineInstance->getRenderList()->getList()) {
         Node* thisNode = dynamic_cast<Node*>(element);
         thisNode->setMemento();
         
     }
 }
 void LIB_API Engine::restoreMemento() {
-    for (auto& element : Engine::engine_instance->getRenderList()->getList()) {
+    for (auto& element : Engine::engineInstance->getRenderList()->getList()) {
         Node* thisNode = dynamic_cast<Node*>(element);
         thisNode->restoreMemento();
        
