@@ -11,8 +11,9 @@ public:
 	void render(glm::mat4 camera) {};
 
 	int get_number_of_elements() { return listObject.size(); };
-	void put_back_of_vec(Object* oggetto) { listObject.push_back(oggetto); };
-	void put_front_of_vec(Object* oggetto) { listObject.insert(listObject.begin(), oggetto); };
+	void put_back_of_vec(Object* element) { listObject.push_back(element); };
+	void put_front_of_vec(Object* element) { listObject.insert(listObject.begin(), element); };
+	void addRenderObject(Object* element);
 	void render_list(glm::mat4 camera);
 	Object* get_element_by_name(const char* name);
 

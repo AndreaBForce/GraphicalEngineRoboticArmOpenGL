@@ -7,6 +7,7 @@ CXX = g++
 
 # Engine flags
 EFLAGS = -fPIC -Wall -std=c++11 -fexceptions -Iinclude -Idependencies/glm/include
+EINCLUDE = -lglut -lGL -lfreeimage -lGLU
 EDFLAGS = $(EFLAGS) -g
 ERFLAGS = $(EFLAGS) -O2
 LDFLAGS = -shared
@@ -117,7 +118,7 @@ ed_msg:
 	@echo "BUILDING ENGINE DEBUG"
 
 engine_build_debug: ed_msg $(D_ENGINE_O_FILES) $(D_ENGINE_LIB_DIR)
-	$(CXX) $(LDFLAGS) $(D_ENGINE_O_FILES) -o $(D_ENGINE_LIB_PATH) -lglut
+	$(CXX) $(LDFLAGS) $(D_ENGINE_O_FILES) -o $(D_ENGINE_LIB_PATH) $(EINCLUDE)
 	@echo "BUILDING ENGINE DEBUG DONE"
 	
 $(D_ENGINE_O_DIR)/%.o: $(ENGINE_NAME)/%.cpp $(D_ENGINE_O_DIR)
@@ -130,7 +131,7 @@ er_msg:
 	@echo "BUILDING ENGINE RELEASE"
 
 engine_build_release: er_msg $(R_ENGINE_O_FILES) $(R_ENGINE_LIB_DIR)
-	$(CXX) $(LDFLAGS) $(R_ENGINE_O_FILES) -o $(R_ENGINE_LIB_PATH) -s -lglut
+	$(CXX) $(LDFLAGS) $(R_ENGINE_O_FILES) -o $(R_ENGINE_LIB_PATH) -s $(EINCLUDE)
 	@echo "BUILDING ENGINE RELEASE DONE"
 	
 $(R_ENGINE_O_DIR)/%.o: $(ENGINE_NAME)/%.cpp $(R_ENGINE_O_DIR)
