@@ -93,7 +93,6 @@ void LIB_API Light::render(glm::mat4 camera) {
    glLoadMatrixf(glm::value_ptr(camera * this->getFinalMatrix()));
 
    // Light position is set to object coordinates and is modified by the current OpenGL matrix (as with any other object):
-
    glLightfv(lightNr, GL_AMBIENT, glm::value_ptr(Light::ambient));
    glLightfv(lightNr, GL_DIFFUSE, glm::value_ptr(Light::diffuse));
    glLightfv(lightNr, GL_SPECULAR, glm::value_ptr(Light::specular));
