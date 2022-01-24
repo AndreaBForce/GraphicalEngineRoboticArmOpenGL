@@ -15,11 +15,9 @@
 /////////////////////
 int windowId;
 Engine* engine;
-float cameraPosX = 0.0f;
-float cameraPosY = 5.0f;
-float cameraPosZ = 30.0f;
 int fps = 0;
 int frames = 0;
+bool cameraPosition = true;
 
 //GLOBAL ARM ANGLES
 float asse00 = 0.0f;
@@ -34,12 +32,12 @@ glm::mat4 oldBall;
 int ballTransfo;
 
 //camera params
-glm::vec3 eye(-40.0f, 50.0f, -65.0f);
+glm::vec3 eye(0.0f, 10.0f, 0.0f);
 glm::vec3 up(0.0f, 1.0f, 0.0f);
-glm::vec3 center(-40.0f, 0.0f, 40.0f);
+glm::vec3 center(0.0f, 0.0f, 40.0f);
 
-Camera* cam1 = new Camera(eye, glm::vec3(40.0f, 0.0f, 40.0f), up);
-Camera* cam2 = new Camera(glm::vec3(0.0f, 20.0f, 0.0f), center, up);
+Camera* cam1 = new Camera(glm::vec3(-40.0f, 50.0f, -65.0f), glm::vec3(40.0f, 0.0f, 40.0f), up);
+Camera* cam2 = new Camera(eye, center, up);
 Camera* mainCam;
 
 //Global for controls
@@ -51,11 +49,8 @@ bool tooltip = true;
 ///////////////////////
 
 void displayCallback(){
-    //cameraMat = glm::lookAt(eye, glm::vec3(cameraPosX, cameraPosY, cameraPosZ), up);
-    //cameraMat = mainCam->get_camera_mat();
     engine->clearDisplay();
 
-    //cam2->render(cameraMat);
     //questo metodo per renderizzare tutto una volta implementato correttamente
     engine->getRenderList()->renderList(mainCam->getCameraMat());
 
@@ -134,26 +129,35 @@ void specialCallback(int key, int mouseX, int mouseY){
     switch(key){
         case KEY_UP:
             std::cout << "KEY UP" << std::endl;
-            cameraPosZ -= speed;
-            center.y += speed;
+            if(cameraPosition)
+                eye.y += speed;
+            else
+                center.y += speed;
             break;
         case KEY_DOWN:
             std::cout << "KEY DOWN" << std::endl;
-            cameraPosZ += speed;
-            center.y -= speed;
+            if(cameraPosition)
+                eye.y -= speed;
+            else
+                center.y -= speed;
             break;
         case KEY_LEFT:
             std::cout << "KEY LEFT" << std::endl;
-            cameraPosX -= speed;
-            center.z -= speed;
+            if(cameraPosition)
+                eye.z -= speed;
+            else
+                center.z -= speed;
             break;
         case KEY_RIGHT:
             std::cout << "KEY RIGHT" << std::endl;
-            cameraPosX += speed;
-            center.z += speed;
+            if(cameraPosition)
+                eye.z += speed;
+            else
+                center.z += speed;
             break;
     }
 
+    cam2->setEye(eye);
     cam2->setCenter(center);
 
    engine->forceRendering(windowId);
@@ -185,8 +189,8 @@ bool check_distance_two_vectors(Node* node1,Node* node2,float range) {
 
 void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
-    float speed = 0.5f;
-    float translateFactorFork = 0.05f;
+    float speed = 1.0f;
+    float translate_factor_fork = 0.05f;
 
 
     Node* ballObjectToBeTaken;
@@ -207,12 +211,27 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
     glm::vec3 scaleBall(1.20f, 1.0f, 1.0f);
 
     switch(key){
+        case 'e':
+            if(cameraPosition)
+                eye.x += speed;
+            else
+                center.x += speed;
+            break;
+        case 'r':
+            if(cameraPosition)
+                eye.x -= speed;
+            else
+                center.x -= speed;
+            break;
         case 'p':
+            cameraPosition = !cameraPosition;
+            break;
+        case '1':
             //switch to cam1
             std::cout << "P PRESSED" << std::endl;
             mainCam = cam1;
             break;
-        case 'o':
+        case '2':
             //switch to cam2
             std::cout << "O PRESSED" << std::endl;
             mainCam = cam2;
@@ -425,6 +444,8 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
     }
 
+    cam2->setEye(eye);
+    cam2->setCenter(center);
     engine->forceRendering(windowId);
 }
 
@@ -451,7 +472,6 @@ int main(int argc, char *argv[]){
     engine->setShadowFlag("Plane");
 
     mainCam = cam1;
-    cam2->setParent((dynamic_cast<Node*>(engine->getRenderList()->getElementByName("Cylinder001"))));
 
     engine->setDisplayCallback(displayCallback);
     engine->setReshapeCallback();
@@ -465,7 +485,7 @@ int main(int argc, char *argv[]){
 
     engine->startEventLoop();
 
-    engine->endEventLoop();
+    engine->freeContext();
 
     return 0;
 }

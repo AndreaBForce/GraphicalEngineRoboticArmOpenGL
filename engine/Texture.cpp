@@ -51,6 +51,10 @@ LIB_API Texture::Texture(char textureName[FILENAME_MAX]) {
 }
 
 LIB_API Texture::~Texture() {
+    std::cout << "Texture dtor" << std::endl;
+    if(textureId != 0){
+        glDeleteTextures(1, &textureId);
+    }
 }
 
 void LIB_API Texture::setPath(const char* dirPath){

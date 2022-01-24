@@ -107,8 +107,6 @@ void LIB_API Test::testList() {
 	list->addRenderObject(new Material());
 	assert(list->getNumberOfElements() == 2);
 
-	delete(light);
-	delete(mesh);
 	delete(list);
 }
 

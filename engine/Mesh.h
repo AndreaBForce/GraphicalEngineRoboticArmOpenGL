@@ -5,11 +5,12 @@
 #include "Vertex.h"
 #include "Utils.h"
 #include <string>
+#include <memory>
 
 class LIB_API Mesh : public Node{
     public:
         Mesh();
-        virtual ~Mesh();
+        ~Mesh();
 
         void render(glm::mat4 camera) override;
 
@@ -29,7 +30,7 @@ class LIB_API Mesh : public Node{
         std::vector<unsigned int*> getFaces(){return faces;};
 
     private:
-        Material* material;
+        std::shared_ptr<Material> materialPtr;
         char materialName[FILENAME_MAX];
         bool hasShadow;
         unsigned int children;

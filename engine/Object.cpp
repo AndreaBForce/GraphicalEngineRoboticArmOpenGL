@@ -6,3 +6,7 @@ LIB_API Object::Object() {
 	id = idCounter;
 	idCounter++;
 }
+
+LIB_API Object::~Object(){
+    //dtor
+}

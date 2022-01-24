@@ -11,6 +11,7 @@ class LIB_API Object
     public:
 
         Object();
+        virtual ~Object();
 
         int get_id(){return id;}
 

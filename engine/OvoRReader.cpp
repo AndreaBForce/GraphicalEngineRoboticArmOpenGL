@@ -21,15 +21,15 @@
 #include <iomanip>
 #include <limits.h>
 #include <glm/gtc/packing.hpp>
+#include <memory>
 
 long file_size;
 List* nodeList;
-List* materialList = new List();
+std::vector<std::shared_ptr<Material>> materialPointers;
 
 using namespace std;
 LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
 {
-
     //Root of the tree
     Node* root;
 
@@ -59,7 +59,6 @@ LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
     nodeList = list;
     root = recursiveLoad(buffer, position);
 
-    delete materialList;
     return root;
 }
 
@@ -224,7 +223,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(metalnessMapName, data + chunkPosition);
         chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
 
-        materialList->pushBackOfVec(thisMaterial);
+        materialPointers.push_back(std::shared_ptr<Material>(thisMaterial));
 
     }
     break;
@@ -285,7 +284,14 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Material name, or [none] if not used:
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
-        thisMesh->setMaterial(dynamic_cast<Material*>(materialList->getElementByName(materialName)));
+        std::shared_ptr<Material> material;
+        for(auto& mat : materialPointers){
+            if(mat->get_name() == materialName){
+                material = mat;
+                break;
+            }
+        }
+        thisMesh->set_material(material);
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
@@ -345,7 +351,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             {
                 for (unsigned int c = 0; c < mp.nrOfHulls; c++)
                 {
-
 
                     // Hull number of vertices:
                     unsigned int nrOfVertices;

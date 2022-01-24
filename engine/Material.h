@@ -7,7 +7,7 @@
 class LIB_API Material : public Object {
 public:
     Material();
-    virtual ~Material();
+    ~Material();
     void render(glm::mat4 camera) override;
 
     void setEmission(glm::vec3 emission);
@@ -18,7 +18,7 @@ public:
     void setTexture(char textureName[FILENAME_MAX]);
 
     bool hasTexture(){return texture != nullptr;}
-        
+
     glm::vec4 getEmission();
     glm::vec4 getAmbient();
     glm::vec4 getSpecular();
