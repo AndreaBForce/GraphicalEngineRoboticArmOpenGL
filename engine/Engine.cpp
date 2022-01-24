@@ -261,3 +261,19 @@ void LIB_API Engine::scaleNode(const char* node_name, glm::vec3 axis) {
 
     thisNode->set_pos_matrix(glm::scale(thisNode->get_pos_matrix(), axis));
 }
+
+void LIB_API Engine::enableMemento() {
+
+    for (auto& element : Engine::engine_instance->getRenderList()->getList()) {
+        Node* thisNode = dynamic_cast<Node*>(element);
+        thisNode->setMemento();
+        
+    }
+}
+void LIB_API Engine::restoreMemento() {
+    for (auto& element : Engine::engine_instance->getRenderList()->getList()) {
+        Node* thisNode = dynamic_cast<Node*>(element);
+        thisNode->restoreMemento();
+       
+    }
+}

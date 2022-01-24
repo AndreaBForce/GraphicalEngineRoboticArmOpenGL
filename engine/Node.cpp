@@ -45,3 +45,14 @@ void LIB_API Node::set_affine_decomposition(Node* nodo_affine) {
     nodo_affine->set_orientation(orientation);
 
 }
+
+void LIB_API Node::restoreMemento() {
+    parent = mementoParent;
+    pos_matrix = memento;
+    
+}
+
+void LIB_API Node::setMemento() {
+    memento = pos_matrix;
+    mementoParent = parent;
+}

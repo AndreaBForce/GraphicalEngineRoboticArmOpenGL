@@ -20,9 +20,12 @@ class LIB_API Object
 
         virtual void render(glm::mat4 camera) = 0;
 
+        
     private:
         int id;
         std::string name;
+
+
 };
 
 #endif // OBJECT_H
