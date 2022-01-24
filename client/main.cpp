@@ -410,7 +410,6 @@ int main(int argc, char *argv[]){
     engine->loadFromFile("../files/stanza.OVO");
     engine->setShadowFlag("Plane");
 
-    Light* l1 = new Light();
     mainCam = cam1;
     cam2->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Cylinder001"))));
 
