@@ -10,15 +10,17 @@ class LIB_API Camera : public Node
         Camera();
         Camera(glm::vec3 eye, glm::vec3 center, glm::vec3 up) : eye{eye}, center{center}, up{up} {};
         virtual ~Camera();
-        void render(glm::mat4 camera) override;
 
-        glm::mat4 get_camera_mat();
-        void set_eye(glm::vec3 eye){ this->eye = eye;};
-        void set_center(glm::vec3 center){this->center = center;};
-        void set_up(glm::vec3 up){this->up = up;};
+        glm::mat4 getCameraMat();
+        void setEye(glm::vec3 eye){ this->eye = eye;};
+        void setCenter(glm::vec3 center){this->center = center;};
+        void setUp(glm::vec3 up){this->up = up;};
+
+        glm::vec3 getEye(){return eye;};
+        glm::vec3 getCenter(){return center;};
+        glm::vec3 getUp(){return up;};
 
     private:
-        glm::mat4 view_matrix;
         glm::vec3 eye;
         glm::vec3 center;
         glm::vec3 up;

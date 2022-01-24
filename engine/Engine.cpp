@@ -68,10 +68,6 @@ LIB_API Engine*  Engine::GetInstance(){
     return engine_instance;
 }
 
-void LIB_API Engine::engineMsg(){
-    std::cout << "Sono l'engine 1" << std::endl;
-}
-
 void LIB_API Engine::clearDisplay(){
     //glClearColor(0.0f, 0.6f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -101,15 +97,17 @@ void LIB_API Engine::enableLightSystem(){
 }
 
 void LIB_API Engine::startEventLoop(){
-    
+
     while(1){
         glutMainLoopEvent();
     }
 }
 
 void LIB_API Engine::endEventLoop(){
+    std::cout << "FREE ENGINE" << std::endl;
     glutLeaveMainLoop();
     FreeImage_DeInitialise();
+    delete(nodeList);
 }
 
 void LIB_API Engine::swapBuffer(){
@@ -126,7 +124,7 @@ void LIB_API Engine::enableWireframe(bool enable){
 void LIB_API Engine::setShadowFlag(const char* noShadowName){
     std::string excludeName = noShadowName;
 
-    for(auto& element : nodeList->get_list()){
+    for(auto& element : nodeList->getList()){
 
         if(dynamic_cast<Mesh*>(element)){
             std::string meshName = element->get_name();
@@ -146,7 +144,6 @@ void LIB_API Engine::setShadowFlag(const char* noShadowName){
  */
 void LIB_API reshapeCallback(int width, int height)
 {
-    std::cout << "[reshape func invoked]" << std::endl;
 
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
@@ -155,8 +152,8 @@ void LIB_API reshapeCallback(int width, int height)
     Engine::GetInstance()->setProjection(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 500.0f));
     Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
 
-    Engine::GetInstance()->set_height(height);
-    Engine::GetInstance()->set_width(width);
+    Engine::GetInstance()->setHeight(height);
+    Engine::GetInstance()->setWidth(width);
 
     glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getProjection()));
     glMatrixMode(GL_MODELVIEW);
@@ -212,7 +209,7 @@ void LIB_API Engine::loadFromFile(const char* filePath) {
     //Declare the ovoreader
     OvoRReader OvoReader;
 
-    Node* root = OvoReader.readDataFromFile(filePath, Engine::engine_instance->get_object_list());
+    Node* root = OvoReader.readDataFromFile(filePath, Engine::engine_instance->getRenderList());
 
     loadTree(root);
 
@@ -247,22 +244,20 @@ void LIB_API Engine::setTimerCallback(void(*callback)(int value),int time,int mi
    glutTimerFunc(time,callback,min_time);
 }
 
-void LIB_API Engine::rotate_node(const char* node_name, float angle, glm::vec3 axis) {
-    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->get_object_list()->get_element_by_name(node_name));
+void LIB_API Engine::rotateNode(const char* node_name, float angle, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->getRenderList()->getElementByName(node_name));
 
     thisNode->set_pos_matrix(glm::rotate(thisNode->get_pos_matrix(), glm::radians(angle), axis));
-
-
 }
 
-void LIB_API Engine::translate_node(const char* node_name, glm::vec3 axis) {
-    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->get_object_list()->get_element_by_name(node_name));
+void LIB_API Engine::translateNode(const char* node_name, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->getRenderList()->getElementByName(node_name));
 
     thisNode->set_pos_matrix(glm::translate(thisNode->get_pos_matrix(), axis));
 }
 
-void LIB_API Engine::scale_node(const char* node_name, glm::vec3 axis) {
-    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->get_object_list()->get_element_by_name(node_name));
+void LIB_API Engine::scaleNode(const char* node_name, glm::vec3 axis) {
+    Node* thisNode = dynamic_cast<Node*>(Engine::engine_instance->getRenderList()->getElementByName(node_name));
 
     thisNode->set_pos_matrix(glm::scale(thisNode->get_pos_matrix(), axis));
 }

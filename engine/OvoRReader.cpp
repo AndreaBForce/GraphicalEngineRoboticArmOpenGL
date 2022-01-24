@@ -247,7 +247,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         cout << "   Metalness tex.:  " << metalnessMapName << endl;
         chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
 
-        materialList->put_back_of_vec(thisMaterial);
+        materialList->pushBackOfVec(thisMaterial);
 
     }
     break;
@@ -316,7 +316,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
         cout << materialName << endl;
-        thisMesh->set_material(dynamic_cast<Material*>(materialList->get_element_by_name(materialName)));
+        thisMesh->set_material(dynamic_cast<Material*>(materialList->getElementByName(materialName)));
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
@@ -741,14 +741,14 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         }
 
         if (numberOfChildren) {
-            while (curNode->get_number_of_children() < numberOfChildren)
+            while (curNode->getNumberOfChildren() < numberOfChildren)
             {
                 prevNode = curNode;
                 Node* childNode = recursiveLoad(buffer, position);
                 prevNode->addChild(childNode);
                 curNode = prevNode;
             }
-            prevNode = curNode->get_parent();
+            prevNode = curNode->getParent();
 
         }else if(chunkId == 9 || chunkId == 0){
             recursiveLoad(buffer, position);

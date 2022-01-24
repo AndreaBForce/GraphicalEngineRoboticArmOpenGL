@@ -8,6 +8,7 @@
 #include "Mesh.h"
 #include "Light.h"
 #include "Camera.h"
+#include "Test.h"
 
 ///////////////////////
 // GLOBAL VARIABLES //
@@ -52,42 +53,42 @@ void displayCallback(){
 
     //cam2->render(cameraMat);
     //questo metodo per renderizzare tutto una volta implementato correttamente
-    engine->get_object_list()->render_list(mainCam->get_camera_mat());
+    engine->getRenderList()->renderList(mainCam->getCameraMat());
 
     char texts[64];
     sprintf(texts, "FPS: %d", fps);
-    engine->write2DText(texts,1.0f,engine->get_height()-14);
+    engine->write2DText(texts,1.0f,engine->getHeight()-14);
 
 
     strcpy(texts,"[y] Rotate Base CCW");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14*2));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14*2));
     strcpy(texts,"[x] Rotate Base CW");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 3));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 3));
 
     strcpy(texts, "[d] Rotate Asse 00 UP");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 4));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 4));
     strcpy(texts, "[c] Rotate Asse 00 DOWN");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 5));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 5));
 
     strcpy(texts, "[f] Rotate Asse 01 UP");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 6));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 6));
     strcpy(texts, "[v] Rotate Asse 01 DOWN");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 7));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 7));
 
     strcpy(texts, "[g] Rotate Asse 02 UP");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 8));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 8));
     strcpy(texts, "[b] Rotate Asse 02 DOWN");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 9));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 9));
 
     strcpy(texts, "[h] Rotate Asse Force UP");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 10));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 10));
     strcpy(texts, "[n] Rotate Asse Forca DOWN");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 11));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 11));
 
     strcpy(texts, "[j] Apri forche");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 12));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 12));
     strcpy(texts, "[k] Stringi forche");
-    engine->write2DText(texts, 1.0f, engine->get_height() - (14 * 13));
+    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 13));
     frames++;
 
     engine->swapBuffer();
@@ -121,7 +122,7 @@ void specialCallback(int key, int mouseX, int mouseY){
             break;
     }
 
-    cam2->set_center(center);
+    cam2->setCenter(center);
 
    engine->forceRendering(windowId);
 }
@@ -189,63 +190,63 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             //CCW
             //Ruota base free
             std::cout << "Y PRESSED" << std::endl;
-            engine->rotate_node("RotateBase", 0.5f, rotateAxisY);
+            engine->rotateNode("RotateBase", 0.5f, rotateAxisY);
             break;
 
         case 'x':
             //CW
             //Ruota base free
             std::cout << "X PRESSED" << std::endl;
-            engine->rotate_node("RotateBase", -0.5f, rotateAxisY);
+            engine->rotateNode("RotateBase", -0.5f, rotateAxisY);
             break;
 
         case 'd':
             //Up
             std::cout << "D PRESSED" << std::endl;
 
-            engine->rotate_node("RuotaAsse00", 0.5, rotateAxisZ);
+            engine->rotateNode("RuotaAsse00", 0.5, rotateAxisZ);
             break;
 
         case 'c':
             //Down
             std::cout << "C PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse00", -0.5, rotateAxisZ);
+            engine->rotateNode("RuotaAsse00", -0.5, rotateAxisZ);
             break;
         case 'f':
             //Up
             std::cout << "F PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse01", 0.5f, rotateAxisZ);
+            engine->rotateNode("RuotaAsse01", 0.5f, rotateAxisZ);
             break;
 
         case 'v':
             //Down
             std::cout << "V PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse01", -0.5f, rotateAxisZ);
+            engine->rotateNode("RuotaAsse01", -0.5f, rotateAxisZ);
             break;
         case 'g':
             //Up
             std::cout << "G PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse02", 0.5f, rotateAxisZ);
+            engine->rotateNode("RuotaAsse02", 0.5f, rotateAxisZ);
             break;
 
         case 'b':
             //Down
             std::cout << "B PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsse02", -0.5f, rotateAxisZ);
+            engine->rotateNode("RuotaAsse02", -0.5f, rotateAxisZ);
             break;
         case 'h':
             //Up
             std::cout << "H PRESSED" << std::endl;
 
-            engine->rotate_node("RuotaAsseForca", 0.5f, rotateAxisZ);
-            std::cout << glm::to_string((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))->getFinalMatrix())) << std::endl;
+            engine->rotateNode("RuotaAsseForca", 0.5f, rotateAxisZ);
+            std::cout << glm::to_string((dynamic_cast<Node*>(engine->getRenderList()->getElementByName("RuotaAsseForca"))->getFinalMatrix())) << std::endl;
             break;
 
         case 'n':
             //Down
             std::cout << "N PRESSED" << std::endl;
-            engine->rotate_node("RuotaAsseForca", -0.5f, rotateAxisZ);
-            std::cout << glm::to_string((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))->getFinalMatrix())) << std::endl;
+            engine->rotateNode("RuotaAsseForca", -0.5f, rotateAxisZ);
+            std::cout << glm::to_string((dynamic_cast<Node*>(engine->getRenderList()->getElementByName("RuotaAsseForca"))->getFinalMatrix())) << std::endl;
             break;
         case 'j':
             //apri pinza
@@ -258,12 +259,12 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                 //Questo if serve per la parte di scalare la palla quando apro le forche
                 if (ball_grabbed) {
                     //Prendo il nodo palla, metto la vecchia matrice di posizione ovvero quella originale senza transformazioni
-                    ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
+                    ball_object_to_be_taken = (dynamic_cast<Node*>(engine->getRenderList()->getElementByName("Sphere001")));
                     ball_object_to_be_taken->set_pos_matrix(old_ball);
 
                     //Qua applico la transformazione n-1 volte di quanto erano state applicate prima
                     for (int i = 0; i < actual_fork; i++) {
-                        engine->scale_node("Sphere001",scale_ball);
+                        engine->scaleNode("Sphere001",scale_ball);
                     }
                     //ri renderizzo la scena
                     displayCallback();
@@ -275,12 +276,12 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     //release ball
 
                     //Prendo il nodo palla
-                    ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
+                    ball_object_to_be_taken = (dynamic_cast<Node*>(engine->getRenderList()->getElementByName("Sphere001")));
 
 
 
                     //Vado a leggere l'ultima colonna della matrice finale,Essa corrisponde alle world coordinates della palla.
-                    glm::vec4 ball_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
+                    glm::vec4 ball_world_coordinate = glm::column(ball_object_to_be_taken->getFinalMatrix(), 3);
 
                     //Qua mi salvo la matrice iniziale(ovvero presa sulla forca) in world coordinates
                     glm::mat4 matriceInzialeePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, ball_world_coordinate.g, ball_world_coordinate.b));
@@ -319,8 +320,8 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                 }
 
                 //traslo le forche
-                engine->translate_node("forca1", translate_fork);
-                engine->translate_node("forca2", -translate_fork);
+                engine->translateNode("forca1", translate_fork);
+                engine->translateNode("forca2", -translate_fork);
                 //nego le pinze
                 actual_fork--;
             }
@@ -331,8 +332,8 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             std::cout << "K PRESSED" << std::endl;
 
             //Qui vado a prendere i nodi che mi servono ovvero la palla e il RuotaAsseForca, che usero come padre dopo
-            ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
-            rotate_axis_fork_father = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca")));
+            ball_object_to_be_taken = (dynamic_cast<Node*>(engine->getRenderList()->getElementByName("Sphere001")));
+            rotate_axis_fork_father = (dynamic_cast<Node*>(engine->getRenderList()->getElementByName("RuotaAsseForca")));
 
 
             //Questo if, controlla se la forca abbia raggiunto la posizione massima di chiusura
@@ -350,7 +351,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     ball_object_to_be_taken->set_parent(rotate_axis_fork_father);
 
                     //Dopo di che effettuo una traslazione perche altrimenti sarebbe dentro il padre
-                    engine->translate_node("Sphere001", translate_ball);
+                    engine->translateNode("Sphere001", translate_ball);
 
                     //Salvo un save point di come era originalmente la palla che viene usato dopo nella parte di release della palla
                     old_ball = ball_object_to_be_taken->get_pos_matrix();
@@ -362,15 +363,15 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
                 //If che controlla se palla presa, e le forche sono <=2, posso chiudere ancora
                 if (ball_grabbed && actual_fork <= 2) {
-                    engine->scale_node("Sphere001", scale_ball);
-                    engine->translate_node("forca1", -translate_fork);
-                    engine->translate_node("forca2", translate_fork);
+                    engine->scaleNode("Sphere001", scale_ball);
+                    engine->translateNode("forca1", -translate_fork);
+                    engine->translateNode("forca2", translate_fork);
                     actual_fork++;
                 }
                 //Altrimenti controllo se ho o meno la palla e se non l'ho posso chiudere di piu le forche
                 else if(!ball_grabbed) {
-                    engine->translate_node("forca1", -translate_fork);
-                    engine->translate_node("forca2", translate_fork);
+                    engine->translateNode("forca1", -translate_fork);
+                    engine->translateNode("forca2", translate_fork);
                     actual_fork++;
                 }
 
@@ -399,14 +400,11 @@ void timerCallback(int value) {
 // MAIN //
 /////////
 int main(int argc, char *argv[]){
-    std::cout << "Sono il client" << std::endl;
 
     engine = Engine::GetInstance();
 
-    engine->engineMsg();
-
     windowId = engine->init3Dcontext("Mangrovie Robotic Arm Project", 600, 600, argc, argv);
-    
+
     Test* test = new Test();
     test->testExec();
 
@@ -415,7 +413,7 @@ int main(int argc, char *argv[]){
     engine->setShadowFlag("Plane");
 
     mainCam = cam1;
-    cam2->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Cylinder001"))));
+    cam2->set_parent((dynamic_cast<Node*>(engine->getRenderList()->getElementByName("Cylinder001"))));
 
     engine->setDisplayCallback(displayCallback);
     engine->setReshapeCallback();

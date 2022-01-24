@@ -12,6 +12,7 @@ LIB_API Test::~Test() {
 }
 
 void LIB_API Test::testLight() {
+    std::cout << "TESTING LIGHT" << std::endl;
 	Light* light = new Light();
 
 	assert(light->getLightNr() == LIGHT0);
@@ -38,6 +39,7 @@ void LIB_API Test::testLight() {
 }
 
 void LIB_API Test::testMaterial() {
+    std::cout << "TESTING MATERIAL" << std::endl;
 	Material* material = new Material();
 
 	material->setAmbient(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -50,13 +52,19 @@ void LIB_API Test::testMaterial() {
 	assert(material->getEmission() == glm::vec4(2.0f, 2.0f, 2.0f, 1.0f));
 
 	material->setShininess(2.0f);
-	assert(material->getShiness() == (1 - sqrt(2.0f)) * 128);
+	assert(material->getShiness() - ((1 - sqrt(2.0f)) * 128) < 0.0000001f);
+
+	material->setShininess(1.0f);
+	assert(material->getShiness() == 0.0f);
 
 	material->setSpecular(glm::vec3(4.0f, 4.0f, 4.0f));
 	assert(material->getSpecular() == glm::vec4(4.0f * 0.4, 4.0f * 0.4, 4.0f * 0.4, 1.0f));
+
+	delete(material);
 }
 
 void LIB_API Test::testVertex() {
+    std::cout << "TESTING VERTEX" << std::endl;
 	Vertex* vertex = new Vertex();
 
 	vertex->setNormal(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -67,9 +75,11 @@ void LIB_API Test::testVertex() {
 
 	vertex->setVertex(glm::vec3(3.0f, 3.0f, 3.0f));
 	assert(vertex->getVertex() == glm::vec3(3.0f, 3.0f, 3.0f));
+	delete(vertex);
 }
 
 void LIB_API Test::testMesh() {
+    std::cout << "TESTING MESH" << std::endl;
 	Mesh* mesh = new Mesh();
 
 	mesh->set_bBoxMin(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -86,35 +96,64 @@ void LIB_API Test::testMesh() {
 
 	mesh->setHasShadow(true);
 	assert(mesh->getHasShadow() == true);
+	delete(mesh);
 }
 void LIB_API Test::testList() {
+    std::cout << "TESTING LIST" << std::endl;
 	List* list = new List();
 	Mesh* mesh = new Mesh();
 	mesh->set_name("mesh");
 	Light* light = new Light();
 	light->set_name("light");
 
-	list->put_front_of_vec(mesh);
-	assert(list->get_number_of_elements() == 1);
-	list->put_back_of_vec(light);
-	assert(list->get_number_of_elements() == 2);
-	assert(list->get_element_by_name("mesh") == mesh);
-	assert(list->get_element_by_name("light") == light);
+	list->pushFrontOfVec(mesh);
+	assert(list->getNumberOfElements() == 1);
+	list->pushBackOfVec(light);
+	assert(list->getNumberOfElements() == 2);
+	assert(list->getElementByName("mesh") == mesh);
+	assert(list->getElementByName("light") == light);
+
+	list->addRenderObject(new Material());
+	assert(list->getNumberOfElements() == 2);
 
 	delete(light);
+	delete(mesh);
+	delete(list);
 }
 
 void LIB_API Test::testCamera() {
+    std::cout << "TESTING CAMERA" << std::endl;
+    Camera* cam = new Camera();
+    glm::vec3 eye(-40.0f, 50.0f, -65.0f);
+    glm::vec3 up(0.0f, 1.0f, 0.0f);
+    glm::vec3 center(-40.0f, 0.0f, 40.0f);
+
+    cam->setEye(eye);
+    assert(cam->getEye() == eye);
+
+    cam->setCenter(center);
+    assert(cam->getCenter() == center);
+
+    cam->setUp(up);
+    assert(cam->getUp() == up);
+
+    glm::mat4 camMat = glm::lookAt(eye, center, up);
+    assert(cam->getCameraMat() == camMat);
+
+    delete(cam);
 
 }
 
 void LIB_API Test::testTexture() {
+    std::cout << "TESTING TEXTURE" << std::endl;
 	char name[] = "texture 1";
 	Texture* texture = new Texture(name);
 	assert(texture->getTextureId() == 0);
+	delete(texture);
 }
 
 void LIB_API Test::testNode() {
+    std::cout << "TESTING NODE" << std::endl;
 	Node* node = new Node();
 
 	node->set_scale(glm::vec3(1.0f, 1.0f, 1.0f));
@@ -128,17 +167,26 @@ void LIB_API Test::testNode() {
 
 	node->set_orientation(glm::quat());
 	assert(node->getOrientation() == glm::quat());
+
+	delete(node);
 }
 
 void LIB_API Test::testObject() {
+    std::cout << "TESTING OBJECT" << std::endl;
 	Mesh* mesh = new Mesh();
 	Light* light = new Light();
 
 	assert(mesh->get_id() != 0);
 	assert(light->get_id() != 0);
+
+	delete(light);
+	delete(mesh);
 }
 
 void LIB_API Test::testExec() {
+    std::cout << "*****************" << std::endl;
+    std::cout << "TEST STARTING" << std::endl;
+    std::cout << "*****************" << std::endl;
 	testLight();
 	testMaterial();
 	testVertex();
@@ -148,4 +196,7 @@ void LIB_API Test::testExec() {
 	testTexture();
 	testNode();
 	testObject();
+    std::cout << "*****************" << std::endl;
+	std::cout << "TEST FINISHED" << std::endl;
+    std::cout << "*****************" << std::endl;
 }

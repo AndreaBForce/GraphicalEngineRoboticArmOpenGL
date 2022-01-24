@@ -32,7 +32,6 @@
 class LIB_API Engine{
     public:
         static Engine* GetInstance();
-        void engineMsg();
 		int init3Dcontext(const char* nomeFinestra, int width,int height, int argc, char* argv[]);
 		void setDisplayCallback(void(* callback)(void));
 		void setReshapeCallback();
@@ -61,18 +60,18 @@ class LIB_API Engine{
 		void setProjection(glm::mat4 projectionMat) { projection = projectionMat; };
 		void setOrtho(glm::mat4 orthoMat) { ortho = orthoMat; };
 
-		int get_width() { return width; };
-		int get_height() { return height;};
+		int getWidth() { return width; };
+		int getHeight() { return height;};
 
-		void set_width(int widthS) { width = widthS; };
-		void set_height(int heightS) { height = heightS; };
+		void setWidth(int widthS) { width = widthS; };
+		void setHeight(int heightS) { height = heightS; };
 
 		Material* getShadowMaterial(){return shadowMaterial;};
-		List* get_object_list() { return nodeList; }
+		List* getRenderList() { return nodeList; }
 
-		void rotate_node(const char* node_name, float angle,glm::vec3 axis);
-		void translate_node(const char* node_name, glm::vec3 axis);
-		void scale_node(const char* node_name, glm::vec3 axis);
+		void rotateNode(const char* node_name, float angle,glm::vec3 axis);
+		void translateNode(const char* node_name, glm::vec3 axis);
+		void scaleNode(const char* node_name, glm::vec3 axis);
 
 		glm::mat4 getProjection() { return projection; };
 		glm::mat4 getOrtho() { return ortho; };

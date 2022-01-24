@@ -65,6 +65,8 @@
 		<Unit filename="Object.h" />
 		<Unit filename="OvoRReader.cpp" />
 		<Unit filename="OvoRReader.h" />
+		<Unit filename="Test.cpp" />
+		<Unit filename="Test.h" />
 		<Unit filename="Texture.cpp" />
 		<Unit filename="Texture.h" />
 		<Unit filename="Utils.h" />
