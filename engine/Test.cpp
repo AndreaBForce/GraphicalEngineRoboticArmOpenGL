@@ -114,8 +114,6 @@ void LIB_API Test::testTexture() {
 	assert(texture->getTextureId() == 0);
 }
 
-
-
 void LIB_API Test::testNode() {
 	Node* node = new Node();
 
