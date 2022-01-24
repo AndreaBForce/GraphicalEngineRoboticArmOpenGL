@@ -14,7 +14,6 @@ public:
     virtual ~Light();
 
     //Add light settings
-    void setPosition(glm::vec3 position);
     void setAmbient(glm::vec4 ambient);
     void setDiffuse(glm::vec4 diffuse);
     void setSpecular(glm::vec4 specular);
@@ -34,7 +33,6 @@ public:
     uint16_t getLightNr(){return lightNr;};
 
 private:
-    glm::vec3 position ;
     glm::vec4 ambient ;
     glm::vec4 diffuse ;
     glm::vec4 specular ;

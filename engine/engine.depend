@@ -42,21 +42,21 @@
 
 1636185684 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/simpleClass.h
 
-1643036968 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Camera.cpp
+1643048547 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Camera.cpp
 	"Camera.h"
 	<GL/freeglut.h>
 	<iostream>
 
-1643036674 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Camera.h
+1643048547 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Camera.h
 	"Node.h"
 	"Utils.h"
 
-1642715048 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Node.h
+1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Node.h
 	"Object.h"
 	"Utils.h"
 	<vector>
 
-1642106117 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Object.h
+1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Object.h
 	"Utils.h"
 	<string>
 	<glm/glm.hpp>
@@ -949,7 +949,7 @@
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/type_ptr.inl
 	<cstring>
 
-1642929688 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.cpp
+1643049582 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.cpp
 	"Engine.h"
 	"Node.h"
 	"OvoRReader.h"
@@ -961,33 +961,33 @@
 	<Windows.h>
 	<FreeImage.h>
 
-1642715082 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
+1643049578 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
 	"Node.h"
 	"Utils.h"
 	"List.h"
 	"Texture.h"
 	"Material.h"
 
-1642715082 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.cpp
+1643046265 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.cpp
 	"Mesh.h"
 	"Utils.h"
 	"Engine.h"
 	<iostream>
 	<GL/freeglut.h>
 
-1642715082 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
+1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
 	"Node.h"
 	"Material.h"
 	"Vertex.h"
 	"Utils.h"
 	<string>
 
-1642939402 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Node.cpp
+1643047106 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Node.cpp
 	"Node.h"
 	<iostream>
 	<glm/gtx/matrix_decompose.hpp>
 
-1641290332 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Object.cpp
+1643046265 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Object.cpp
 	"Object.h"
 
 1641299162 source:/home/andrea/Grafica/Progetto/labingsw022021202203cg/engine/Camera.cpp
@@ -1965,31 +1965,31 @@
 	<cstdint>
 	"List.h"
 
-1642454035 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Light.h
+1643050403 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Light.h
 	"Engine.h"
 	"Node.h"
 	"Utils.h"
 
-1642284939 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
+1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
 	"Object.h"
 	"Texture.h"
 	"Utils.h"
 
-1642454035 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
+1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.h
 	"Object.h"
 	"Utils.h"
 
-1643044756 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Light.cpp
+1643050414 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Light.cpp
 	"Light.h"
 	<iostream>
 	<GL/freeglut.h>
 
-1642284939 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.cpp
+1643046265 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.cpp
 	"Material.h"
 	<GL/freeglut.h>
 	<iostream>
 
-1643044951 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/OvoRReader.cpp
+1643049284 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/OvoRReader.cpp
 	"OvoRReader.h"
 	<iostream>
 	<fstream>
@@ -1998,7 +1998,7 @@
 	<limits.h>
 	<glm/gtc/packing.hpp>
 
-1643033064 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.cpp
+1643046493 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Texture.cpp
 	"Texture.h"
 	<GL/freeglut.h>
 	<FreeImage.h>
@@ -2063,12 +2063,12 @@
 1642106117 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Vertex.cpp
 	"Vertex.h"
 
-1643044380 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/List.h
+1643049284 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/List.h
 	"Object.h"
 	"Utils.h"
 	<vector>
 
-1643044403 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/List.cpp
+1643049284 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/List.cpp
 	"List.h"
 	<iostream>
 	"Light.h"
@@ -2086,4 +2086,22 @@
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtx/matrix_decompose.inl
 	"../gtc/constants.hpp"
 	"../gtc/epsilon.hpp"
+
+1643050313 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Test.cpp
+	"Test.h"
+	<iostream>
+	<cassert>
+
+1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Test.h
+	"Utils.h"
+	"Material.h"
+	"Mesh.h"
+	"Light.h"
+	"List.h"
+	"Texture.h"
+	"Vertex.h"
+	"Engine.h"
+	"Camera.h"
+	"Node.h"
+	"Object.h"
 

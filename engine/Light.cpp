@@ -35,10 +35,6 @@ LIB_API Light::~Light() {
     lightsCnt--;
 }
 
-void LIB_API Light::setPosition(glm::vec3 position){
-    this->position = position;
-}
-
 void LIB_API Light::setAmbient(glm::vec4 ambient){
     this->ambient = ambient;
 }

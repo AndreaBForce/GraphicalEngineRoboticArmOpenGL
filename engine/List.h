@@ -10,14 +10,14 @@ public:
 	~List();
 	void render(glm::mat4 camera) {};
 
-	int get_number_of_elements() { return listObject.size(); };
-	void put_back_of_vec(Object* element) { listObject.push_back(element); };
-	void put_front_of_vec(Object* element) { listObject.insert(listObject.begin(), element); };
+	int getNumberOfElements() { return listObject.size(); };
+	void pushBackOfVec(Object* element) { listObject.push_back(element); };
+	void pushFrontOfVec(Object* element) { listObject.insert(listObject.begin(), element); };
 	void addRenderObject(Object* element);
-	void render_list(glm::mat4 camera);
-	Object* get_element_by_name(const char* name);
+	void renderList(glm::mat4 camera);
+	Object* getElementByName(const char* name);
 
-	std::vector<Object*> get_list() { return listObject; };
+	std::vector<Object*> getList() { return listObject; };
 private:
 	std::vector<Object*> listObject;
 
