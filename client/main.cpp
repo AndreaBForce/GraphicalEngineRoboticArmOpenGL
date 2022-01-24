@@ -3,11 +3,11 @@
 #include <glm/gtc/matrix_access.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-
 #include "Engine.h"
 #include "Node.h"
 #include "Mesh.h"
 #include "Light.h"
+#include "Camera.h"
 
 ///////////////////////
 // GLOBAL VARIABLES //
@@ -32,24 +32,27 @@ bool ball_grabbed = false;
 glm::mat4 old_ball;
 int ball_transfo;
 
-
-glm::mat4 cameraMat;
-
 //camera params
-glm::vec3 eye(-40.0f, 60.0f, 65.0f);
+glm::vec3 eye(-40.0f, 50.0f, -65.0f);
 glm::vec3 up(0.0f, 1.0f, 0.0f);
+glm::vec3 center(-40.0f, 0.0f, 40.0f);
 
+Camera* cam1 = new Camera(eye, glm::vec3(40.0f, 0.0f, 40.0f), up);
+Camera* cam2 = new Camera(glm::vec3(0.0f, 20.0f, 0.0f), center, up);
+Camera* mainCam;
 
 /////////////////////////
 // CALLBACK FUNCTIONS //
 ///////////////////////
 
 void displayCallback(){
-    cameraMat = glm::lookAt(eye, glm::vec3(cameraPosX, cameraPosY, cameraPosZ), up);
+    //cameraMat = glm::lookAt(eye, glm::vec3(cameraPosX, cameraPosY, cameraPosZ), up);
+    //cameraMat = mainCam->get_camera_mat();
     engine->clearDisplay();
 
+    //cam2->render(cameraMat);
     //questo metodo per renderizzare tutto una volta implementato correttamente
-    engine->get_object_list()->render_list(cameraMat);
+    engine->get_object_list()->render_list(mainCam->get_camera_mat());
 
     char texts[64];
     sprintf(texts, "FPS: %d", fps);
@@ -93,32 +96,38 @@ void displayCallback(){
 
 void specialCallback(int key, int mouseX, int mouseY){
 
-    float speed = 0.5f;
+    float speed = 1.0f;
 
     switch(key){
         case KEY_UP:
             std::cout << "KEY UP" << std::endl;
             cameraPosZ -= speed;
+            center.y += speed;
             break;
         case KEY_DOWN:
             std::cout << "KEY DOWN" << std::endl;
             cameraPosZ += speed;
+            center.y -= speed;
             break;
         case KEY_LEFT:
             std::cout << "KEY LEFT" << std::endl;
             cameraPosX -= speed;
+            center.z -= speed;
             break;
         case KEY_RIGHT:
             std::cout << "KEY RIGHT" << std::endl;
             cameraPosX += speed;
+            center.z += speed;
             break;
     }
+
+    cam2->set_center(center);
 
    engine->forceRendering(windowId);
 }
 
 bool check_distance_two_vectors(Node* node1,Node* node2,float range) {
-    
+
     //L'ultima colonna delle final matrix contiene i vettori in world cordinates cosi possiamo confrontarli
 
     glm::vec4 node1_world_coordinate = glm::column(node1->get_final_matrix(), 3);
@@ -159,19 +168,21 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
     glm::vec3 translate_nulla(0.0f, 0.0f, 0.0f);
 
     glm::vec3 translate_ball(-3.5f, 1.5f, 2.6f);
-    
+
     glm::vec3 translate_ball_floor(0.0f,0.25f,0.0f);
 
     glm::vec3 scale_ball(1.20f, 1.0f, 1.0f);
 
     switch(key){
-        case 'w':
-            std::cout << "W PRESSED" << std::endl;
-            cameraPosY += speed;
+        case 'p':
+            //switch to cam1
+            std::cout << "P PRESSED" << std::endl;
+            mainCam = cam1;
             break;
-        case 's':
-            std::cout << "S PRESSED" << std::endl;
-            cameraPosY -= speed;
+        case 'o':
+            //switch to cam2
+            std::cout << "O PRESSED" << std::endl;
+            mainCam = cam2;
             break;
 
         case 'y':
@@ -191,7 +202,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
         case 'd':
             //Up
             std::cout << "D PRESSED" << std::endl;
-           
+
             engine->rotate_node("RuotaAsse00", 0.5, rotateAxisZ);
             break;
 
@@ -225,7 +236,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
         case 'h':
             //Up
             std::cout << "H PRESSED" << std::endl;
-            
+
             engine->rotate_node("RuotaAsseForca", 0.5f, rotateAxisZ);
             std::cout << glm::to_string((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca"))->get_final_matrix())) << std::endl;
             break;
@@ -251,7 +262,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     ball_object_to_be_taken->set_pos_matrix(old_ball);
 
                     //Qua applico la transformazione n-1 volte di quanto erano state applicate prima
-                    for (int i = 0; i < actual_fork; i++) {    
+                    for (int i = 0; i < actual_fork; i++) {
                         engine->scale_node("Sphere001",scale_ball);
                     }
                     //ri renderizzo la scena
@@ -262,21 +273,21 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                 //Questo if serve per quando rilascio la palla
                 if (actual_fork == 0 && ball_grabbed) {
                     //release ball
-                    
+
                     //Prendo il nodo palla
                     ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
-                    
-                   
-                    
+
+
+
                     //Vado a leggere l'ultima colonna della matrice finale,Essa corrisponde alle world coordinates della palla.
                     glm::vec4 ball_world_coordinate = glm::column(ball_object_to_be_taken->get_final_matrix(), 3);
-                    
+
                     //Qua mi salvo la matrice iniziale(ovvero presa sulla forca) in world coordinates
                     glm::mat4 matriceInzialeePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, ball_world_coordinate.g, ball_world_coordinate.b));
                     //Qua salvo la matrice finale della palla in world coordinates, ovvero con la y messa a 1
                     glm::mat4 matriceFinalePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, 1.0f, ball_world_coordinate.b));
-                   
-                    
+
+
                     //Setto il padre della palla il nodo root della scena, poi metto la sua pos matrix come la matrice in world coordinates che ha adesso
                     ball_object_to_be_taken->set_parent(engine->getRoot());
                     ball_object_to_be_taken->set_pos_matrix(matriceInzialeePalle);
@@ -284,10 +295,10 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     //while che fa l'animazione di caduta della palla
                     //finche la componente y delle world coordinates della palla non è >=1 lui decrementa
                     while (ball_world_coordinate.g >= 1) {
-                   
+
                         //Aggiorno la matrice inziale della palla
                         matriceInzialeePalle = ball_object_to_be_taken->get_pos_matrix();
-                      
+
                         //Effetuo la traslazione della palla
                         ball_object_to_be_taken->set_pos_matrix(glm::translate(matriceInzialeePalle, -translate_ball_floor));
 
@@ -296,13 +307,13 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
                         //renderizzo la scena
                         displayCallback();
-                       
+
                     }
-                    
-                    
+
+
                     //Setto come matrice della palla quella finale dichiarata prima, perchè è piu precisa
                     ball_object_to_be_taken->set_pos_matrix(matriceFinalePalle);
-                   
+
                     //resetto la flag
                     ball_grabbed = false;
                 }
@@ -322,15 +333,15 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             //Qui vado a prendere i nodi che mi servono ovvero la palla e il RuotaAsseForca, che usero come padre dopo
             ball_object_to_be_taken = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Sphere001")));
             rotate_axis_fork_father = (dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("RuotaAsseForca")));
-            
+
 
             //Questo if, controlla se la forca abbia raggiunto la posizione massima di chiusura
             if (actual_fork < max_fork_close) {
 
                 //Questo if, controlla se la forca sia aperta del tutto e se la distanza tra la palla e il padre sia < 5.0
                 if (actual_fork == 0 && check_distance_two_vectors(ball_object_to_be_taken, rotate_axis_fork_father, 5.0f)) {
-                   
-                    
+
+
 
                     //Qui vado a settare la matrice di posizione della palla, uguale a quella della ruota asse forca
                     ball_object_to_be_taken->set_pos_matrix(rotate_axis_fork_father->get_pos_matrix());
@@ -340,14 +351,14 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
                     //Dopo di che effettuo una traslazione perche altrimenti sarebbe dentro il padre
                     engine->translate_node("Sphere001", translate_ball);
-                    
+
                     //Salvo un save point di come era originalmente la palla che viene usato dopo nella parte di release della palla
                     old_ball = ball_object_to_be_taken->get_pos_matrix();
-                    
+
                     //flaggo a true il fatto che ho la palla grabbata
                     ball_grabbed = true;
                 }
-                
+
 
                 //If che controlla se palla presa, e le forche sono <=2, posso chiudere ancora
                 if (ball_grabbed && actual_fork <= 2) {
@@ -362,7 +373,7 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     engine->translate_node("forca2", translate_fork);
                     actual_fork++;
                 }
-                
+
             }
 
             break;
@@ -398,6 +409,10 @@ int main(int argc, char *argv[]){
     engine->setTextureFilePath("../files/textures/");
     engine->loadFromFile("../files/stanza.OVO");
     engine->setShadowFlag("Plane");
+
+    Light* l1 = new Light();
+    mainCam = cam1;
+    cam2->set_parent((dynamic_cast<Node*>(engine->get_object_list()->get_element_by_name("Cylinder001"))));
 
     engine->setDisplayCallback(displayCallback);
     engine->setReshapeCallback();

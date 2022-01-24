@@ -1,5 +1,8 @@
 #include "List.h"
 #include <iostream>
+
+#include "Light.h"
+#include "Mesh.h"
 LIB_API List::List() {
 }
 
@@ -19,4 +22,13 @@ LIB_API Object* List::get_element_by_name(const char* name) {
 		}
 	}
 	return nullptr;
+}
+
+void LIB_API List::addRenderObject(Object* element){
+
+    if((dynamic_cast<Light*>(element))){
+        put_front_of_vec(element);
+    }else if((dynamic_cast<Mesh*>(element))){
+        put_back_of_vec(element);
+    }
 }

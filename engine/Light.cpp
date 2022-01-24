@@ -23,8 +23,10 @@ LIB_API Light::Light() {
 
 
         lightsCnt++;
-    }else
+    }else{
         lightNr = 0;
+        std::cerr << "MAX " << MAX_LIGHTS << " LIGHTS MANAGEABLE" << std::endl;
+    }
 
 	//ctor
 }
@@ -62,15 +64,12 @@ void LIB_API Light::setLightType(lightType type){
 }
 
 void LIB_API Light::render(glm::mat4 camera) {
-    //std::cout << "render light" << std::endl;
+
+    if(lightNr == 0)
+        return;
 
     // Set light position:
    glLoadMatrixf(glm::value_ptr(camera * this->get_final_matrix()));
-
-   // Draw a small emissive sphere to show light position:
-   //glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(glm::vec4(1.0f)));
-   //glutSolidSphere(0.5, 64, 64);
-   //glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(glm::vec4(0.0f)));
 
    // Light position is set to object coordinates and is modified by the current OpenGL matrix (as with any other object):
 

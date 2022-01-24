@@ -2,7 +2,7 @@
  * @file		ovoreader.cpp
  * @brief	Minimal decoder for the OverVision Object (OVO) 3D file format
  *
- * @author	A. "Killer" Peternier (achille.peternier@supsi.ch), (C) 2013-2020
+ * @author	A. Peternier (achille.peternier@supsi.ch), (C) 2013-2020
  * @editor	D. Moranda (diego.moranda@supsi.ch), (C) 2021-2022
  * @editor	M. Metaldi (matteo.metaldi@student.supsi.ch), (C) 2021-2022
  * @editor	A. Riccardi (andrea.riccardi@student.supsi.ch), (C) 2021-2022
@@ -80,7 +80,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
     unsigned int numberOfChildren = 0;
 
     /*
-    * Leggi com memcpy e ogni volta poi sposti la position
+    * Leggi con memcpy e ogni volta poi sposti la position
     * Dopo ogni memcpy bisogna spostare la positon del socio
     */
     //Lettura id del chunk
@@ -105,9 +105,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
     memcpy(data, buffer + position, sizeof(char) * chunkSize);
     position = position + (sizeof(char) * chunkSize);
-
-    //TODO FARE UNA FUNZIONE DI STO MEGA PEZZO DI CODICE
-
 
     switch ((OvObject::Type)chunkId)
     {
@@ -319,9 +316,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
         cout << materialName << endl;
-        //TODO
         thisMesh->set_material(dynamic_cast<Material*>(materialList->get_element_by_name(materialName)));
-        //thisMesh->get_material()->set_name(materialName); SEGMENTATION FAULT
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
@@ -335,14 +330,12 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         glm::vec3 bBoxMin;
         memcpy(&bBoxMin, data + chunkPosition, sizeof(glm::vec3));
         thisMesh->set_bBoxMin(bBoxMin);
-        //cout << "   BBox minimum  :  " << thisMesh->bBoxMin.x << ", " << thisMesh->bBoxMin.y << ", " << thisMesh->bBoxMin.z << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Mesh bounding box maximum corner:
         glm::vec3 bBoxMax;
         memcpy(&bBoxMax, data + chunkPosition, sizeof(glm::vec3));
         thisMesh->set_bBoxMax(bBoxMax);
-        //cout << "   BBox maximum  :  " << thisMesh->bBoxMax.x << ", " << thisMesh->bBoxMax.y << ", " << thisMesh->bBoxMax.z << endl;
         chunkPosition += sizeof(glm::vec3);
 
         // Optional physics properties:
@@ -475,21 +468,18 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 // Vertex coords:
                 glm::vec3 vertex;
                 memcpy(&vertex, data + chunkPosition, sizeof(glm::vec3));
-                //cout << "      xyz  . . . :  " << vertex.x << ", " << vertex.y << ", " << vertex.z << endl;
                 chunkPosition += sizeof(glm::vec3);
 
                 // Vertex normal:
                 unsigned int normalData;
                 memcpy(&normalData, data + chunkPosition, sizeof(unsigned int));
                 glm::vec4 normal = glm::unpackSnorm3x10_1x2(normalData);
-                //cout << "      normal . . :  " << normal.x << ", " << normal.y << ", " << normal.z << endl;
                 chunkPosition += sizeof(unsigned int);
 
                 // Texture coordinates:
                 unsigned int textureData;
                 memcpy(&textureData, data + chunkPosition, sizeof(unsigned int));
                 glm::vec2 uv = glm::unpackHalf2x16(textureData);
-                //cout << "      uv . . . . :  " << uv.x << ", " << uv.y << endl;
                 chunkPosition += sizeof(unsigned int);
 
                 // Tangent vector:
@@ -516,8 +506,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 unsigned int* face = new unsigned int[3];
                 memcpy(face, data + chunkPosition, sizeof(unsigned int) * 3);
                 chunkPosition += sizeof(unsigned int) * 3;
-                //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
-                //cout << "   Face data . . :  f" << c << " (" << face[0] << ", " << face[1] << ", " << face[2] << ")" << endl;
                 if(l == 0){
                     thisMesh->add_face(face);
                 }
@@ -579,7 +567,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             }
         }
         curNode = thisMesh;
-        nodeList->put_back_of_vec(curNode);
     }
     break;
 
@@ -688,11 +675,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         chunkPosition += sizeof(unsigned char);
         curNode = thisLight;
 
-        if(thisLight->getLightNr() == 0){
-            cout << "MASSIMO " << MAX_LIGHTS << " GESTIBILI" << endl;
-
-        }else
-            nodeList->put_front_of_vec(curNode);
     }
     break;
 
@@ -748,8 +730,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
         break;
     }
-    //buffer = buffer + position;
-
 
     // Go recursive when child nodes are avaialble:
 
@@ -757,27 +737,22 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
 
         if(curNode != NULL){
             curNode->set_parent(prevNode);
+            nodeList->addRenderObject(curNode);
         }
 
         if (numberOfChildren) {
-            //curNode->set_parent(prevNode);
             while (curNode->get_number_of_children() < numberOfChildren)
             {
                 prevNode = curNode;
                 Node* childNode = recursiveLoad(buffer, position);
-                cout << "child node : " << childNode->get_name() << endl;
-                cout << "Cur node : " << curNode->get_name() << endl;
-                cout << "Prev node : " << prevNode->get_name() << endl;
                 prevNode->addChild(childNode);
                 curNode = prevNode;
             }
             prevNode = curNode->get_parent();
-            //SE non è mesh fa la ricorsione altrimenti ritorna
+
         }else if(chunkId == 9 || chunkId == 0){
-            cout << "entro qui ora" << endl;
             recursiveLoad(buffer, position);
         }
-
 
     // Done:
 
