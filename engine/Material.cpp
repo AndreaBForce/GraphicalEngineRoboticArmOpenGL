@@ -5,6 +5,11 @@ LIB_API Material::Material() {
 }
 
 LIB_API Material::~Material(){
+    std::cout << "Material dtor" << std::endl;
+
+    if(texture != nullptr){
+        delete texture;
+    }
 }
 
 void LIB_API Material::setEmission(glm::vec3 emission){

@@ -5,11 +5,12 @@
 #include "Vertex.h"
 #include "Utils.h"
 #include <string>
+#include <memory>
 
 class LIB_API Mesh : public Node{
     public:
         Mesh();
-        virtual ~Mesh();
+        ~Mesh();
 
         void render(glm::mat4 camera) override;
 
@@ -21,8 +22,8 @@ class LIB_API Mesh : public Node{
         void set_bBoxMax(glm::vec3 bBoxMax);
         void set_radius(float radius);
         void set_children(unsigned int children);
-        void set_material(Material* new_material){material = new_material;}
-        void setHasShadow(bool flag){ hasShadow = flag;}
+        void set_material(std::shared_ptr<Material> new_material){materialPtr = new_material;};
+        void setHasShadow(bool flag){ hasShadow = flag;};
 
         glm::vec3 getBoxMin() { return this->bBoxMin; };
         glm::vec3 getBoxMax() { return this->bBoxMax; };
@@ -35,7 +36,7 @@ class LIB_API Mesh : public Node{
         std::vector<unsigned int*> getFaces(){return faces;};
 
     private:
-        Material* material;
+        std::shared_ptr<Material> materialPtr;
         char materialName[FILENAME_MAX];
         bool hasShadow;
 

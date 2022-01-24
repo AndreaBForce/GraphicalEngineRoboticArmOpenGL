@@ -7,7 +7,7 @@
 
 1636185684 /home/matteo/Desktop/grafica/projCG/labingsw022021202203cg/engine/simpleClass.h
 
-1643049876 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/client/main.cpp
+1643060982 source:/home/dimo/Desktop/cgProject/labingsw022021202203cg/client/main.cpp
 	<iostream>
 	<glm/gtc/matrix_transform.hpp>
 	<glm/gtc/matrix_access.hpp>
@@ -21,7 +21,7 @@
 
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/simpleClass.h
 
-1643049578 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
+1643060924 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Engine.h
 	"Node.h"
 	"Utils.h"
 	"List.h"
@@ -33,7 +33,7 @@
 	"Utils.h"
 	<vector>
 
-1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Object.h
+1643055629 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Object.h
 	"Utils.h"
 	<string>
 	<glm/glm.hpp>
@@ -926,14 +926,15 @@
 1636372658 /home/dimo/Desktop/cgProject/labingsw022021202203cg/dependencies/glm/include/glm/gtc/type_ptr.inl
 	<cstring>
 
-1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
+1643059868 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Mesh.h
 	"Node.h"
 	"Material.h"
 	"Vertex.h"
 	"Utils.h"
 	<string>
+	<memory>
 
-1643046265 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
+1643055515 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Material.h
 	"Object.h"
 	"Texture.h"
 	"Utils.h"
@@ -942,7 +943,7 @@
 	"Object.h"
 	"Utils.h"
 
-1643050403 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Light.h
+1643055515 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Light.h
 	"Engine.h"
 	"Node.h"
 	"Utils.h"
@@ -953,7 +954,7 @@
 	"Object.h"
 	"Utils.h"
 
-1643049284 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/List.h
+1643051385 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/List.h
 	"Object.h"
 	"Utils.h"
 	<vector>
@@ -1014,7 +1015,7 @@
 	<cstdarg>
 	<cstdio>
 
-1643048547 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Camera.h
+1643051385 /home/dimo/Desktop/cgProject/labingsw022021202203cg/engine/Camera.h
 	"Node.h"
 	"Utils.h"
 

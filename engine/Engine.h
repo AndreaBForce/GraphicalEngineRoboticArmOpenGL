@@ -40,7 +40,7 @@ class LIB_API Engine{
 		void forceRendering(int windowId);
 		void enableLightSystem();
 		void startEventLoop();
-		void endEventLoop();
+		void freeContext();
 		void clearDisplay();
 		void swapBuffer();
         void loadTree(Node* root);

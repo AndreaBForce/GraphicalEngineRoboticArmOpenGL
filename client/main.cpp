@@ -47,11 +47,8 @@ Camera* mainCam;
 ///////////////////////
 
 void displayCallback(){
-    //cameraMat = glm::lookAt(eye, glm::vec3(cameraPosX, cameraPosY, cameraPosZ), up);
-    //cameraMat = mainCam->get_camera_mat();
     engine->clearDisplay();
 
-    //cam2->render(cameraMat);
     //questo metodo per renderizzare tutto una volta implementato correttamente
     engine->getRenderList()->renderList(mainCam->getCameraMat());
 
@@ -425,7 +422,7 @@ int main(int argc, char *argv[]){
 
     engine->startEventLoop();
 
-    engine->endEventLoop();
+    engine->freeContext();
 
     return 0;
 

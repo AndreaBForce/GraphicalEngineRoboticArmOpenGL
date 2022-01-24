@@ -56,6 +56,7 @@ int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
 #include <FreeImage.h>
 //define static variable
 Engine* Engine::engine_instance = nullptr;
+bool isRunning;
 
 ///////////////////
 // BODY OF CLASS //
@@ -69,7 +70,6 @@ LIB_API Engine*  Engine::GetInstance(){
 }
 
 void LIB_API Engine::clearDisplay(){
-    //glClearColor(0.0f, 0.6f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -97,17 +97,20 @@ void LIB_API Engine::enableLightSystem(){
 }
 
 void LIB_API Engine::startEventLoop(){
+    isRunning = true;
 
     while(1){
-        glutMainLoopEvent();
+        if(isRunning)
+            glutMainLoopEvent();
+        else
+            break;
     }
 }
 
-void LIB_API Engine::endEventLoop(){
-    std::cout << "FREE ENGINE" << std::endl;
-    glutLeaveMainLoop();
+void LIB_API Engine::freeContext(){
     FreeImage_DeInitialise();
-    delete(nodeList);
+    delete(Engine::GetInstance()->getRenderList());
+    std::cout << "FREE CONTEXT" << std::endl;
 }
 
 void LIB_API Engine::swapBuffer(){
@@ -164,6 +167,9 @@ void LIB_API Engine::setReshapeCallback(){
     glutReshapeFunc(reshapeCallback);
 }
 
+void LIB_API closeCallback(){
+    isRunning = false;
+}
 
 int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
     int windowId;
@@ -175,10 +181,12 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
     glutInit(&argc, argv);
 
     // Set some optional flags:
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_EXIT);
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 
     // Create the window with a specific title:
     windowId = glutCreateWindow(nomeFinestra);
+
+    glutCloseFunc(closeCallback);
 
     //set shadow properties
     shadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.001f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 1.0f));

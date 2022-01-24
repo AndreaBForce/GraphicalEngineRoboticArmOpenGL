@@ -12,11 +12,12 @@ LIB_API Mesh::Mesh()
 
 LIB_API Mesh::~Mesh()
 {
+    std::cout << "Mesh " << this->get_name() << std::endl;
     //dtor
 }
 
 LIB_API Material* Mesh::get_material(){
-    return material;
+    return materialPtr.get();
 }
 
 void LIB_API Mesh::set_bBoxMin(glm::vec3 mesh_bBoxMin){
@@ -39,14 +40,13 @@ void LIB_API Mesh::set_children(unsigned int mesh_children){
 void LIB_API Mesh::render(glm::mat4 camera){
 
     // render material
-    material->render(camera);
+    materialPtr->render(camera);
 
-   
-   glLoadMatrixf(glm::value_ptr(camera * this->getFinalMatrix()));
-   
+    glLoadMatrixf(glm::value_ptr(camera * this->getFinalMatrix()));
+
     glEnable(GL_NORMALIZE);
 
-    if(material->hasTexture())
+    if(materialPtr->hasTexture())
         glEnable(GL_TEXTURE_2D);
 
     for(unsigned int* face : faces){
@@ -67,7 +67,7 @@ void LIB_API Mesh::render(glm::mat4 camera){
         glEnd();
     }
 
-    if(material->hasTexture())
+    if(materialPtr->hasTexture())
         glDisable(GL_TEXTURE_2D);
 
     if (hasShadow)

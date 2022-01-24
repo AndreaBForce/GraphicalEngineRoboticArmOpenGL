@@ -32,6 +32,7 @@ LIB_API Light::Light() {
 }
 
 LIB_API Light::~Light() {
+    std::cout << "Light dtor" << std::endl;
     lightsCnt--;
 }
 
