@@ -43,7 +43,7 @@ Camera* mainCam;
 //Global for controls
 bool wireframe = true;
 bool tooltip = true;
-
+int max_height;
 /////////////////////////
 // CALLBACK FUNCTIONS //
 ///////////////////////
@@ -54,6 +54,7 @@ void displayCallback(){
     //questo metodo per renderizzare tutto una volta implementato correttamente
     engine->getRenderList()->renderList(mainCam->getCameraMat());
 
+    max_height = engine->getHeight();
 
     char texts[64];
     sprintf(texts, "FPS: %d", fps);
@@ -61,58 +62,67 @@ void displayCallback(){
 
     if (tooltip) {
         strcpy(texts, "------------------------------");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 2));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 2));
         strcpy(texts, "Comandi Braccio");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 3));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 3));
 
         strcpy(texts, "[y] Rotate Base CCW");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 4));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 4));
         strcpy(texts, "[x] Rotate Base CW");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 5));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 5));
 
         strcpy(texts, "[d] Rotate Asse 00 UP");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 6));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 6));
         strcpy(texts, "[c] Rotate Asse 00 DOWN");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 7));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 7));
 
         strcpy(texts, "[f] Rotate Asse 01 UP");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 8));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 8));
         strcpy(texts, "[v] Rotate Asse 01 DOWN");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 9));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 9));
 
         strcpy(texts, "[g] Rotate Asse 02 UP");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 10));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 10));
         strcpy(texts, "[b] Rotate Asse 02 DOWN");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 11));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 11));
 
         strcpy(texts, "[h] Rotate Asse Force UP");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 12));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 12));
         strcpy(texts, "[n] Rotate Asse Forca DOWN");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 13));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 13));
 
         strcpy(texts, "[j] Apri forche");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 14));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 14));
         strcpy(texts, "[k] Stringi forche");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 15));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 15));
 
 
         strcpy(texts, "------------------------------");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 16));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 16));
         strcpy(texts, "Utilities");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 17));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 17));
         strcpy(texts, "[q] Resetta scena");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 18));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 18));
         strcpy(texts, "[z] Enable/Disable wireframe");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 19));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 19));
         strcpy(texts, "[u] Enable/Disable tooltip");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 20));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 20));
 
 
         strcpy(texts, "------------------------------");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 21));
+        engine->write2DText(texts, 1.0f, max_height - (14 * 21));
         strcpy(texts, "Camera controls");
-        engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 22));
-
+        engine->write2DText(texts, 1.0f, max_height - (14 * 22));
+        strcpy(texts, "[1] - [2] Change camera");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 23));
+        strcpy(texts, "[Up] - [Down] arrows Change camera height");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 24));
+        strcpy(texts, "[Left] - [Right] arrows Change z camera distance from point");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 25));
+        strcpy(texts, "[e] - [r] Change x camera distance from point");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 26));
+        strcpy(texts, "[p] Change camera focus point");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 27));
     }
 
 
