@@ -13,9 +13,11 @@ LIB_API Light::Light() {
         switch(lightsCnt){
             case 0:
                 lightNr = LIGHT0;
+                glEnable(LIGHT0);
                 break;
             case 1:
                 lightNr = LIGHT1;
+                glEnable(LIGHT1);
                 break;
             default:
                 break;

@@ -89,11 +89,13 @@ void LIB_API Engine::forceRendering(int windowId){
     glutPostWindowRedisplay(windowId);
 }
 
+void LIB_API Engine::forceReshape(){
+    glutReshapeWindow(this->getWidth(), this->getHeight());
+}
+
 void LIB_API Engine::enableLightSystem(){
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
     glEnable(GL_LIGHTING);
-    glEnable(LIGHT0);
-    glEnable(LIGHT1);
 }
 
 void LIB_API Engine::startEventLoop(){
@@ -147,12 +149,11 @@ void LIB_API Engine::setShadowFlag(const char* noShadowName){
  */
 void LIB_API reshapeCallback(int width, int height)
 {
-
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
-    //glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f);
 
-    Engine::GetInstance()->setProjection(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 500.0f));
+
+    Engine::GetInstance()->setProjection(glm::perspective(glm::radians(Engine::GetInstance()->getProjectionProperties().x), (float)width / (float)height, Engine::GetInstance()->getProjectionProperties().y, Engine::GetInstance()->getProjectionProperties().z));
     Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
 
     Engine::GetInstance()->setHeight(height);
@@ -272,13 +273,13 @@ void LIB_API Engine::enableMemento() {
     for (auto& element : Engine::engineInstance->getRenderList()->getList()) {
         Node* thisNode = dynamic_cast<Node*>(element);
         thisNode->setMemento();
-        
+
     }
 }
 void LIB_API Engine::restoreMemento() {
     for (auto& element : Engine::engineInstance->getRenderList()->getList()) {
         Node* thisNode = dynamic_cast<Node*>(element);
         thisNode->restoreMemento();
-       
+
     }
 }

@@ -12,7 +12,6 @@ LIB_API Mesh::Mesh()
 
 LIB_API Mesh::~Mesh()
 {
-    std::cout << "Mesh " << this->get_name() << std::endl;
     //dtor
 }
 

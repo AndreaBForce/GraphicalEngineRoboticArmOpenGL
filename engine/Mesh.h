@@ -19,7 +19,7 @@ class LIB_API Mesh : public Node{
         void loadMeshFromFile();
 
         void setChildren(unsigned int children);
-        void setMaterial(Material* newMaterial){material = newMaterial;}
+        void setMaterial(std::shared_ptr<Material> newMaterial){materialPtr = newMaterial;}
         void setHasShadow(bool flag){ hasShadow = flag;}
 
         unsigned int getChildren() { return this->children; };

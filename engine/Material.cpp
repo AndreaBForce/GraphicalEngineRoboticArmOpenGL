@@ -5,8 +5,6 @@ LIB_API Material::Material() {
 }
 
 LIB_API Material::~Material(){
-    std::cout << "Material dtor" << std::endl;
-
     if(texture != nullptr){
         delete texture;
     }
@@ -63,7 +61,7 @@ float LIB_API Material::getShiness() {
 
 void LIB_API Material::render(glm::mat4 camera){
 
-    if(texture != nullptr){
+    if(hasTexture()){
         texture->render(camera);
     }
 

@@ -15,7 +15,6 @@ std::string Texture::path;
 
 
 LIB_API Texture::Texture(char textureName[FILENAME_MAX]) {
-
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
 
@@ -51,7 +50,6 @@ LIB_API Texture::Texture(char textureName[FILENAME_MAX]) {
 }
 
 LIB_API Texture::~Texture() {
-    std::cout << "Texture dtor" << std::endl;
     if(textureId != 0){
         glDeleteTextures(1, &textureId);
     }
@@ -66,5 +64,8 @@ unsigned int LIB_API Texture::getTextureId() {
 }
 
 void LIB_API Texture::render(glm::mat4 camera){
+    if(textureId == 0)
+        return;
+
     glBindTexture(GL_TEXTURE_2D, textureId);
 }

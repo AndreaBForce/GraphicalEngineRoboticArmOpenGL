@@ -291,7 +291,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
                 break;
             }
         }
-        thisMesh->set_material(material);
+        thisMesh->setMaterial(material);
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
