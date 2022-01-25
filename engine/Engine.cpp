@@ -89,10 +89,6 @@ void LIB_API Engine::forceRendering(int windowId){
     glutPostWindowRedisplay(windowId);
 }
 
-void LIB_API Engine::forceReshape(){
-    glutReshapeWindow(this->getWidth(), this->getHeight());
-}
-
 void LIB_API Engine::enableLightSystem(){
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
     glEnable(GL_LIGHTING);
@@ -152,7 +148,7 @@ void LIB_API reshapeCallback(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
 
-
+    std::cout << "reshape callback" << std::endl;
     Engine::GetInstance()->setProjection(glm::perspective(glm::radians(Engine::GetInstance()->getProjectionProperties().x), (float)width / (float)height, Engine::GetInstance()->getProjectionProperties().y, Engine::GetInstance()->getProjectionProperties().z));
     Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
 
@@ -161,6 +157,11 @@ void LIB_API reshapeCallback(int width, int height)
 
     glLoadMatrixf(glm::value_ptr(Engine::GetInstance()->getProjection()));
     glMatrixMode(GL_MODELVIEW);
+}
+
+void LIB_API Engine::forceReshape() {
+    //glutReshapeWindow(this->getWidth(), this->getHeight());
+    reshapeCallback(this->getWidth(), this->getHeight());
 }
 
 
