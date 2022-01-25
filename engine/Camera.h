@@ -7,7 +7,7 @@
 class LIB_API Camera : public Node
 {
     public:
-        Camera();
+        Camera(){};
         Camera(glm::vec3 eye, glm::vec3 center, glm::vec3 up) : eye{eye}, center{center}, up{up} {};
         virtual ~Camera();
 

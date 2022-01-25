@@ -128,7 +128,7 @@ void LIB_API Engine::setShadowFlag(const char* noShadowName){
     for(auto& element : nodeList->getList()){
 
         if(dynamic_cast<Mesh*>(element)){
-            std::string meshName = element->get_name();
+            std::string meshName = element->getName();
             if(meshName.find(excludeName) == std::string::npos){
                 Mesh* mesh = dynamic_cast<Mesh*>(element);
                 mesh->setHasShadow(true);
@@ -137,7 +137,7 @@ void LIB_API Engine::setShadowFlag(const char* noShadowName){
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * This callback is invoked each time the window gets resized (and once also when created).
  * @param width new window width
@@ -148,7 +148,6 @@ void LIB_API reshapeCallback(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
 
-    std::cout << "reshape callback" << std::endl;
     Engine::GetInstance()->setProjection(glm::perspective(glm::radians(Engine::GetInstance()->getProjectionProperties().x), (float)width / (float)height, Engine::GetInstance()->getProjectionProperties().y, Engine::GetInstance()->getProjectionProperties().z));
     Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
 
@@ -160,10 +159,8 @@ void LIB_API reshapeCallback(int width, int height)
 }
 
 void LIB_API Engine::forceReshape() {
-    //glutReshapeWindow(this->getWidth(), this->getHeight());
     reshapeCallback(this->getWidth(), this->getHeight());
 }
-
 
 void LIB_API Engine::setReshapeCallback(){
     glutReshapeFunc(reshapeCallback);

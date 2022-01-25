@@ -123,7 +123,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Node name:
         char nodeName[FILENAME_MAX];
         strcpy(nodeName, data + chunkPosition);
-        actualNode->set_name(nodeName);
+        actualNode->setName(nodeName);
 
         chunkPosition += (unsigned int)strlen(nodeName) + 1;
 
@@ -158,7 +158,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
         chunkPosition += (unsigned int)strlen(materialName) + 1;
-        thisMaterial->set_name(materialName);
+        thisMaterial->setName(materialName);
 
         // Material term colors, starting with emissive:
         glm::vec3 emission, albedo;
@@ -245,7 +245,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Mesh name:
         char meshName[FILENAME_MAX];
         strcpy(meshName, data + chunkPosition);
-        thisMesh->set_name(meshName);
+        thisMesh->setName(meshName);
 
         chunkPosition += (unsigned int)strlen(meshName) + 1;
 
@@ -286,7 +286,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(materialName, data + chunkPosition);
         std::shared_ptr<Material> material;
         for(auto& mat : materialPointers){
-            if(mat->get_name() == materialName){
+            if(mat->getName() == materialName){
                 material = mat;
                 break;
             }
@@ -528,7 +528,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         char lightName[FILENAME_MAX];
         strcpy(lightName, data + chunkPosition);
         chunkPosition += (unsigned int)strlen(lightName) + 1;
-        thisLight->set_name(lightName);
+        thisLight->setName(lightName);
 
         // Light matrix:
         glm::mat4 matrix;

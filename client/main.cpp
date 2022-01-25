@@ -51,7 +51,6 @@ int max_height;
 void displayCallback(){
     engine->clearDisplay();
 
-    //questo metodo per renderizzare tutto una volta implementato correttamente
     engine->getRenderList()->renderList(mainCam->getCameraMat());
 
     max_height = engine->getHeight();
@@ -59,70 +58,76 @@ void displayCallback(){
     char texts[64];
     sprintf(texts, "FPS: %d", fps);
     engine->write2DText(texts,1.0f,engine->getHeight()-14);
+    sprintf(texts, "View from %s", mainCam->getName().c_str());
+    engine->write2DText(texts, 1.0f, max_height - (14 * 2));
+
+    if(cameraPosition)
+        strcpy(texts, "Camera commands for position (only Cam2)");
+    else
+        strcpy(texts, "Camera commands for focus point (only Cam2)");
+    engine->write2DText(texts, 1.0f, max_height - (14 * 3));
 
     if (tooltip) {
         strcpy(texts, "------------------------------");
-        engine->write2DText(texts, 1.0f, max_height - (14 * 2));
-        strcpy(texts, "Comandi Braccio");
-        engine->write2DText(texts, 1.0f, max_height - (14 * 3));
-
-        strcpy(texts, "[y] Rotate Base CCW");
         engine->write2DText(texts, 1.0f, max_height - (14 * 4));
-        strcpy(texts, "[x] Rotate Base CW");
+        strcpy(texts, "Comandi Braccio");
         engine->write2DText(texts, 1.0f, max_height - (14 * 5));
 
-        strcpy(texts, "[d] Rotate Asse 00 UP");
+        strcpy(texts, "[y] Rotate Base CCW");
         engine->write2DText(texts, 1.0f, max_height - (14 * 6));
-        strcpy(texts, "[c] Rotate Asse 00 DOWN");
+        strcpy(texts, "[x] Rotate Base CW");
         engine->write2DText(texts, 1.0f, max_height - (14 * 7));
 
-        strcpy(texts, "[f] Rotate Asse 01 UP");
+        strcpy(texts, "[d] Rotate Asse 00 UP");
         engine->write2DText(texts, 1.0f, max_height - (14 * 8));
-        strcpy(texts, "[v] Rotate Asse 01 DOWN");
+        strcpy(texts, "[c] Rotate Asse 00 DOWN");
         engine->write2DText(texts, 1.0f, max_height - (14 * 9));
 
-        strcpy(texts, "[g] Rotate Asse 02 UP");
+        strcpy(texts, "[f] Rotate Asse 01 UP");
         engine->write2DText(texts, 1.0f, max_height - (14 * 10));
-        strcpy(texts, "[b] Rotate Asse 02 DOWN");
+        strcpy(texts, "[v] Rotate Asse 01 DOWN");
         engine->write2DText(texts, 1.0f, max_height - (14 * 11));
 
-        strcpy(texts, "[h] Rotate Asse Force UP");
+        strcpy(texts, "[g] Rotate Asse 02 UP");
         engine->write2DText(texts, 1.0f, max_height - (14 * 12));
-        strcpy(texts, "[n] Rotate Asse Forca DOWN");
+        strcpy(texts, "[b] Rotate Asse 02 DOWN");
         engine->write2DText(texts, 1.0f, max_height - (14 * 13));
 
-        strcpy(texts, "[j] Apri forche");
+        strcpy(texts, "[h] Rotate Asse Force UP");
         engine->write2DText(texts, 1.0f, max_height - (14 * 14));
-        strcpy(texts, "[k] Stringi forche");
+        strcpy(texts, "[n] Rotate Asse Forca DOWN");
         engine->write2DText(texts, 1.0f, max_height - (14 * 15));
 
-
-        strcpy(texts, "------------------------------");
+        strcpy(texts, "[j] Open forks");
         engine->write2DText(texts, 1.0f, max_height - (14 * 16));
-        strcpy(texts, "Utilities");
+        strcpy(texts, "[k] Close forks");
         engine->write2DText(texts, 1.0f, max_height - (14 * 17));
-        strcpy(texts, "[q] Resetta scena");
-        engine->write2DText(texts, 1.0f, max_height - (14 * 18));
-        strcpy(texts, "[z] Enable/Disable wireframe");
-        engine->write2DText(texts, 1.0f, max_height - (14 * 19));
-        strcpy(texts, "[u] Enable/Disable tooltip");
-        engine->write2DText(texts, 1.0f, max_height - (14 * 20));
-
 
         strcpy(texts, "------------------------------");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 18));
+        strcpy(texts, "Utilities");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 19));
+        strcpy(texts, "[q] Reset scene");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 20));
+        strcpy(texts, "[z] Enable/Disable wireframe");
         engine->write2DText(texts, 1.0f, max_height - (14 * 21));
-        strcpy(texts, "Camera controls");
+        strcpy(texts, "[u] Enable/Disable tooltip");
         engine->write2DText(texts, 1.0f, max_height - (14 * 22));
-        strcpy(texts, "[1] - [2] Change camera");
+
+        strcpy(texts, "------------------------------");
         engine->write2DText(texts, 1.0f, max_height - (14 * 23));
-        strcpy(texts, "[Up] - [Down] arrows Change camera height");
+        strcpy(texts, "Camera controls");
         engine->write2DText(texts, 1.0f, max_height - (14 * 24));
-        strcpy(texts, "[Left] - [Right] arrows Change z camera distance from point");
+        strcpy(texts, "[1] - [2] Change camera");
         engine->write2DText(texts, 1.0f, max_height - (14 * 25));
-        strcpy(texts, "[e] - [r] Change x camera distance from point");
+        strcpy(texts, "[Up] - [Down] arrows Move camera position/focus on Y");
         engine->write2DText(texts, 1.0f, max_height - (14 * 26));
-        strcpy(texts, "[p] Change camera focus point");
+        strcpy(texts, "[Left] - [Right] arrows Move camera position/focus on Z");
         engine->write2DText(texts, 1.0f, max_height - (14 * 27));
+        strcpy(texts, "[e] - [r] Move camera position/focus on X");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 28));
+        strcpy(texts, "[p] Change camera commands for position/focus");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 29));
     }
 
 
@@ -240,14 +245,14 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
             //switch to cam1
             std::cout << "P PRESSED" << std::endl;
             mainCam = cam1;
-            engine->setProjectionProperties(glm::vec3(100.0f, 1.0f, 500.0f));
+            engine->setProjectionProperties(glm::vec3(100.0f, 1.0f, 200.0f));
             engine->forceReshape();
             break;
         case '2':
             //switch to cam2
             std::cout << "O PRESSED" << std::endl;
             mainCam = cam2;
-            engine->setProjectionProperties(glm::vec3(45.0f, 1.0f, 500.0f));
+            engine->setProjectionProperties(glm::vec3(45.0f, 1.0f, 200.0f));
             engine->forceReshape();
             break;
 
@@ -477,8 +482,10 @@ int main(int argc, char *argv[]){
     engine->loadFromFile("../files/stanza.OVO");
     engine->setShadowFlag("Plane");
 
+    cam1->setName("Cam1");
+    cam2->setName("Cam2");
     mainCam = cam1;
-    engine->setProjectionProperties(glm::vec3(100.0f, 1.0f, 500.0f));
+    engine->setProjectionProperties(glm::vec3(100.0f, 1.0f, 200.0f));
 
     engine->setDisplayCallback(displayCallback);
     engine->setReshapeCallback();

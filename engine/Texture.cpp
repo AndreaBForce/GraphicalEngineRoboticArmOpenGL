@@ -39,11 +39,10 @@ LIB_API Texture::Texture(char textureName[FILENAME_MAX]) {
 
         gluBuild2DMipmaps(GL_TEXTURE_2D, 4, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
 
-        //glTexImage2D(GL_TEXTURE_2D, 0 , GL_RGBA, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
-
         FreeImage_Unload(bitmap);
     }
     else {
+        glDeleteTextures(1, &textureId);
         textureId = 0;
     }
 

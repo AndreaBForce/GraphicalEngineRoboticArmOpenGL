@@ -2,11 +2,6 @@
 #include <GL/freeglut.h>
 #include <iostream>
 
-LIB_API Camera::Camera()
-{
-    //ctor
-}
-
 LIB_API Camera::~Camera()
 {
     //dtor

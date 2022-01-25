@@ -1,10 +1,10 @@
 #include "Node.h"
 #include <iostream>
-#include <glm/gtx/matrix_decompose.hpp>
 
 LIB_API Node::Node()
 {
     this->posMatrix = glm::mat4(1.0f);
+    this->parent = nullptr;
     //ctor
 }
 
