@@ -478,8 +478,8 @@ int main(int argc, char *argv[]){
     Test* test = new Test();
     test->testExec();
 
-    engine->setTextureFilePath("../files/textures/");
-    engine->loadFromFile("../files/stanza.OVO");
+    engine->setTextureFilePath("files/textures/");
+    engine->loadFromFile("files/stanza.OVO");
     engine->setShadowFlag("Plane");
 
     cam1->setName("Cam1");
