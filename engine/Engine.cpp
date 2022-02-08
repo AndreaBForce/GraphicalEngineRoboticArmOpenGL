@@ -56,6 +56,7 @@ int APIENTRY DllMain(HANDLE instDLL, DWORD reason, LPVOID _reserved)
 #include <FreeImage.h>
 //define static variable
 Engine* Engine::engineInstance = nullptr;
+bool isRunning;
 
 ///////////////////
 // BODY OF CLASS //
@@ -91,22 +92,23 @@ void LIB_API Engine::forceRendering(int windowId){
 void LIB_API Engine::enableLightSystem(){
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
     glEnable(GL_LIGHTING);
-    glEnable(LIGHT0);
-    glEnable(LIGHT1);
 }
 
 void LIB_API Engine::startEventLoop(){
+    isRunning = true;
 
     while(1){
-        glutMainLoopEvent();
+        if(isRunning)
+            glutMainLoopEvent();
+        else
+            break;
     }
 }
 
-void LIB_API Engine::endEventLoop(){
-    std::cout << "FREE ENGINE" << std::endl;
-    glutLeaveMainLoop();
+void LIB_API Engine::freeContext(){
     FreeImage_DeInitialise();
-    delete(nodeList);
+    delete(Engine::GetInstance()->getRenderList());
+    std::cout << "FREE CONTEXT" << std::endl;
 }
 
 void LIB_API Engine::swapBuffer(){
@@ -126,7 +128,7 @@ void LIB_API Engine::setShadowFlag(const char* noShadowName){
     for(auto& element : nodeList->getList()){
 
         if(dynamic_cast<Mesh*>(element)){
-            std::string meshName = element->get_name();
+            std::string meshName = element->getName();
             if(meshName.find(excludeName) == std::string::npos){
                 Mesh* mesh = dynamic_cast<Mesh*>(element);
                 mesh->setHasShadow(true);
@@ -135,7 +137,7 @@ void LIB_API Engine::setShadowFlag(const char* noShadowName){
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * This callback is invoked each time the window gets resized (and once also when created).
  * @param width new window width
@@ -143,12 +145,10 @@ void LIB_API Engine::setShadowFlag(const char* noShadowName){
  */
 void LIB_API reshapeCallback(int width, int height)
 {
-
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
-    //glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 100.0f);
 
-    Engine::GetInstance()->setProjection(glm::perspective(glm::radians(45.0f), (float)width / (float)height, 1.0f, 500.0f));
+    Engine::GetInstance()->setProjection(glm::perspective(glm::radians(Engine::GetInstance()->getProjectionProperties().x), (float)width / (float)height, Engine::GetInstance()->getProjectionProperties().y, Engine::GetInstance()->getProjectionProperties().z));
     Engine::GetInstance()->setOrtho(glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f));
 
     Engine::GetInstance()->setHeight(height);
@@ -158,11 +158,17 @@ void LIB_API reshapeCallback(int width, int height)
     glMatrixMode(GL_MODELVIEW);
 }
 
+void LIB_API Engine::forceReshape() {
+    reshapeCallback(this->getWidth(), this->getHeight());
+}
 
 void LIB_API Engine::setReshapeCallback(){
     glutReshapeFunc(reshapeCallback);
 }
 
+void LIB_API closeCallback(){
+    isRunning = false;
+}
 
 int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int height, int argc, char* argv[]) {
     int windowId;
@@ -174,10 +180,12 @@ int LIB_API Engine::init3Dcontext(const char* nomeFinestra, int width, int heigh
     glutInit(&argc, argv);
 
     // Set some optional flags:
-    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_EXIT);
+    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 
     // Create the window with a specific title:
     windowId = glutCreateWindow(nomeFinestra);
+
+    glutCloseFunc(closeCallback);
 
     //set shadow properties
     shadowMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.001f, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 1.0f));
@@ -256,4 +264,20 @@ void LIB_API Engine::scaleNode(const char* nodeName, glm::vec3 axis) {
     Node* thisNode = dynamic_cast<Node*>(Engine::engineInstance->getRenderList()->getElementByName(nodeName));
 
     thisNode->setPosMatrix(glm::scale(thisNode->getPosMatrix(), axis));
+}
+
+void LIB_API Engine::enableMemento() {
+
+    for (auto& element : Engine::engineInstance->getRenderList()->getList()) {
+        Node* thisNode = dynamic_cast<Node*>(element);
+        thisNode->setMemento();
+
+    }
+}
+void LIB_API Engine::restoreMemento() {
+    for (auto& element : Engine::engineInstance->getRenderList()->getList()) {
+        Node* thisNode = dynamic_cast<Node*>(element);
+        thisNode->restoreMemento();
+
+    }
 }

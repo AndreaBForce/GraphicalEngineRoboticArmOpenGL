@@ -15,11 +15,9 @@
 /////////////////////
 int windowId;
 Engine* engine;
-float cameraPosX = 0.0f;
-float cameraPosY = 5.0f;
-float cameraPosZ = 30.0f;
 int fps = 0;
 int frames = 0;
+bool cameraPosition = true;
 
 //GLOBAL ARM ANGLES
 float asse00 = 0.0f;
@@ -34,61 +32,105 @@ glm::mat4 oldBall;
 int ballTransfo;
 
 //camera params
-glm::vec3 eye(-40.0f, 50.0f, -65.0f);
+glm::vec3 eye(0.0f, 10.0f, 0.0f);
 glm::vec3 up(0.0f, 1.0f, 0.0f);
-glm::vec3 center(-40.0f, 0.0f, 40.0f);
+glm::vec3 center(0.0f, 0.0f, 40.0f);
 
-Camera* cam1 = new Camera(eye, glm::vec3(40.0f, 0.0f, 40.0f), up);
-Camera* cam2 = new Camera(glm::vec3(0.0f, 20.0f, 0.0f), center, up);
+Camera* cam1 = new Camera(glm::vec3(-40.0f, 50.0f, -65.0f), glm::vec3(40.0f, 0.0f, 40.0f), up);
+Camera* cam2 = new Camera(eye, center, up);
 Camera* mainCam;
 
+//Global for controls
+bool wireframe = true;
+bool tooltip = true;
+int max_height;
 /////////////////////////
 // CALLBACK FUNCTIONS //
 ///////////////////////
 
 void displayCallback(){
-    //cameraMat = glm::lookAt(eye, glm::vec3(cameraPosX, cameraPosY, cameraPosZ), up);
-    //cameraMat = mainCam->get_camera_mat();
     engine->clearDisplay();
 
-    //cam2->render(cameraMat);
-    //questo metodo per renderizzare tutto una volta implementato correttamente
     engine->getRenderList()->renderList(mainCam->getCameraMat());
+
+    max_height = engine->getHeight();
 
     char texts[64];
     sprintf(texts, "FPS: %d", fps);
     engine->write2DText(texts,1.0f,engine->getHeight()-14);
+    sprintf(texts, "View from %s", mainCam->getName().c_str());
+    engine->write2DText(texts, 1.0f, max_height - (14 * 2));
+
+    if(cameraPosition)
+        strcpy(texts, "Camera commands for position (only Cam2)");
+    else
+        strcpy(texts, "Camera commands for focus point (only Cam2)");
+    engine->write2DText(texts, 1.0f, max_height - (14 * 3));
+
+    if (tooltip) {
+        strcpy(texts, "------------------------------");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 4));
+        strcpy(texts, "Comandi Braccio");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 5));
+
+        strcpy(texts, "[y] Rotate Base CCW");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 6));
+        strcpy(texts, "[x] Rotate Base CW");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 7));
+
+        strcpy(texts, "[d] Rotate Asse 00 UP");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 8));
+        strcpy(texts, "[c] Rotate Asse 00 DOWN");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 9));
+
+        strcpy(texts, "[f] Rotate Asse 01 UP");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 10));
+        strcpy(texts, "[v] Rotate Asse 01 DOWN");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 11));
+
+        strcpy(texts, "[g] Rotate Asse 02 UP");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 12));
+        strcpy(texts, "[b] Rotate Asse 02 DOWN");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 13));
+
+        strcpy(texts, "[h] Rotate Asse Force UP");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 14));
+        strcpy(texts, "[n] Rotate Asse Forca DOWN");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 15));
+
+        strcpy(texts, "[j] Open forks");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 16));
+        strcpy(texts, "[k] Close forks");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 17));
+
+        strcpy(texts, "------------------------------");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 18));
+        strcpy(texts, "Utilities");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 19));
+        strcpy(texts, "[q] Reset scene");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 20));
+        strcpy(texts, "[z] Enable/Disable wireframe");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 21));
+        strcpy(texts, "[u] Enable/Disable tooltip");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 22));
+
+        strcpy(texts, "------------------------------");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 23));
+        strcpy(texts, "Camera controls");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 24));
+        strcpy(texts, "[1] - [2] Change camera");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 25));
+        strcpy(texts, "[Up] - [Down] arrows Move camera position/focus on Y");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 26));
+        strcpy(texts, "[Left] - [Right] arrows Move camera position/focus on Z");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 27));
+        strcpy(texts, "[e] - [r] Move camera position/focus on X");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 28));
+        strcpy(texts, "[p] Change camera commands for position/focus");
+        engine->write2DText(texts, 1.0f, max_height - (14 * 29));
+    }
 
 
-    strcpy(texts,"[y] Rotate Base CCW");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14*2));
-    strcpy(texts,"[x] Rotate Base CW");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 3));
-
-    strcpy(texts, "[d] Rotate Asse 00 UP");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 4));
-    strcpy(texts, "[c] Rotate Asse 00 DOWN");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 5));
-
-    strcpy(texts, "[f] Rotate Asse 01 UP");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 6));
-    strcpy(texts, "[v] Rotate Asse 01 DOWN");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 7));
-
-    strcpy(texts, "[g] Rotate Asse 02 UP");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 8));
-    strcpy(texts, "[b] Rotate Asse 02 DOWN");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 9));
-
-    strcpy(texts, "[h] Rotate Asse Force UP");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 10));
-    strcpy(texts, "[n] Rotate Asse Forca DOWN");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 11));
-
-    strcpy(texts, "[j] Apri forche");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 12));
-    strcpy(texts, "[k] Stringi forche");
-    engine->write2DText(texts, 1.0f, engine->getHeight() - (14 * 13));
     frames++;
 
     engine->swapBuffer();
@@ -102,26 +144,35 @@ void specialCallback(int key, int mouseX, int mouseY){
     switch(key){
         case KEY_UP:
             std::cout << "KEY UP" << std::endl;
-            cameraPosZ -= speed;
-            center.y += speed;
+            if(cameraPosition)
+                eye.y += speed;
+            else
+                center.y += speed;
             break;
         case KEY_DOWN:
             std::cout << "KEY DOWN" << std::endl;
-            cameraPosZ += speed;
-            center.y -= speed;
+            if(cameraPosition)
+                eye.y -= speed;
+            else
+                center.y -= speed;
             break;
         case KEY_LEFT:
             std::cout << "KEY LEFT" << std::endl;
-            cameraPosX -= speed;
-            center.z -= speed;
+            if(cameraPosition)
+                eye.z -= speed;
+            else
+                center.z -= speed;
             break;
         case KEY_RIGHT:
             std::cout << "KEY RIGHT" << std::endl;
-            cameraPosX += speed;
-            center.z += speed;
+            if(cameraPosition)
+                eye.z += speed;
+            else
+                center.z += speed;
             break;
     }
 
+    cam2->setEye(eye);
     cam2->setCenter(center);
 
    engine->forceRendering(windowId);
@@ -153,7 +204,7 @@ bool check_distance_two_vectors(Node* node1,Node* node2,float range) {
 
 void keyboardCallback(unsigned char key, int mouseX, int mouseY){
 
-    float speed = 0.5f;
+    float speed = 1.0f;
     float translateFactorFork = 0.05f;
 
 
@@ -175,15 +226,34 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
     glm::vec3 scaleBall(1.20f, 1.0f, 1.0f);
 
     switch(key){
+        case 'e':
+            if(cameraPosition)
+                eye.x += speed;
+            else
+                center.x += speed;
+            break;
+        case 'r':
+            if(cameraPosition)
+                eye.x -= speed;
+            else
+                center.x -= speed;
+            break;
         case 'p':
+            cameraPosition = !cameraPosition;
+            break;
+        case '1':
             //switch to cam1
             std::cout << "P PRESSED" << std::endl;
             mainCam = cam1;
+            engine->setProjectionProperties(glm::vec3(100.0f, 1.0f, 200.0f));
+            engine->forceReshape();
             break;
-        case 'o':
+        case '2':
             //switch to cam2
             std::cout << "O PRESSED" << std::endl;
             mainCam = cam2;
+            engine->setProjectionProperties(glm::vec3(45.0f, 1.0f, 200.0f));
+            engine->forceReshape();
             break;
 
         case 'y':
@@ -270,15 +340,12 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     displayCallback();
                 }
 
-
                 //Questo if serve per quando rilascio la palla
                 if (actualFork == 0 && ballGrabbed) {
                     //release ball
 
                     //Prendo il nodo palla
                     ballObjectToBeTaken = (dynamic_cast<Node*>(engine->getRenderList()->getElementByName("Sphere001")));
-
-
 
                     //Vado a leggere l'ultima colonna della matrice finale,Essa corrisponde alle world coordinates della palla.
                     glm::vec4 ball_world_coordinate = glm::column(ballObjectToBeTaken->getFinalMatrix(), 3);
@@ -287,7 +354,6 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     glm::mat4 matriceInzialeePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, ball_world_coordinate.g, ball_world_coordinate.b));
                     //Qua salvo la matrice finale della palla in world coordinates, ovvero con la y messa a 1
                     glm::mat4 matriceFinalePalle = glm::translate(glm::mat4(1.0f), glm::vec3(ball_world_coordinate.r, 1.0f, ball_world_coordinate.b));
-
 
                     //Setto il padre della palla il nodo root della scena, poi metto la sua pos matrix come la matrice in world coordinates che ha adesso
                     ballObjectToBeTaken->setParent(engine->getRoot());
@@ -310,7 +376,6 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                         displayCallback();
 
                     }
-
 
                     //Setto come matrice della palla quella finale dichiarata prima, perch� � piu precisa
                     ballObjectToBeTaken->setPosMatrix(matriceFinalePalle);
@@ -342,8 +407,6 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                 //Questo if, controlla se la forca sia aperta del tutto e se la distanza tra la palla e il padre sia < 5.0
                 if (actualFork == 0 && check_distance_two_vectors(ballObjectToBeTaken, rotateAxisForkFather, 5.0f)) {
 
-
-
                     //Qui vado a settare la matrice di posizione della palla, uguale a quella della ruota asse forca
                     ballObjectToBeTaken->setPosMatrix(rotateAxisForkFather->getPosMatrix());
 
@@ -374,19 +437,26 @@ void keyboardCallback(unsigned char key, int mouseX, int mouseY){
                     engine->translateNode("forca2", translateFork);
                     actualFork++;
                 }
-
             }
 
             break;
         case 'z':
-            engine->enableWireframe(true);
+            engine->enableWireframe(wireframe);
+            wireframe = !wireframe;
             break;
         case 'u':
-            engine->enableWireframe(false);
+            tooltip = !tooltip;
+            break;
+        case 'q':
+            std::cout << "Q PRESSED" << std::endl;
+            ballGrabbed = false;
+            engine->restoreMemento();
             break;
 
     }
 
+    cam2->setEye(eye);
+    cam2->setCenter(center);
     engine->forceRendering(windowId);
 }
 
@@ -408,12 +478,14 @@ int main(int argc, char *argv[]){
     Test* test = new Test();
     test->testExec();
 
-    engine->setTextureFilePath("../files/textures/");
-    engine->loadFromFile("../files/stanza.OVO");
+    engine->setTextureFilePath("files/textures/");
+    engine->loadFromFile("files/stanza.OVO");
     engine->setShadowFlag("Plane");
 
+    cam1->setName("Cam1");
+    cam2->setName("Cam2");
     mainCam = cam1;
-    cam2->setParent((dynamic_cast<Node*>(engine->getRenderList()->getElementByName("Cylinder001"))));
+    engine->setProjectionProperties(glm::vec3(100.0f, 1.0f, 200.0f));
 
     engine->setDisplayCallback(displayCallback);
     engine->setReshapeCallback();
@@ -423,9 +495,11 @@ int main(int argc, char *argv[]){
 
     engine->enableLightSystem();
 
+    engine->enableMemento();
+
     engine->startEventLoop();
 
-    engine->endEventLoop();
+    engine->freeContext();
 
     return 0;
 }

@@ -5,6 +5,9 @@ LIB_API Material::Material() {
 }
 
 LIB_API Material::~Material(){
+    if(texture != nullptr){
+        delete texture;
+    }
 }
 
 void LIB_API Material::setEmission(glm::vec3 emission){
@@ -58,7 +61,7 @@ float LIB_API Material::getShiness() {
 
 void LIB_API Material::render(glm::mat4 camera){
 
-    if(texture != nullptr){
+    if(hasTexture()){
         texture->render(camera);
     }
 

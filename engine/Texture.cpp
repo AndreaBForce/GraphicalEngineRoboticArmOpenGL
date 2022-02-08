@@ -15,7 +15,6 @@ std::string Texture::path;
 
 
 LIB_API Texture::Texture(char textureName[FILENAME_MAX]) {
-
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
 
@@ -40,17 +39,19 @@ LIB_API Texture::Texture(char textureName[FILENAME_MAX]) {
 
         gluBuild2DMipmaps(GL_TEXTURE_2D, 4, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
 
-        //glTexImage2D(GL_TEXTURE_2D, 0 , GL_RGBA, FreeImage_GetWidth(bitmap), FreeImage_GetHeight(bitmap), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, (void*)FreeImage_GetBits(bitmap));
-
         FreeImage_Unload(bitmap);
     }
     else {
+        glDeleteTextures(1, &textureId);
         textureId = 0;
     }
 
 }
 
 LIB_API Texture::~Texture() {
+    if(textureId != 0){
+        glDeleteTextures(1, &textureId);
+    }
 }
 
 void LIB_API Texture::setPath(const char* dirPath){
@@ -62,5 +63,8 @@ unsigned int LIB_API Texture::getTextureId() {
 }
 
 void LIB_API Texture::render(glm::mat4 camera){
+    if(textureId == 0)
+        return;
+
     glBindTexture(GL_TEXTURE_2D, textureId);
 }

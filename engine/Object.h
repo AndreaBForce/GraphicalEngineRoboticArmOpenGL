@@ -11,14 +11,16 @@ class LIB_API Object
     public:
 
         Object();
+        virtual ~Object();
 
-        int get_id(){return id;}
+        int getId(){return id;}
 
-        std::string get_name(){return name;}
+        std::string getName(){return name;}
 
-        void set_name(std::string new_name){name = new_name;}
+        void setName(std::string new_name){name = new_name;}
 
         virtual void render(glm::mat4 camera) = 0;
+
 
     private:
         int id;

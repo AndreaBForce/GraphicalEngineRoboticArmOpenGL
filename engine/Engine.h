@@ -38,9 +38,10 @@ class LIB_API Engine{
 		void setSpecialCallback(void(* callback)(int key, int mouseX, int mouseY));
 		void setKeyboardCallback(void(* callback)(unsigned char key, int mouseX, int mouseY));
 		void forceRendering(int windowId);
+		void forceReshape();
 		void enableLightSystem();
 		void startEventLoop();
-		void endEventLoop();
+		void freeContext();
 		void clearDisplay();
 		void swapBuffer();
         void loadTree(Node* root);
@@ -65,6 +66,7 @@ class LIB_API Engine{
 
 		void setWidth(int widthS) { width = widthS; };
 		void setHeight(int heightS) { height = heightS; };
+		void setProjectionProperties(glm::vec3 properties){projectionProperties = properties;};
 
 		Material* getShadowMaterial(){return shadowMaterial;};
 		List* getRenderList() { return nodeList; }
@@ -76,9 +78,13 @@ class LIB_API Engine{
 		glm::mat4 getProjection() { return projection; };
 		glm::mat4 getOrtho() { return ortho; };
 		glm::mat4 getShadowMatrix(){return shadowMatrix;};
+		glm::vec3 getProjectionProperties(){return projectionProperties;};
 
 		Engine(Engine &other) = delete;
 		void operator=(const Engine &) = delete;
+
+		void enableMemento();
+		void restoreMemento();
 
         void loadFromFile(const char* filePath);
     private:
@@ -88,6 +94,7 @@ class LIB_API Engine{
 		glm::mat4 ortho;
         Material* shadowMaterial;
         glm::mat4 shadowMatrix;
+        glm::vec3 projectionProperties;
 		int width;
 		int height;
 

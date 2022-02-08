@@ -11,7 +11,7 @@ class LIB_API Light : public Node{
 public:
 public:
     Light();
-    virtual ~Light();
+    ~Light();
 
     //Add light settings
     void setAmbient(glm::vec4 ambient);

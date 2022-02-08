@@ -21,15 +21,15 @@
 #include <iomanip>
 #include <limits.h>
 #include <glm/gtc/packing.hpp>
+#include <memory>
 
 long file_size;
 List* nodeList;
-List* materialList = new List();
+std::vector<std::shared_ptr<Material>> materialPointers;
 
 using namespace std;
 LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
 {
-
     //Root of the tree
     Node* root;
 
@@ -59,7 +59,6 @@ LIB_API Node* OvoRReader::readDataFromFile(const char* filePath,List* list)
     nodeList = list;
     root = recursiveLoad(buffer, position);
 
-    delete materialList;
     return root;
 }
 
@@ -124,7 +123,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Node name:
         char nodeName[FILENAME_MAX];
         strcpy(nodeName, data + chunkPosition);
-        actualNode->set_name(nodeName);
+        actualNode->setName(nodeName);
 
         chunkPosition += (unsigned int)strlen(nodeName) + 1;
 
@@ -159,7 +158,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
         chunkPosition += (unsigned int)strlen(materialName) + 1;
-        thisMaterial->set_name(materialName);
+        thisMaterial->setName(materialName);
 
         // Material term colors, starting with emissive:
         glm::vec3 emission, albedo;
@@ -224,7 +223,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         strcpy(metalnessMapName, data + chunkPosition);
         chunkPosition += (unsigned int)strlen(metalnessMapName) + 1;
 
-        materialList->pushBackOfVec(thisMaterial);
+        materialPointers.push_back(std::shared_ptr<Material>(thisMaterial));
 
     }
     break;
@@ -246,7 +245,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Mesh name:
         char meshName[FILENAME_MAX];
         strcpy(meshName, data + chunkPosition);
-        thisMesh->set_name(meshName);
+        thisMesh->setName(meshName);
 
         chunkPosition += (unsigned int)strlen(meshName) + 1;
 
@@ -285,7 +284,14 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         // Material name, or [none] if not used:
         char materialName[FILENAME_MAX];
         strcpy(materialName, data + chunkPosition);
-        thisMesh->setMaterial(dynamic_cast<Material*>(materialList->getElementByName(materialName)));
+        std::shared_ptr<Material> material;
+        for(auto& mat : materialPointers){
+            if(mat->getName() == materialName){
+                material = mat;
+                break;
+            }
+        }
+        thisMesh->setMaterial(material);
         chunkPosition += (unsigned int)strlen(materialName) + 1;
 
         // Mesh bounding sphere radius:
@@ -345,7 +351,6 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
             {
                 for (unsigned int c = 0; c < mp.nrOfHulls; c++)
                 {
-
 
                     // Hull number of vertices:
                     unsigned int nrOfVertices;
@@ -523,7 +528,7 @@ LIB_API Node* OvoRReader::recursiveLoad(uint8_t* buffer, unsigned int& position)
         char lightName[FILENAME_MAX];
         strcpy(lightName, data + chunkPosition);
         chunkPosition += (unsigned int)strlen(lightName) + 1;
-        thisLight->set_name(lightName);
+        thisLight->setName(lightName);
 
         // Light matrix:
         glm::mat4 matrix;
